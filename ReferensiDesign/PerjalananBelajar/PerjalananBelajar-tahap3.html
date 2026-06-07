@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MicroScout | Ocean Entry</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-tint": "#006591",
+                        "secondary-container": "#6bff8f",
+                        "on-secondary-container": "#007432",
+                        "tertiary-fixed": "#ffdf9a",
+                        "surface-container-low": "#f2f4f6",
+                        "primary-fixed": "#c9e6ff",
+                        "inverse-primary": "#89ceff",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "tertiary-fixed-dim": "#f7be1d",
+                        "secondary-fixed-dim": "#4ae176",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-container": "#423000",
+                        "on-secondary-fixed": "#002109",
+                        "on-tertiary-fixed-variant": "#5a4300",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#89ceff",
+                        "on-primary-container": "#003751",
+                        "secondary-fixed": "#6bff8f",
+                        "surface-dim": "#d8dadc",
+                        "tertiary-container": "#c39400",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f7f9fb",
+                        "outline": "#6e7881",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#0ea5e9",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container": "#eceef0",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3e4850",
+                        "tertiary": "#785a00",
+                        "secondary": "#006e2f",
+                        "on-primary-fixed": "#001e2f",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#bec8d2",
+                        "on-background": "#191c1e",
+                        "inverse-surface": "#2d3133",
+                        "primary": "#006591",
+                        "on-surface": "#191c1e",
+                        "on-secondary-fixed-variant": "#005321",
+                        "background": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xl": "64px",
+                        "md": "24px",
+                        "container-max": "1200px",
+                        "base": "8px",
+                        "lg": "40px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .ocean-gradient {
+            background: radial-gradient(circle at center, #f0f9ff 0%, #e0f2fe 100%);
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #0ea5e9;
+            border-radius: 50%;
+            pointer-events: auto;
+            cursor: pointer;
+            filter: blur(1px);
+            box-shadow: 0 0 8px rgba(14, 165, 233, 0.6);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .particle:hover {
+            transform: scale(0);
+        }
+
+        @keyframes drift {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(var(--x), var(--y));
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-x-hidden">
+    <!-- TopNavBar -->
+    <nav
+        class="bg-surface dark:bg-surface-container-low shadow-[0_4px_12px_rgba(0,0,0,0.15)] full-width top-0 sticky z-50">
+        <div class="flex justify-between items-center px-lg py-sm max-w-container-max mx-auto w-full">
+            <div class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary">
+                MicroScout
+            </div>
+            <div class="hidden md:flex items-center gap-md">
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary-fixed-dim transition-colors duration-200"
+                    href="../LandingPage/LandingPage.html">Field Guide</a>
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary-fixed-dim transition-colors duration-200"
+                    href="PerjalananBelajarHome.html">Mission Logs</a>
+                <a class="text-secondary font-bold border-b-2 border-secondary pb-1 font-label-md text-label-md"
+                    href="PerjalananBelajar-tahap1.html">AR Explorer</a>
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary-fixed-dim transition-colors duration-200"
+                    href="../Materi/Materi.html">Lab Results</a>
+            </div>
+            <div class="flex items-center gap-sm">
+                <div class="relative flex items-center bg-surface-container rounded-full px-sm py-xs">
+                    <span class="material-symbols-outlined text-primary text-[20px]">search</span>
+                    <input class="bg-transparent border-none focus:ring-0 text-label-sm w-32 md:w-48"
+                        placeholder="Scan ecosystem..." type="text" />
+                </div>
+                <button class="text-primary hover:scale-95 transition-transform"><span
+                        class="material-symbols-outlined">notifications</span></button>
+                <button class="text-primary hover:scale-95 transition-transform"><span
+                        class="material-symbols-outlined">account_circle</span></button>
+            </div>
+        </div>
+    </nav>
+    <main class="flex-grow flex flex-col">
+        <!-- AR Interaction Container -->
+        <div class="relative w-full h-[716px] ocean-gradient overflow-hidden cursor-crosshair">
+            <!-- Background Image Description -->
+            <div class="absolute inset-0 z-0 opacity-40">
+                <img class="w-full h-full object-cover"
+                    data-alt="A sun-drenched underwater perspective looking up toward the shimmering surface of a vibrant ocean. The water is clear with high-key lighting, featuring soft cyan and mint green color palettes. Tiny, glowing organic particles float suspended in the water, creating a sense of a microscopic, bright world. The overall aesthetic is educational, optimistic, and clean, avoiding dark or murky depths."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA06nPWWCGVYLlEG-XR4L-Zj71yd9Iw9M2yTXJKeHPk2xUOQ9F_yNOSwt9gT8PUHElDDbBnFUON_pkJeksQXmRyqf7FjePWQ3GW-1351s87TavxjCWYBbC5p6_F8lO3GxcBgT6PFACtbFNHM5xHrwsqEM9Z93eG75wPSfTfLYr6MDTZ7szVEfnv4WLtVtoXTMXRawTQ81bi-v4TBzUZxhU53EW4F3az5Ojd73bdMBbNuAuNfd6hMzuFWfp2hrzY0BPMWDVbOwmQIw" />
+            </div>
+            <!-- AR Viewport Overlays -->
+            <div class="absolute inset-0 pointer-events-none flex flex-col justify-between p-lg z-10">
+                <div class="flex justify-between items-start">
+                    <div class="space-y-sm">
+                        <!-- Mission Directive -->
+                        <div
+                            class="bg-surface/90 backdrop-blur-md p-md rounded-xl shadow-xl max-w-sm pointer-events-auto border-2 border-primary-container">
+                            <div class="flex items-center gap-sm text-primary mb-xs">
+                                <span class="material-symbols-outlined">error</span>
+                                <h2 class="font-headline-md text-headline-md">The Impossible Mission</h2>
+                            </div>
+                            <p class="text-body-md text-on-surface-variant">
+                                <strong>Objective:</strong> Capture 10 micro-particles using your specialized scoop.
+                                Microplastics are now so small they evade conventional filtration.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Particle Counter -->
+                    <div
+                        class="bg-inverse-surface text-inverse-on-surface p-md rounded-xl shadow-xl pointer-events-auto min-w-[200px] flex flex-col items-center">
+                        <span class="text-label-sm uppercase tracking-wider opacity-80">Particles Collected</span>
+                        <div class="text-[48px] font-bold leading-tight text-secondary-fixed">0 <span
+                                class="text-body-md font-normal text-surface-variant">/ 10,000+</span></div>
+                        <div class="w-full h-2 bg-on-surface-variant rounded-full mt-sm overflow-hidden">
+                            <div class="h-full bg-secondary-fixed w-1 transition-all duration-300"
+                                id="collect-progress"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-end">
+                    <!-- Fluid Dynamics Card -->
+                    <div
+                        class="bg-surface/90 backdrop-blur-md p-md rounded-xl shadow-xl pointer-events-auto border-2 border-secondary-container max-w-xs">
+                        <div class="flex items-center gap-sm text-secondary mb-xs">
+                            <span class="material-symbols-outlined"
+                                style="font-variation-settings: 'FILL' 1;">waves</span>
+                            <h3 class="font-label-md text-label-md">Fluid Dynamics Status</h3>
+                        </div>
+                        <div class="space-y-xs font-label-sm text-on-surface-variant">
+                            <div class="flex justify-between"><span>Flow Velocity:</span> <span
+                                    class="text-secondary font-bold">4.2 m/s</span></div>
+                            <div class="flex justify-between"><span>Viscosity:</span> <span
+                                    class="text-secondary font-bold">Low</span></div>
+                            <div class="flex justify-between"><span>Microplastic Density:</span> <span
+                                    class="text-error font-bold">Critical</span></div>
+                        </div>
+                    </div>
+                    <!-- AR Prompt -->
+                    <div
+                        class="text-center bg-white/20 backdrop-blur-sm px-lg py-sm rounded-full border border-white/40">
+                        <p class="text-primary font-bold animate-pulse">CATCH THE PARTICLES WITH YOUR CURSOR</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Particle Simulation Layer -->
+            <div class="absolute inset-0 z-5" id="particle-container">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+        <!-- Information Section -->
+        <section class="max-w-container-max mx-auto w-full px-lg py-xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-lg items-center">
+                <div class="space-y-md">
+                    <div
+                        class="inline-flex items-center gap-base bg-secondary-container text-on-secondary-container px-sm py-xs rounded-full">
+                        <span class="material-symbols-outlined text-[18px]">biotech</span>
+                        <span class="text-label-sm font-bold uppercase">Scientific Log Entry #042</span>
+                    </div>
+                    <h2 class="font-headline-lg text-headline-lg text-primary">Microplastics: The Invisible Crisis</h2>
+                    <p class="text-body-lg text-on-surface-variant leading-relaxed">
+                        As we enter the deeper ocean currents, our sensors detect particles smaller than 1 micrometer.
+                        These fragments are no longer just floating debris; they have become part of the water's fluid
+                        state. Current technology cannot physically "catch" or filter them without destroying the
+                        microorganisms that form the base of the food chain.
+                    </p>
+                    <div class="flex gap-md pt-sm">
+                        <div class="flex-1 p-md bg-surface-container rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-secondary block mb-xs">psychology</span>
+                            <p class="text-label-sm text-on-surface-variant">The cleanup isn't about picking up
+                                pieces—it's about stopping the source.</p>
+                        </div>
+                        <div class="flex-1 p-md bg-surface-container rounded-xl border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary block mb-xs">water_drop</span>
+                            <p class="text-label-sm text-on-surface-variant">80% of ocean plastic originates from just
+                                1,000 rivers worldwide.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl blur-xl group-hover:blur-2xl transition duration-500">
+                    </div>
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                        <img class="w-full h-auto"
+                            data-alt="A clean, scientific macro photograph of a laboratory petri dish containing vibrant blue and clear water samples. Miniature plastic fibers are illuminated under a cool white light, appearing as tiny tangled threads. The background is a clean, sterile laboratory environment with mint green accents and soft shadows, following a bright and breezy educational aesthetic."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsdwO_vT5YWG-R8e0Bwsh8PfEzmpUF0LzjGOUXnohyJQsn0GlKvTxAx8xvDAMxHYPG0vGlLy5duSXApG2JEAiVEsjcyVHgyVT5eYAeb4U5DOmqR7Ail5ZA7n2L0lzBGmo1pUAmg7CbVWvwPTeTuInaL2x7qR0NAb1EvCZczitfEPa07LfeZGwJu02gJK8-Gu7kaj5RhVA_XD3tBUu9HlTZrX3BTGqn0d3Yc-Xoz14oq9X0Dz2ZTiYXLTn0iltVvN7_uH0ohBE0cw" />
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-highest dark:bg-inverse-surface full-width mt-auto">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center px-lg py-md max-w-container-max mx-auto w-full">
+            <div class="text-label-md font-label-md font-bold text-secondary dark:text-secondary-fixed mb-md md:mb-0">
+                MicroScout Educational Initiative
+            </div>
+            <div class="flex gap-md mb-md md:mb-0">
+                <a class="text-on-surface-variant dark:text-surface-variant text-label-sm font-label-sm hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors"
+                    href="#">Curriculum Guide</a>
+                <a class="text-on-surface-variant dark:text-surface-variant text-label-sm font-label-sm hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors"
+                    href="#">Privacy Policy</a>
+                <a class="text-on-surface-variant dark:text-surface-variant text-label-sm font-label-sm hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors"
+                    href="#">Resource Center</a>
+                <a class="text-on-surface-variant dark:text-surface-variant text-label-sm font-label-sm hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors"
+                    href="#">Support</a>
+            </div>
+            <div class="text-on-surface-variant dark:text-surface-variant text-label-sm font-label-sm">
+                © 2024 MicroScout Educational Initiative
+            </div>
+        </div>
+    </footer>
+    <script>
+        const container = document.getElementById('particle-container');
+        const colors = ['#0ea5e9', '#38bdf8', '#7dd3fc', '#f7be1d', '#4ae176'];
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+
+            // Random start position
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * (window.innerHeight * 0.7);
+
+            // Random drift destination
+            const dx = (Math.random() - 0.5) * 200;
+            const dy = (Math.random() - 0.5) * 200;
+
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            particle.style.setProperty('--x', `${dx}px`);
+            particle.style.setProperty('--y', `${dy}px`);
+            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+            // Random animation duration
+            const duration = 3 + Math.random() * 5;
+            particle.style.animation = `drift ${duration}s linear infinite alternate`;
+
+            // Escape logic
+            particle.addEventListener('mouseenter', (e) => {
+                // If it wasn't "caught" (scaled to 0 by CSS), make it jump away
+                if (particle.style.transform !== 'scale(0)') {
+                    const jumpX = (Math.random() - 0.5) * 300;
+                    const jumpY = (Math.random() - 0.5) * 300;
+                    particle.style.transition = 'all 0.1s ease-out';
+                    particle.style.transform = `translate(${jumpX}px, ${jumpY}px)`;
+
+                    // Spawn more on "near-catch"
+                    if (Math.random() > 0.7) {
+                        createParticle();
+                        createParticle();
+                    }
+                }
+            });
+
+            container.appendChild(particle);
+        }
+
+        // Initial particles
+        for (let i = 0; i < 150; i++) {
+            createParticle();
+        }
+
+        // Keep them coming
+        setInterval(() => {
+            if (container.children.length < 300) {
+                createParticle();
+            }
+        }, 2000);
+    </script>
+
+    <div style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 9999;">
+        <a href="PerjalananBelajar-tahap2.html" style="background: white; border: 2px solid #006591; color: #006591; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Kembali</a>
+        <a href="PerjalananBelajar-tahap4.html" style="background: #006591; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Selanjutnya</a>
+    </div>
+</body>
+
+</html>

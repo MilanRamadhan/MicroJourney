@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MicroJourney AR - Tahap 1: Botol Plastik</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        .ar-scanline {
+            background: linear-gradient(to bottom, transparent, rgba(14, 165, 233, 0.2), transparent);
+            height: 100px;
+            width: 100%;
+            position: absolute;
+            animation: scan 3s linear infinite;
+            z-index: 10;
+        }
+
+        @keyframes scan {
+            0% {
+                top: -100px;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        .confidence-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#006591",
+                        "on-tertiary-fixed": "#251a00",
+                        "outline": "#6e7881",
+                        "primary-fixed-dim": "#89ceff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005321",
+                        "surface-container": "#eceef0",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary-container": "#6bff8f",
+                        "on-tertiary-fixed-variant": "#5a4300",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "background": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#003751",
+                        "on-background": "#191c1e",
+                        "primary-fixed": "#c9e6ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002109",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#f7be1d",
+                        "on-surface": "#191c1e",
+                        "inverse-primary": "#89ceff",
+                        "surface-container-low": "#f2f4f6",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#785a00",
+                        "on-tertiary-container": "#423000",
+                        "tertiary-container": "#c39400",
+                        "primary-container": "#0ea5e9",
+                        "surface-bright": "#f7f9fb",
+                        "primary": "#006591",
+                        "surface": "#f7f9fb",
+                        "surface-dim": "#d8dadc",
+                        "on-surface-variant": "#3e4850",
+                        "secondary": "#006e2f",
+                        "on-secondary-container": "#007432",
+                        "secondary-fixed-dim": "#4ae176",
+                        "outline-variant": "#bec8d2",
+                        "surface-variant": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdf9a",
+                        "secondary-fixed": "#6bff8f",
+                        "on-primary-fixed": "#001e2f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "64px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "md": "24px",
+                        "container-max": "1200px",
+                        "lg": "40px",
+                        "sm": "12px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Top Navigation Bar -->
+    <header
+        class="bg-surface/80 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.05)] docked full-width top-0 sticky z-50">
+        <div class="flex justify-between items-center w-full px-md py-4 max-w-container-max mx-auto">
+            <div class="flex items-center gap-xs">
+                <span class="material-symbols-outlined text-primary text-3xl"
+                    data-icon="travel_explore">travel_explore</span>
+                <span class="font-headline-md text-headline-md font-bold text-primary">MicroJourney AR</span>
+            </div>
+            <nav class="hidden md:flex items-center space-x-lg">
+                <a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md"
+                    href="../LandingPage/LandingPage.html">Beranda</a>
+                <a class="text-primary border-b-2 border-primary pb-1 font-bold font-label-md text-label-md"
+                    href="PerjalananBelajarHome.html">Perjalanan Belajar</a>
+                <a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md"
+                    href="../Materi/Materi.html">Materi</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../E-LKPD/Dashboard-LKPD.html">E-LKPD</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../RaporGuru/Dashboard-Guru.html">Rapor Guru</a>
+            </nav>
+            <div class="flex items-center gap-md">
+                <button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors"
+                    data-icon="notifications">notifications</button>
+                <div
+                    class="w-10 h-10 rounded-full bg-secondary-container overflow-hidden border-2 border-white shadow-sm">
+                    <img alt="Student Profile Avatar" class="w-full h-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5_aeekQiaRlY8j3M5PDijhKFT-tsZ1wD0KPee0n38umRA8-G1weOZdYpIs7VJP6jFTnBQfcvTI3hLypfNM7jDhjC2XezZzP1ai-BxT-75Jv0g8aoc_NHIq2sBqx0_6yDSyNSfnti1WLaqJAEqEB3Gz2O8VBjpk1G6q-0balqjztc3FbTl1v05gBcn0-djLL7Lno4k0M76gU0YkhlBowbSVKcMgMFjNMV6-KG33hsPb8tbCbYo-dTj1fLtBdrNIcVLhgPYfZ-Nmw" />
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main
+        class="flex-grow flex flex-col md:flex-row relative p-sm md:p-md gap-md max-w-[1600px] mx-auto w-full h-[calc(100vh-160px)] md:h-[calc(100vh-80px)]">
+        <!-- Left Panel: Scientific Log -->
+        <aside class="hidden xl:flex flex-col w-80 space-y-md shrink-0">
+            <div class="glass-panel p-md rounded-xl shadow-sm flex flex-col h-full border-l-4 border-primary">
+                <div class="flex items-center gap-sm mb-md">
+                    <span class="material-symbols-outlined text-primary" data-icon="assignment">assignment</span>
+                    <h2 class="font-headline-md text-[18px] text-primary">Scientific Log</h2>
+                </div>
+                <div class="flex-grow overflow-y-auto space-y-4 pr-2">
+                    <div class="bg-surface-container-low p-sm rounded-lg border border-outline-variant/30">
+                        <span class="text-[10px] font-bold text-primary block mb-1">LOG #0412</span>
+                        <p class="text-label-sm leading-relaxed">Sinyal optik stabil. Memulai kalibrasi spektrum polimer
+                            pada koordinat botol plastik.</p>
+                    </div>
+                    <div class="bg-surface-container-low p-sm rounded-lg border border-outline-variant/30">
+                        <span class="text-[10px] font-bold text-secondary block mb-1">LOG #0413</span>
+                        <p class="text-label-sm leading-relaxed">Deteksi tuntas. Mengidentifikasi polietilen tereftalat
+                            (PET) melalui transparansi material.</p>
+                    </div>
+                    <div class="bg-surface-container-low p-sm rounded-lg border border-outline-variant/30">
+                        <span class="text-[10px] font-bold text-tertiary block mb-1">ANALYSIS</span>
+                        <p class="text-label-sm leading-relaxed">Objek memiliki residu organik 18% dari sisa cairan
+                            minuman manis.</p>
+                    </div>
+                </div>
+                <div class="mt-auto pt-md">
+                    <div class="flex justify-between text-label-sm text-on-surface-variant mb-2">
+                        <span>CPU Load</span>
+                        <span>42%</span>
+                    </div>
+                    <div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-primary h-full transition-all duration-500" style="width: 42%"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- Center: AR Viewport -->
+        <section class="flex-grow relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-black group">
+            <!-- Simulated Camera Feed -->
+            <img class="absolute inset-0 w-full h-full object-cover brightness-90 group-hover:scale-105 transition-transform duration-[10s]"
+                data-alt="A high-resolution photograph of a clear plastic water bottle lying on a modern, brightly lit white wooden desk. The scene is shot from a top-down perspective, emphasizing a clean, educational aesthetic with soft daylight pouring in from the side. Surrounding the bottle are small green succulents and a tablet showing ecological graphs, reinforcing the environmental stewardship theme. The atmosphere is optimistic, vibrant, and reflects a sunny morning in a contemporary laboratory or classroom."
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZmvIGufJoKC7GBLRcB8jXymU2xlQSBKNw8QYLyU3colAzmLVf4jxXhbV2eK1tu9q8rTrFeiOCDcfaJeFnnoPeaB92r49GYHrycP80O_Yl9EYkcMzN3-Qg_jM3WZ1_TZn4D9VSlOleM_PSd-ArLZ12MBbblB3zWTUV7gCvDSQXh7NJPHGtaZ90weyOtdZ3LD4XgkjxmjXjPAO3usvudsBAvrNhqph3ARhfVKvMgr6DSxt5RXQbPL4GXeblLEQH9w-rT3g3XCOIbA" />
+            <!-- AR UI Overlays -->
+            <div class="absolute inset-0 pointer-events-none">
+                <div class="ar-scanline"></div>
+                <!-- Bounding Box -->
+                <div
+                    class="absolute top-1/4 left-1/3 w-1/3 h-1/2 border-2 border-primary-container rounded-lg confidence-pulse">
+                    <!-- Corner Brackets -->
+                    <div
+                        class="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-primary-container rounded-tl-sm">
+                    </div>
+                    <div
+                        class="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-primary-container rounded-tr-sm">
+                    </div>
+                    <div
+                        class="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-primary-container rounded-bl-sm">
+                    </div>
+                    <div
+                        class="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-primary-container rounded-br-sm">
+                    </div>
+                    <!-- Tag -->
+                    <div
+                        class="absolute -top-8 left-0 bg-primary-container text-white px-3 py-1 rounded-sm text-[10px] font-bold tracking-wider flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[12px]" data-icon="target">target</span>
+                        PET_PLASTIC_DETECTION - 98% CONFIDENCE
+                    </div>
+                </div>
+                <!-- HUD Elements -->
+                <div class="absolute bottom-6 left-6 text-white space-y-1">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                        <span class="text-[12px] font-bold tracking-widest">LIVE AR FEED</span>
+                    </div>
+                    <div class="text-[10px] font-mono opacity-70">COORD: 34.0522° N, 118.2437° W</div>
+                </div>
+            </div>
+            <!-- Pop-up Quiz Overlay -->
+            <div class="absolute inset-0 z-40 bg-on-surface/30 backdrop-blur-sm flex items-center justify-center p-md transition-opacity duration-300"
+                id="quiz-overlay">
+                <div class="bg-surface max-w-md w-full p-lg rounded-2xl shadow-2xl scale-110">
+                    <div class="flex justify-center mb-md">
+                        <div class="w-16 h-16 bg-tertiary-container rounded-full flex items-center justify-center">
+                            <span class="material-symbols-outlined text-on-tertiary-container text-3xl"
+                                data-icon="psychology">psychology</span>
+                        </div>
+                    </div>
+                    <h3 class="font-headline-md text-center mb-sm text-on-surface">Tantangan Cepat!</h3>
+                    <p class="font-body-md text-center text-on-surface-variant mb-lg">AI mendeteksi ini plastik PET.
+                        Berapa lama botol ini hancur di tanah?</p>
+                    <div class="grid grid-cols-1 gap-sm">
+                        <button
+                            class="w-full py-4 px-md rounded-xl border-2 border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-all font-label-md flex justify-between items-center group"
+                            onclick="checkAnswer(false, this)">
+                            <span>10 - 20 Tahun</span>
+                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100"
+                                data-icon="chevron_right">chevron_right</span>
+                        </button>
+                        <button
+                            class="w-full py-4 px-md rounded-xl border-2 border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-all font-label-md flex justify-between items-center group"
+                            onclick="checkAnswer(true, this)">
+                            <span>450 Tahun</span>
+                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100"
+                                data-icon="chevron_right">chevron_right</span>
+                        </button>
+                        <button
+                            class="w-full py-4 px-md rounded-xl border-2 border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-all font-label-md flex justify-between items-center group"
+                            onclick="checkAnswer(false, this)">
+                            <span>Tidak akan hancur</span>
+                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100"
+                                data-icon="chevron_right">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Right Panel: Composition Analysis -->
+        <aside class="flex flex-col w-full md:w-80 space-y-md shrink-0">
+            <div class="glass-panel p-md rounded-xl shadow-sm border-r-4 border-secondary">
+                <div class="flex items-center gap-sm mb-md">
+                    <span class="material-symbols-outlined text-secondary" data-icon="biotech">biotech</span>
+                    <h2 class="font-headline-md text-[18px] text-secondary">Composition Analysis</h2>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-label-md text-on-surface">Polyethylene</span>
+                            <span class="font-bold text-secondary">72%</span>
+                        </div>
+                        <div class="w-full bg-surface-container h-3 rounded-full overflow-hidden">
+                            <div class="bg-secondary h-full rounded-full" style="width: 72%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-label-md text-on-surface">Organic Matter</span>
+                            <span class="font-bold text-tertiary">18%</span>
+                        </div>
+                        <div class="w-full bg-surface-container h-3 rounded-full overflow-hidden">
+                            <div class="bg-tertiary h-full rounded-full" style="width: 18%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-label-md text-on-surface">Impurity (Soil)</span>
+                            <span class="font-bold text-outline">10%</span>
+                        </div>
+                        <div class="w-full bg-surface-container h-3 rounded-full overflow-hidden">
+                            <div class="bg-outline h-full rounded-full" style="width: 10%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 p-sm bg-secondary-container/20 rounded-lg border border-secondary/20">
+                    <div class="flex gap-2 items-start">
+                        <span class="material-symbols-outlined text-secondary text-sm" data-icon="info">info</span>
+                        <p class="text-[11px] leading-tight text-on-secondary-fixed-variant">Botol ini memiliki tingkat
+                            daur ulang tinggi (Grade A) jika dibersihkan.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Navigation Controls -->
+            <div class="mt-auto grid grid-cols-2 gap-sm">
+                <button
+                    class="flex flex-col items-center justify-center p-sm bg-surface-container-low hover:bg-surface-container transition-colors rounded-xl border border-outline-variant/30 active:scale-95 duration-150">
+                    <span class="material-symbols-outlined text-on-surface-variant" data-icon="refresh">refresh</span>
+                    <span class="text-[10px] mt-1 font-bold">RE-SCAN</span>
+                </button>
+                <button
+                    class="flex flex-col items-center justify-center p-sm bg-primary text-white hover:bg-primary/90 transition-colors rounded-xl shadow-lg active:scale-95 duration-150">
+                    <span class="material-symbols-outlined" data-icon="photo_camera"
+                        data-weight="fill">photo_camera</span>
+                    <span class="text-[10px] mt-1 font-bold">CAPTURE</span>
+                </button>
+            </div>
+        </aside>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-low py-xl mt-auto">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center w-full px-md max-w-container-max mx-auto space-y-md md:space-y-0">
+            <div class="flex items-center gap-xs">
+                <span class="font-headline-md text-headline-md text-on-surface font-bold">MicroJourney AR</span>
+            </div>
+            <p class="font-body-md text-body-md text-on-surface-variant text-center md:text-left">
+                © 2024 MicroJourney AR. Petualangan Ekosistem Digital.
+            </p>
+            <div class="flex items-center space-x-md">
+                <a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm"
+                    href="#">Kurikulum</a>
+                <a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm"
+                    href="#">Pusat Bantuan</a>
+                <a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm"
+                    href="#">Privasi</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        function checkAnswer(isCorrect, element) {
+            const buttons = element.parentElement.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (isCorrect) {
+                element.classList.remove('border-outline-variant');
+                element.classList.add('border-secondary', 'bg-secondary-container');
+                setTimeout(() => {
+                    document.getElementById('quiz-overlay').classList.add('opacity-0', 'pointer-events-none');
+                }, 1000);
+            } else {
+                element.classList.remove('border-outline-variant');
+                element.classList.add('border-error', 'bg-error-container');
+                setTimeout(() => {
+                    element.classList.remove('border-error', 'bg-error-container');
+                    element.classList.add('border-outline-variant');
+                    buttons.forEach(btn => btn.disabled = false);
+                }, 1000);
+            }
+        }
+
+        // Slight micro-interaction for scan line speed
+        setInterval(() => {
+            const scanLine = document.querySelector('.ar-scanline');
+            if (scanLine) {
+                scanLine.style.opacity = Math.random() * 0.5 + 0.5;
+            }
+        }, 500);
+    </script>
+
+    <div style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 9999;">
+        <a href="PerjalananBelajarHome.html" style="background: white; border: 2px solid #006591; color: #006591; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Kembali</a>
+        <a href="PerjalananBelajar-tahap2.html" style="background: #006591; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Selanjutnya</a>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,5 @@
+Tahap 1 → Stimulation (Kamera AR - Pemicu)
+Tahap 2 & 3 → Data Collection (Eksplorasi Degradasi & Rantai Makanan)
+Tahap 4 → Data Processing (Investigasi Fisiologis Lambung & Usus Halus)
+Tahap 5 → Verification (Integrasi E-LKPD)
+Tahap 6 → Generalization (Aksi Nyata)

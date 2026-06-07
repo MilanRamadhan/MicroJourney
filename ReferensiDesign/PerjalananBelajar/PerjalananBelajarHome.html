@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Perjalanan Belajar - MicroJourney AR</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e6e8ea",
+                        "on-background": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "background": "#f7f9fb",
+                        "on-tertiary-fixed-variant": "#5a4300",
+                        "on-secondary-fixed": "#002109",
+                        "outline-variant": "#bec8d2",
+                        "surface": "#f7f9fb",
+                        "surface-dim": "#d8dadc",
+                        "secondary-fixed-dim": "#4ae176",
+                        "on-primary-fixed": "#001e2f",
+                        "secondary": "#006e2f",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#007432",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "surface-tint": "#006591",
+                        "tertiary-fixed": "#ffdf9a",
+                        "tertiary-container": "#c39400",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005321",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "surface-variant": "#e0e3e5",
+                        "inverse-primary": "#89ceff",
+                        "inverse-on-surface": "#eff1f3",
+                        "secondary-fixed": "#6bff8f",
+                        "on-surface-variant": "#3e4850",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#785a00",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#0ea5e9",
+                        "surface-container": "#eceef0",
+                        "on-surface": "#191c1e",
+                        "primary-fixed": "#c9e6ff",
+                        "primary-fixed-dim": "#89ceff",
+                        "secondary-container": "#6bff8f",
+                        "on-tertiary-container": "#423000",
+                        "surface-bright": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-container": "#003751",
+                        "primary": "#006591",
+                        "on-secondary": "#ffffff",
+                        "outline": "#6e7881",
+                        "tertiary-fixed-dim": "#f7be1d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "margin-mobile": "16px",
+                        "lg": "40px",
+                        "container-max": "1200px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .path-dash-animation {
+            stroke-dasharray: 12;
+            animation: dash 20s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .adventure-map {
+            background-image: radial-gradient(#e0e3e5 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
+    <!-- TopNavBar -->
+    <nav
+        class="sticky top-0 z-50 bg-surface-container-lowest dark:bg-surface-dim shadow-[0_4px_12px_rgba(0,0,0,0.05)] h-20 flex items-center">
+        <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+            <div class="flex items-center gap-lg">
+                <span
+                    class="font-headline-md text-headline-md font-extrabold text-primary dark:text-inverse-primary tracking-tight">MicroJourney
+                    AR</span>
+                <div class="hidden md:flex items-center gap-md">
+                    <a class="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim pb-2 transition-colors"
+                        href="../LandingPage/LandingPage.html">Beranda</a>
+                    <a class="font-body-md text-body-md text-secondary dark:text-secondary-fixed-dim border-b-4 border-secondary dark:border-secondary-fixed-dim pb-2 font-bold"
+                        href="PerjalananBelajarHome.html">Perjalanan Belajar</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim pb-2 transition-colors"
+                        href="../Materi/Materi.html">Materi</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../E-LKPD/Dashboard-LKPD.html">E-LKPD</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../RaporGuru/Dashboard-Guru.html">Rapor Guru</a>
+                </div>
+            </div>
+            <div class="flex items-center gap-md">
+                <div class="relative hidden sm:block">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+                    <input
+                        class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full w-64 focus:ring-2 focus:ring-primary text-label-md font-label-md"
+                        placeholder="Cari petualangan..." type="text" />
+                </div>
+                <div class="flex items-center gap-sm">
+                    <button
+                        class="p-2 text-primary hover:bg-surface-container-low rounded-lg transition-all active:scale-95 duration-200">
+                        <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                    </button>
+                    <button
+                        class="p-2 text-primary hover:bg-surface-container-low rounded-lg transition-all active:scale-95 duration-200">
+                        <span class="material-symbols-outlined" data-icon="emoji_events">emoji_events</span>
+                    </button>
+                    <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container ml-2">
+                        <img alt="Student profile avatar" class="w-full h-full object-cover"
+                            data-alt="A close-up high-quality portrait of a friendly young middle-school explorer with a cheerful expression, wearing modern eco-friendly outdoor gear and a smart headset. The lighting is bright and optimistic, set against a blurred background of a sunny science laboratory. The visual style is clean, modern, and educational, consistent with a high-key light mode interface."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPhS0Cab1IfQuCpORqWOsmK4QpiiO3ieiRzppi7LysofiqoEzn4qAhasxZNg0iYVLDoBR5ESbgA9VuigflkENVf3IeHGqXxAPcaZc7fRW05qCH-y7D0FHNjaPtdV534Nw25O4SztxTLU73IfmtrXsKnr5_QcYiYIQgN0uwJ5VawJlzJ5-aWgZRqziv2rCELgAw_qBsoGSMecsygGrTKVFJqziX2bETDqnN_iGPneaekNE37rcyqXJE5DqUJpRT7sMCjRJT9EAY1g" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="max-w-container-max mx-auto px-gutter py-xl adventure-map min-h-[calc(100vh-80px)]">
+        <!-- Header Section -->
+        <header class="mb-xl text-center max-w-2xl mx-auto">
+            <h1 class="font-display-lg text-display-lg text-primary mb-sm">Ekspedisi Microplastics</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant">Ikuti jejak perjalanan plastik dari tangan kita
+                hingga kembali ke meja makan. Selesaikan setiap misi untuk menjadi Penjaga Samudra!</p>
+        </header>
+        <!-- Journey Path Container -->
+        <div class="relative w-full overflow-x-auto pb-20 pt-10 no-scrollbar">
+            <div class="min-w-[1000px] relative h-[500px]">
+                <!-- SVG Path Connector -->
+                <svg class="absolute top-0 left-0 w-full h-full pointer-events-none" fill="none" viewbox="0 0 1000 500">
+                    <path d="M100,150 C250,150 250,350 400,350 C550,350 550,150 700,150 C850,150 850,350 1000,350"
+                        fill="none" stroke="#cbd5e1" stroke-linecap="round" stroke-width="8"></path>
+                    <path class="path-dash-animation" d="M100,150 C250,150 250,350 400,350 C550,350 550,150 630,200"
+                        fill="none" stroke="#6bff8f" stroke-linecap="round" stroke-width="8"></path>
+                </svg>
+                <!-- Stage 1: The Origin -->
+                <div class="absolute top-[80px] left-[50px] group">
+                    <div
+                        class="relative bg-surface-container-lowest p-6 rounded-xl shadow-md border-2 border-secondary-container w-48 transition-all hover:-translate-y-2 cursor-pointer">
+                        <div
+                            class="absolute -top-4 -left-4 w-10 h-10 bg-secondary text-on-secondary rounded-full flex items-center justify-center font-bold shadow-lg">
+                            1</div>
+                        <div class="mb-4 text-secondary text-4xl">
+                            <span class="material-symbols-outlined text-[48px]" data-icon="bottle_distilled"
+                                style="font-variation-settings: 'FILL' 1;">domain_disabled</span>
+                        </div>
+                        <h3 class="font-label-md text-label-md text-on-surface mb-1">Botol Plastik</h3>
+                        <p class="text-[12px] text-on-surface-variant leading-tight">Plastik terbuang ke lingkungan.</p>
+                        <div class="mt-3 flex items-center text-secondary text-[10px] font-bold">
+                            <span class="material-symbols-outlined text-[14px] mr-1">check_circle</span> SELESAI
+                        </div>
+                    </div>
+                </div>
+                <!-- Stage 2: Weathering -->
+                <div class="absolute top-[280px] left-[250px] group">
+                    <div
+                        class="relative bg-surface-container-lowest p-6 rounded-xl shadow-md border-2 border-secondary-container w-48 transition-all hover:-translate-y-2 cursor-pointer">
+                        <div
+                            class="absolute -top-4 -left-4 w-10 h-10 bg-secondary text-on-secondary rounded-full flex items-center justify-center font-bold shadow-lg">
+                            2</div>
+                        <div class="mb-4 text-secondary text-4xl">
+                            <span class="material-symbols-outlined text-[48px]" data-icon="wb_sunny">wb_sunny</span>
+                        </div>
+                        <h3 class="font-label-md text-label-md text-on-surface mb-1">Pelapukan</h3>
+                        <p class="text-[12px] text-on-surface-variant leading-tight">Matahari dan air memecah plastik.
+                        </p>
+                        <div class="mt-3 flex items-center text-secondary text-[10px] font-bold">
+                            <span class="material-symbols-outlined text-[14px] mr-1">check_circle</span> SELESAI
+                        </div>
+                    </div>
+                </div>
+                <!-- Stage 3: The Ocean Sink -->
+                <div class="absolute top-[80px] left-[450px] group">
+                    <div
+                        class="relative bg-surface-container-lowest p-6 rounded-xl shadow-md border-2 border-secondary-container w-48 transition-all hover:-translate-y-2 cursor-pointer">
+                        <div
+                            class="absolute -top-4 -left-4 w-10 h-10 bg-secondary text-on-secondary rounded-full flex items-center justify-center font-bold shadow-lg">
+                            3</div>
+                        <div class="mb-4 text-secondary text-4xl">
+                            <span class="material-symbols-outlined text-[48px]" data-icon="water_drop">water_drop</span>
+                        </div>
+                        <h3 class="font-label-md text-label-md text-on-surface mb-1">Masuk Samudra</h3>
+                        <p class="text-[12px] text-on-surface-variant leading-tight">Partikel kecil terbawa ke laut.</p>
+                        <div class="mt-3 flex items-center text-secondary text-[10px] font-bold">
+                            <span class="material-symbols-outlined text-[14px] mr-1">check_circle</span> SELESAI
+                        </div>
+                    </div>
+                </div>
+                <!-- Stage 4: Food Chain (CURRENT) -->
+                <div class="absolute top-[280px] left-[600px] z-10 floating">
+                    <div
+                        class="relative bg-primary p-6 rounded-xl shadow-xl border-4 border-primary-container w-56 transform scale-110">
+                        <div
+                            class="absolute -top-5 -left-5 w-12 h-12 bg-tertiary-fixed text-on-tertiary-fixed rounded-full flex items-center justify-center font-extrabold shadow-lg border-2 border-primary ring-4 ring-white">
+                            4</div>
+                        <div class="mb-4 text-white text-4xl">
+                            <span class="material-symbols-outlined text-[56px]" data-icon="set_meal"
+                                style="font-variation-settings: 'FILL' 1;">set_meal</span>
+                        </div>
+                        <h3 class="font-headline-md text-[18px] text-white mb-2 leading-tight">Masuk ke Rantai Makanan
+                        </h3>
+                        <p class="text-[13px] text-primary-fixed leading-tight mb-4">Hewan laut mengira plastik adalah
+                            plankton.</p>
+                        <button onclick="window.location.href='PerjalananBelajar-tahap1.html'" class="w-full bg-secondary-container text-on-secondary-container font-bold py-2 rounded-lg text-label-md hover:bg-secondary-fixed transition-colors active:scale-95">MULAI MISI AR</button>
+                    </div>
+                </div>
+                <!-- Stage 5: Bioaccumulation -->
+                <div
+                    class="absolute top-[80px] left-[780px] group opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">
+                    <div
+                        class="relative bg-surface-container-low p-6 rounded-xl shadow-sm border-2 border-outline-variant w-48">
+                        <div
+                            class="absolute -top-4 -left-4 w-10 h-10 bg-outline text-white rounded-full flex items-center justify-center font-bold shadow-md">
+                            5</div>
+                        <div class="mb-4 text-outline text-4xl">
+                            <span class="material-symbols-outlined text-[48px]"
+                                data-icon="vital_signs">vital_signs</span>
+                        </div>
+                        <h3 class="font-label-md text-label-md text-on-surface mb-1">Bioakumulasi</h3>
+                        <p class="text-[12px] text-on-surface-variant leading-tight">Konsentrasi racun yang meningkat.
+                        </p>
+                        <div class="mt-3 flex items-center text-outline text-[10px] font-bold">
+                            <span class="material-symbols-outlined text-[14px] mr-1">lock</span> TERKUNCI
+                        </div>
+                    </div>
+                </div>
+                <!-- Stage 6: Human Impact -->
+                <div
+                    class="absolute top-[280px] left-[950px] group opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">
+                    <div
+                        class="relative bg-surface-container-low p-6 rounded-xl shadow-sm border-2 border-outline-variant w-48">
+                        <div
+                            class="absolute -top-4 -left-4 w-10 h-10 bg-outline text-white rounded-full flex items-center justify-center font-bold shadow-md">
+                            6</div>
+                        <div class="mb-4 text-outline text-4xl">
+                            <span class="material-symbols-outlined text-[48px]"
+                                data-icon="person_celebrate">person_celebrate</span>
+                        </div>
+                        <h3 class="font-label-md text-label-md text-on-surface mb-1">Dampak Manusia</h3>
+                        <p class="text-[12px] text-on-surface-variant leading-tight">Plastik kembali ke tubuh kita.</p>
+                        <div class="mt-3 flex items-center text-outline text-[10px] font-bold">
+                            <span class="material-symbols-outlined text-[14px] mr-1">lock</span> TERKUNCI
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Featured Mission Card (Bento Layout style) -->
+        <div class="mt-xl grid grid-cols-1 md:grid-cols-12 gap-md items-stretch">
+            <div
+                class="md:col-span-8 bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden flex flex-col md:flex-row border border-outline-variant/30">
+                <div class="md:w-2/5 relative min-h-[200px]">
+                    <img alt="Marine life visualization" class="w-full h-full object-cover"
+                        data-alt="A vibrant, cinematic 3D underwater scene showcasing a school of fish swimming through crystal clear turquoise ocean water. Realistic sunlight beams filter from the surface, illuminating a colorful coral reef. Subtle, glowing digital microplastic particles are suspended in the water, highlighted with soft white outlines to represent an AR learning overlay. The mood is adventurous and scientifically accurate yet friendly for students."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4-qOh4PW3i_HREpNrdpKeTq73PJdIWeLyC5aRDkyPNOH1FKO19rXEi1z0NkcN_NbpYwxTE5GvyFYI_e8fZltGT-gOqBcUTKRj1zG_L9tYRqGLn46mDQHMg2PQjxHLXnKdpbkqdQ4GY7Au3PelNanoHqxJb34NS7z6rsKpwUtt5bxCYThg1EBa-BL-DavYakstN5MR6nNZ1w9BUCBtaCMgaM2mzkYfJCJbYHlmkGiMuFbKySLWDtqq3mq1htwJLTi7CTEPBRU9-g" />
+                </div>
+                <div class="md:w-3/5 p-md flex flex-col justify-center">
+                    <span
+                        class="inline-block bg-primary-container text-on-primary-container text-label-sm font-label-sm px-3 py-1 rounded-full w-fit mb-sm">MISI
+                        AKTIF</span>
+                    <h2 class="font-headline-lg text-headline-lg text-on-background mb-sm">Analisis Rantai Makanan</h2>
+                    <p class="font-body-md text-body-md text-on-surface-variant mb-md">Gunakan kamera AR-mu untuk
+                        memindai spesimen laut dan temukan bagaimana mikroplastik menyusup ke sistem mereka.</p>
+                    <div class="flex gap-sm">
+                        <button
+                            class="bg-primary text-on-primary font-bold px-6 py-3 rounded-xl flex items-center gap-sm shadow-md hover:bg-surface-tint transition-all active:scale-95">
+                            <span class="material-symbols-outlined">qr_code_scanner</span>
+                            Pindai Objek
+                        </button>
+                        <button
+                            class="border-2 border-secondary text-secondary font-bold px-6 py-3 rounded-xl hover:bg-secondary-container/20 transition-all">
+                            Lihat Panduan
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="md:col-span-4 bg-tertiary-container text-on-tertiary-container rounded-2xl p-md flex flex-col justify-between shadow-sm">
+                <div>
+                    <h3 class="font-headline-md text-headline-md mb-xs">Statistik Kamu</h3>
+                    <p class="font-label-md text-label-md opacity-90">Progress Petualangan Minggu Ini</p>
+                </div>
+                <div class="my-md">
+                    <div class="flex justify-between items-end mb-xs">
+                        <span class="text-display-lg font-display-lg">65%</span>
+                        <span class="font-label-md text-label-md mb-2">3/6 Tahap</span>
+                    </div>
+                    <div class="w-full h-4 bg-white/30 rounded-full overflow-hidden">
+                        <div class="h-full bg-on-tertiary-container w-[65%] rounded-full"></div>
+                    </div>
+                </div>
+                <div class="bg-white/20 rounded-xl p-sm flex items-center gap-sm">
+                    <div
+                        class="w-10 h-10 bg-tertiary-fixed text-on-tertiary-fixed rounded-lg flex items-center justify-center font-bold">
+                        <span class="material-symbols-outlined">star</span>
+                    </div>
+                    <div>
+                        <p class="font-label-md text-label-md">1.250 XP Terkumpul</p>
+                        <p class="text-[12px] opacity-80">250 XP lagi untuk naik level!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container dark:bg-surface-container-highest border-t border-outline-variant dark:border-outline">
+        <div
+            class="w-full py-xl px-gutter flex flex-col md:flex-row justify-between items-center gap-md max-w-container-max mx-auto">
+            <div class="flex flex-col items-center md:items-start">
+                <span
+                    class="font-headline-md text-headline-md font-bold text-on-surface dark:text-inverse-on-surface mb-xs">MicroJourney
+                    AR</span>
+                <p
+                    class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant text-center md:text-left">
+                    © 2024 MicroJourney AR. Petualangan Sains untuk Penjelajah Muda.</p>
+            </div>
+            <div class="flex gap-lg">
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors"
+                    href="#">Tentang Kami</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors"
+                    href="#">Bantuan</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors"
+                    href="#">Kebijakan Privasi</a>
+                <a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors"
+                    href="#">Panduan Guru</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Micro-interactions for horizontal scroll
+        const scrollContainer = document.querySelector('.adventure-map .no-scrollbar');
+        if (scrollContainer) {
+            scrollContainer.addEventListener('wheel', (evt) => {
+                evt.preventDefault();
+                scrollContainer.scrollLeft += evt.deltaY;
+            });
+        }
+
+        // Parallax-ish effect on hover
+        document.querySelectorAll('.adventure-map .group').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+
+    <div style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 9999;">
+        <a href="..\LandingPage\LandingPage.html" style="background: white; border: 2px solid #006591; color: #006591; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Kembali</a>
+        <a href="PerjalananBelajar-tahap1.html" style="background: #006591; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Selanjutnya</a>
+    </div>
+</body>
+
+</html>

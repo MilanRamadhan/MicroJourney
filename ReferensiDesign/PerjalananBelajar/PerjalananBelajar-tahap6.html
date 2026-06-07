@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MicroJourney AR - Tahap 6: Dampak Manusia</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#006591",
+                        "on-tertiary-fixed": "#251a00",
+                        "outline": "#6e7881",
+                        "primary-fixed-dim": "#89ceff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005321",
+                        "surface-container": "#eceef0",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary-container": "#6bff8f",
+                        "on-tertiary-fixed-variant": "#5a4300",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "background": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#003751",
+                        "on-background": "#191c1e",
+                        "primary-fixed": "#c9e6ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002109",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#f7be1d",
+                        "on-surface": "#191c1e",
+                        "inverse-primary": "#89ceff",
+                        "surface-container-low": "#f2f4f6",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#785a00",
+                        "on-tertiary-container": "#423000",
+                        "tertiary-container": "#c39400",
+                        "primary-container": "#0ea5e9",
+                        "surface-bright": "#f7f9fb",
+                        "primary": "#006591",
+                        "surface": "#f7f9fb",
+                        "surface-dim": "#d8dadc",
+                        "on-surface-variant": "#3e4850",
+                        "secondary": "#006e2f",
+                        "on-secondary-container": "#007432",
+                        "secondary-fixed-dim": "#4ae176",
+                        "outline-variant": "#bec8d2",
+                        "surface-variant": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdf9a",
+                        "secondary-fixed": "#6bff8f",
+                        "on-primary-fixed": "#001e2f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "64px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "md": "24px",
+                        "container-max": "1200px",
+                        "lg": "40px",
+                        "sm": "12px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .anatomy-glow {
+            filter: drop-shadow(0 0 12px rgba(137, 206, 255, 0.6));
+        }
+
+        .mint-glow {
+            filter: drop-shadow(0 0 8px rgba(74, 225, 118, 0.4));
+        }
+
+        .drag-item {
+            touch-action: none;
+            user-select: none;
+        }
+
+        .signature-canvas {
+            cursor: crosshair;
+            background-image: radial-gradient(#bec8d2 0.5px, transparent 0.5px);
+            background-size: 16px 16px;
+        }
+
+        .medical-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <header
+        class="bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.05)] sticky top-0 z-50">
+        <div class="flex justify-between items-center w-full px-md py-4 max-w-container-max mx-auto">
+            <div class="flex items-center gap-xs">
+                <span class="material-symbols-outlined text-primary text-3xl"
+                    style="font-variation-settings: 'FILL' 1;">microbiology</span>
+                <h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">
+                    MicroJourney AR</h1>
+            </div>
+            <nav class="hidden md:flex items-center gap-lg">
+                <a class="text-on-surface-variant dark:text-outline-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md"
+                    href="../LandingPage/LandingPage.html">Beranda</a>
+                <a class="text-on-surface-variant dark:text-outline-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md"
+                    href="PerjalananBelajarHome.html">Perjalanan Belajar</a>
+                <a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-bold font-label-md text-label-md"
+                    href="../Materi/Materi.html">Materi</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../E-LKPD/Dashboard-LKPD.html">E-LKPD</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../RaporGuru/Dashboard-Guru.html">Rapor Guru</a>
+            </nav>
+            <div class="flex items-center gap-md">
+                <button class="text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                </button>
+                <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+                    <img alt="Student Profile Avatar"
+                        data-alt="A clean, professional portrait of a cheerful middle-school student in a modern school setting. The lighting is bright and high-key, reflecting an optimistic and educational atmosphere. The student is wearing a neat uniform against a blurred background of a brightly lit library or classroom. The visual style is crisp and friendly, consistent with a modern educational design system."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCkgGM3yijKm9HTyQQ-6ESmG1wG_4fzdqZt-a4ykiOA8rx01epYRV5IisjS3fFtJe2Uzi15hJrsPfILDwZTPCn2OPhmXi9mul4WZfvtS7qH8F1XJjVB-SDCxtwL049Oq7DiVoRsbAWE3SwOOy6dyBsQ0bUbqj3UEh0ViWbE_opc0fixNTfFuqETB5rzCrgPusw6iDve-xNxsq-mxmceMO4kVYFef1Jgzl6j84cE98OSaUzoyJyGwtEK2-5lXRyxxPCZGZG0WFq4A" />
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="flex-grow max-w-container-max mx-auto w-full px-md py-lg grid grid-cols-12 gap-gutter">
+        <!-- Header Section -->
+        <section class="col-span-12 mb-base">
+            <div class="flex items-center gap-sm">
+                <span
+                    class="px-3 py-1 bg-primary-container text-on-primary-container rounded-full font-label-md text-label-md">Modul
+                    06</span>
+                <h2 class="font-headline-lg text-headline-lg text-on-surface">Dampak Manusia: Mikroplastik dalam Tubuh
+                </h2>
+            </div>
+            <p class="mt-2 text-on-surface-variant font-body-lg text-body-lg max-w-3xl">Pelajari bagaimana polusi laut
+                kembali kepada kita. Hubungkan sumber paparan ke sistem organ yang terpengaruh.</p>
+        </section>
+        <!-- Left Panel: Puzzle Anatomi -->
+        <aside class="col-span-12 lg:col-span-3 flex flex-col gap-md">
+            <div class="bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/30 h-fit">
+                <h3 class="font-headline-md text-headline-md text-primary mb-md">Puzzle Paparan</h3>
+                <p class="font-label-md text-label-md text-on-surface-variant mb-6">Tarik sumber mikroplastik ke bagian
+                    tubuh yang tepat:</p>
+                <div class="flex flex-col gap-sm">
+                    <div class="drag-item flex items-center gap-sm p-4 bg-surface-container rounded-lg border-2 border-transparent hover:border-primary-container transition-all cursor-grab active:cursor-grabbing group"
+                        draggable="true">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm">
+                            <span class="material-symbols-outlined text-secondary"
+                                data-icon="restaurant">restaurant</span>
+                        </div>
+                        <span class="font-label-md text-label-md font-bold">Makan Seafood</span>
+                    </div>
+                    <div class="drag-item flex items-center gap-sm p-4 bg-surface-container rounded-lg border-2 border-transparent hover:border-primary-container transition-all cursor-grab active:cursor-grabbing group"
+                        draggable="true">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm">
+                            <span class="material-symbols-outlined text-primary"
+                                data-icon="water_drop">water_drop</span>
+                        </div>
+                        <span class="font-label-md text-label-md font-bold">Air Minum</span>
+                    </div>
+                    <div class="drag-item flex items-center gap-sm p-4 bg-surface-container rounded-lg border-2 border-transparent hover:border-primary-container transition-all cursor-grab active:cursor-grabbing group"
+                        draggable="true">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm">
+                            <span class="material-symbols-outlined text-tertiary" data-icon="science">science</span>
+                        </div>
+                        <span class="font-label-md text-label-md font-bold">Garam Laut</span>
+                    </div>
+                </div>
+                <div class="mt-xl p-4 bg-secondary-fixed/10 rounded-lg border border-secondary/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined text-secondary text-sm">info</span>
+                        <span
+                            class="font-label-sm text-label-sm font-bold text-on-secondary-fixed-variant">PETUNJUK</span>
+                    </div>
+                    <p class="font-label-sm text-label-sm text-on-secondary-fixed-variant leading-tight">Mikroplastik
+                        masuk melalui sistem pencernaan sebelum menyebar ke aliran darah.</p>
+                </div>
+            </div>
+        </aside>
+        <!-- Center: 3D Human Model Visualization -->
+        <section
+            class="col-span-12 lg:col-span-6 relative flex items-center justify-center min-h-[500px] bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="absolute inset-0 opacity-10 pointer-events-none"
+                style="background-image: radial-gradient(#006591 1px, transparent 1px); background-size: 30px 30px;">
+            </div>
+            <div class="relative w-full h-full flex items-center justify-center p-md">
+                <!-- Anatomy Model Placeholder -->
+                <div class="relative w-64 h-[480px]">
+                    <img alt="Human Anatomy Outline" class="w-full h-full object-contain opacity-40 mix-blend-multiply"
+                        data-alt="A clean, scientific illustration of a human anatomy silhouette in a modern educational light-mode style. The background is a crisp white with a subtle technical grid pattern. The silhouette is semi-transparent, showing soft internal structures. The lighting is bright and breezy, using a soft aqua and mint glow to highlight the digestive and circulatory systems. The overall mood is medical yet approachable for a school environment."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy5fAIc5LWusKVlcpUVNobpSd-2i0937BdTSl2Rimqcy0zMFGGBx1yo-SCR_8Vf5d0F9PnPZiXm-ubfMRaeDqNOBPsZh2rAhO7s9EzwC1nkyF8LKNrJyr8Ex_PcrxIOuMf3WniSFV1LES0i16FLLM5bZggyavci70EDWazVfqCUvSg27YBeeILwOR1iFXZrSaJiCt2bbAmy2TlYptHEOLbf4F15rXdQpx2pRrS63Z8eK736U7b_DccWbNE4DXPqlXdeVCt-C8LHQ" />
+                    <!-- Glowing Organs Overlays (SVG for interaction) -->
+                    <svg class="absolute inset-0 w-full h-full" viewbox="0 0 200 400">
+                        <!-- Intestines Zone -->
+                        <circle class="animate-pulse mint-glow drop-zone" cx="100" cy="220" data-target="intestines"
+                            fill="#4ae176" fill-opacity="0.2" r="25"></circle>
+                        <path class="opacity-40"
+                            d="M85,200 Q100,190 115,200 Q130,220 115,240 Q100,250 85,240 Q70,220 85,200" fill="none"
+                            stroke="#006e2f" stroke-width="2"></path>
+                        <!-- Bloodstream Zone -->
+                        <path class="animate-[dash_2s_linear_infinite] anatomy-glow drop-zone"
+                            d="M100,100 L100,180 M60,150 L140,150" data-target="bloodstream" fill="none"
+                            stroke="#006591" stroke-dasharray="4 2" stroke-width="3"></path>
+                        <circle class="drop-zone" cx="100" cy="140" data-target="bloodstream" fill="#89ceff"
+                            fill-opacity="0.2" r="15"></circle>
+                    </svg>
+                    <!-- Interactive Tooltips -->
+                    <div class="absolute top-[210px] left-[130px] medical-glass p-2 rounded-lg shadow-sm text-[10px] font-bold border border-secondary-fixed opacity-0 transition-opacity duration-300"
+                        id="hint-intestines">
+                        TARGET: SISTEM PENCERNAAN
+                    </div>
+                </div>
+                <!-- Floating Info Tag -->
+                <div
+                    class="absolute top-md right-md medical-glass p-4 rounded-xl shadow-lg border border-primary/10 max-w-[180px]">
+                    <div class="flex items-center gap-2 mb-1">
+                        <div class="w-2 h-2 rounded-full bg-error animate-ping"></div>
+                        <span class="font-label-sm text-label-sm font-bold text-primary">STATUS AR</span>
+                    </div>
+                    <p class="text-[11px] text-on-surface-variant font-medium">Melacak partikel mikro &lt; 5mm dalam
+                        jaringan lunak...</p>
+                </div>
+            </div>
+        </section>
+        <!-- Right Panel: Detail Medis -->
+        <aside class="col-span-12 lg:col-span-3">
+            <div class="bg-surface-container-low p-md rounded-xl shadow-sm border border-outline-variant/30 h-full flex flex-col"
+                id="medical-detail">
+                <div class="flex items-center gap-xs mb-md">
+                    <span class="material-symbols-outlined text-primary" data-icon="analytics">analytics</span>
+                    <h3 class="font-headline-md text-headline-md text-on-surface">Data Riset</h3>
+                </div>
+                <!-- Initial State -->
+                <div class="flex-grow flex flex-col items-center justify-center text-center p-lg opacity-60"
+                    id="data-empty">
+                    <span class="material-symbols-outlined text-4xl mb-sm" data-icon="lock">lock</span>
+                    <p class="font-label-md text-label-md">Selesaikan puzzle untuk membuka data medis terkini</p>
+                </div>
+                <!-- Content State (Hidden by default) -->
+                <div class="hidden space-y-md" id="data-content">
+                    <div class="p-4 bg-white rounded-lg shadow-sm">
+                        <h4 class="font-label-md text-label-md text-primary mb-1">Penyerapan Gastrointestinal</h4>
+                        <p class="text-[13px] text-on-surface-variant">Partikel plastik menembus lapisan mukosa usus dan
+                            memicu inflamasi ringan pada 87% sampel uji.</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-sm">
+                        <h4 class="font-label-md text-label-md text-secondary mb-1">Translasi Aliran Darah</h4>
+                        <p class="text-[13px] text-on-surface-variant">Mikroplastik ditemukan dapat berikatan dengan sel
+                            darah merah, mempengaruhi transportasi oksigen.</p>
+                    </div>
+                    <div class="p-4 bg-primary-container text-on-primary-container rounded-lg">
+                        <p class="font-bold text-[12px] mb-1">TAHUKAH KAMU?</p>
+                        <p class="text-[12px]">Rata-rata manusia menelan 5 gram plastik setiap minggu—setara dengan satu
+                            kartu kredit!</p>
+                    </div>
+                    <button
+                        class="w-full mt-4 py-3 bg-primary text-white rounded-lg font-label-md text-label-md shadow-lg hover:shadow-primary/20 transition-all">Pelajari
+                        Lebih Lanjut</button>
+                </div>
+            </div>
+        </aside>
+        <!-- Footer Area: Signature Pad -->
+        <section class="col-span-12 mt-lg">
+            <div
+                class="bg-surface-container-highest p-lg rounded-2xl border border-outline-variant/50 relative overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-lg items-center">
+                    <div>
+                        <h3 class="font-headline-lg text-headline-lg text-on-surface mb-sm">Komitmen Ekologi</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-md">Sebagai penutup tahap ini,
+                            tuliskan tanda tangan digitalmu sebagai janji untuk mengurangi penggunaan plastik sekali
+                            pakai.</p>
+                        <div class="flex gap-md">
+                            <div class="flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-secondary" data-icon="check_circle"
+                                    style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                <span class="font-label-sm text-label-sm">Bawa botol sendiri</span>
+                            </div>
+                            <div class="flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-secondary" data-icon="check_circle"
+                                    style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                <span class="font-label-sm text-label-sm">Kurangi sedotan plastik</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <div class="bg-white rounded-xl p-4 shadow-inner border border-outline-variant">
+                            <canvas
+                                class="signature-canvas w-full h-40 rounded-lg border border-dashed border-outline-variant/50"
+                                id="signature-pad"></canvas>
+                            <div class="flex justify-between mt-sm">
+                                <button class="text-error font-label-sm text-label-sm hover:underline"
+                                    id="clear-btn">Hapus</button>
+                                <span class="text-on-surface-variant/50 font-label-sm text-label-sm">Tanda Tangan di
+                                    Sini</span>
+                            </div>
+                        </div>
+                        <button
+                            class="absolute -right-4 -bottom-4 w-16 h-16 rounded-full bg-secondary text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-2xl" data-icon="send">send</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-low dark:bg-surface-container-lowest full-width py-xl mt-auto">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center w-full px-md max-w-container-max mx-auto space-y-md md:space-y-0">
+            <div class="flex items-center gap-sm">
+                <span class="font-headline-md text-headline-md text-on-surface font-bold">MicroJourney AR</span>
+                <span class="text-on-surface-variant font-body-md text-body-md opacity-60">|</span>
+                <span class="text-on-surface-variant font-body-md text-body-md">© 2024 MicroJourney AR. Petualangan
+                    Ekosistem Digital.</span>
+            </div>
+            <div class="flex gap-lg">
+                <a class="text-on-surface-variant dark:text-outline-variant font-label-sm text-label-sm hover:text-secondary transition-colors"
+                    href="#">Kurikulum</a>
+                <a class="text-on-surface-variant dark:text-outline-variant font-label-sm text-label-sm hover:text-secondary transition-colors"
+                    href="#">Pusat Bantuan</a>
+                <a class="text-on-surface-variant dark:text-outline-variant font-label-sm text-label-sm hover:text-secondary transition-colors"
+                    href="#">Privasi</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Simple Interaction Logic
+        const dragItems = document.querySelectorAll('.drag-item');
+        const dropZones = document.querySelectorAll('.drop-zone');
+        const dataEmpty = document.getElementById('data-empty');
+        const dataContent = document.getElementById('data-content');
+        const hintIntestines = document.getElementById('hint-intestines');
+
+        let matches = 0;
+
+        dragItems.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', 'plastic');
+                item.style.opacity = '0.5';
+                hintIntestines.style.opacity = '1';
+            });
+            item.addEventListener('dragend', () => {
+                item.style.opacity = '1';
+                hintIntestines.style.opacity = '0';
+            });
+        });
+
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => e.preventDefault());
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.setAttribute('fill-opacity', '0.6');
+                matches++;
+                if (matches >= 1) {
+                    dataEmpty.classList.add('hidden');
+                    dataContent.classList.remove('hidden');
+                }
+            });
+        });
+
+        // Signature Pad Logic
+        const canvas = document.getElementById('signature-pad');
+        const ctx = canvas.getContext('2d');
+        const clearBtn = document.getElementById('clear-btn');
+        let drawing = false;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth - 32;
+            canvas.height = 160;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function startDrawing(e) {
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#006e2f';
+            ctx.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            drawing = false;
+        }
+
+        clearBtn.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        // Background animation dash offset
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes dash {
+                to { stroke-dashoffset: -20; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+    <div style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 9999;">
+        <a href="PerjalananBelajar-tahap5.html" style="background: white; border: 2px solid #006591; color: #006591; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Kembali</a>
+        <a href="PerjalananBelajarHome.html" style="background: #006591; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Selanjutnya</a>
+    </div>
+</body>
+
+</html>

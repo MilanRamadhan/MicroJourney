@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MicroScout - Stage 2: Weathering</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-tint": "#006591",
+                        "secondary-container": "#6bff8f",
+                        "on-secondary-container": "#007432",
+                        "tertiary-fixed": "#ffdf9a",
+                        "surface-container-low": "#f2f4f6",
+                        "primary-fixed": "#c9e6ff",
+                        "inverse-primary": "#89ceff",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "tertiary-fixed-dim": "#f7be1d",
+                        "secondary-fixed-dim": "#4ae176",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-container": "#423000",
+                        "on-secondary-fixed": "#002109",
+                        "on-tertiary-fixed-variant": "#5a4300",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#89ceff",
+                        "on-primary-container": "#003751",
+                        "secondary-fixed": "#6bff8f",
+                        "surface-dim": "#d8dadc",
+                        "tertiary-container": "#c39400",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f7f9fb",
+                        "outline": "#6e7881",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#0ea5e9",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container": "#eceef0",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3e4850",
+                        "tertiary": "#785a00",
+                        "secondary": "#006e2f",
+                        "on-primary-fixed": "#001e2f",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#bec8d2",
+                        "on-background": "#191c1e",
+                        "inverse-surface": "#2d3133",
+                        "primary": "#006591",
+                        "on-surface": "#191c1e",
+                        "on-secondary-fixed-variant": "#005321",
+                        "background": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xl": "64px",
+                        "md": "24px",
+                        "container-max": "1200px",
+                        "base": "8px",
+                        "lg": "40px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .ar-viewport {
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .weathering-texture {
+            transition: opacity 0.5s ease, filter 0.5s ease;
+        }
+
+        .wave-animation {
+            animation: wave 1.5s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(15px);
+            }
+        }
+
+        .shake-effect {
+            animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <header
+        class="bg-surface dark:bg-surface-container-low full-width top-0 sticky shadow-[0_4px_12px_rgba(0,0,0,0.15)] z-50">
+        <div class="flex justify-between items-center px-lg py-sm max-w-container-max mx-auto w-full">
+            <div class="flex items-center gap-md">
+                <span
+                    class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary">MicroScout</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-lg">
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-md hover:text-secondary-fixed-dim transition-colors duration-200"
+                    href="../LandingPage/LandingPage.html">Field Guide</a>
+                <a class="text-secondary font-bold border-b-2 border-secondary pb-1 font-label-md transition-colors duration-200"
+                    href="PerjalananBelajarHome.html">Mission Logs</a>
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-md hover:text-secondary-fixed-dim transition-colors duration-200"
+                    href="PerjalananBelajar-tahap1.html">AR Explorer</a>
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-md hover:text-secondary-fixed-dim transition-colors duration-200"
+                    href="../Materi/Materi.html">Lab Results</a>
+            </nav>
+            <div class="flex items-center gap-md">
+                <button class="text-primary hover:text-secondary-fixed-dim transition-transform Active:scale-95">
+                    <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                </button>
+                <button class="text-primary hover:text-secondary-fixed-dim transition-transform Active:scale-95">
+                    <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="flex-grow relative flex flex-col md:flex-row overflow-hidden">
+        <!-- Sidebar Controls: UV Simulation -->
+        <aside class="w-full md:w-80 p-md flex flex-col gap-md z-20">
+            <div class="glass-card p-md rounded-xl shadow-sm">
+                <div class="flex items-center gap-sm mb-md">
+                    <span class="material-symbols-outlined text-secondary" data-icon="wb_sunny">wb_sunny</span>
+                    <h2 class="font-headline-md text-headline-md text-primary">UV Exposure</h2>
+                </div>
+                <p class="text-body-md text-on-surface-variant mb-md">Increase sun intensity to simulate long-term UV
+                    degradation.</p>
+                <div class="flex flex-col gap-xs">
+                    <label class="text-label-sm uppercase tracking-wider text-outline" for="uv-slider">Intensity
+                        Level</label>
+                    <input
+                        class="w-full h-3 bg-surface-container-high rounded-full appearance-none cursor-pointer accent-primary-container"
+                        id="uv-slider" max="100" min="0" type="range" value="20" />
+                    <div class="flex justify-between text-label-sm text-outline px-1">
+                        <span>Low</span>
+                        <span>Mid</span>
+                        <span>High</span>
+                    </div>
+                </div>
+                <div class="mt-md p-sm bg-primary-fixed text-on-primary-fixed rounded-lg text-label-md text-center"
+                    id="uv-status">
+                    Current: Mild Sunlight
+                </div>
+            </div>
+            <!-- Scientific Log Card (Floating UI) -->
+            <div class="glass-card p-md rounded-xl shadow-sm">
+                <div class="flex items-center gap-sm mb-md">
+                    <span class="material-symbols-outlined text-tertiary" data-icon="terminal">terminal</span>
+                    <h2 class="font-headline-md text-headline-md text-primary">Scientific Log</h2>
+                </div>
+                <ul class="flex flex-col gap-sm max-h-48 overflow-y-auto pr-2" id="log-list">
+                    <li class="flex gap-sm items-start text-body-md border-l-2 border-secondary-container pl-sm">
+                        <span class="text-secondary font-bold">10:02</span>
+                        <span>Starting baseline observation of PET bottle...</span>
+                    </li>
+                    <li class="flex gap-sm items-start text-body-md border-l-2 border-outline-variant pl-sm">
+                        <span class="text-outline font-bold">10:05</span>
+                        <span>Beach environment active. Surface temp: 24°C.</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <!-- Central AR Viewport -->
+        <section class="flex-grow relative ar-viewport flex items-center justify-center p-md">
+            <!-- Background Image -->
+            <div class="absolute inset-0 z-0">
+                <img alt="Coastal view" class="w-full h-full object-cover brightness-105"
+                    data-alt="A sun-drenched, high-key coastal beach scene with pristine white sand meeting crystal clear turquoise waters. The lighting is bright and airy, reflecting a modern educational aesthetic with optimistic and vibrant tones. Gentle waves lap at the shore under a clear sky, creating a peaceful and exploratory environment perfect for scientific observation."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMMrubUcAOnIrZf92Tb4yUpvtc1wAUbdY_j2H1rgWqQh4MK-ip7hzWB3TGvQ7is3SaTVhkE7pFsPRRJPeeycL3DBdwvk8MfSmbhiwQyUuXdJgbHDzKvqkhJtcgNYs9A-aDSYAh5N6My4M3lypXCW2UMAfOpjvHZFH-xUEPTq3Bwq4LbTo3z9ubnVAxT70Pc_MLO4KzZno1Os9tPrVXPdTaiV0-hmKFmKem7z6muDXCbUZ9SeXg6cD6oG2yntOGftmQAclQBpomMg" />
+                <div class="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent"></div>
+            </div>
+            <!-- AR Bottle Focus -->
+            <div class="relative z-10 w-64 h-64 md:w-96 md:h-96 transition-transform duration-300 hover:scale-105 cursor-pointer flex items-center justify-center"
+                id="bottle-container">
+                <div class="relative w-full h-full" id="bottle-visual">
+                    <!-- Main Bottle -->
+                    <img alt="Plastic bottle" class="w-full h-full object-contain drop-shadow-2xl weathering-texture"
+                        data-alt="A close-up studio shot of a standard clear plastic mineral water bottle, isolated but styled with a 3D AR overlay effect. The lighting is bright and clean, consistent with a modern light-mode educational UI. The bottle initially appears pristine and smooth, ready to be manipulated by simulated environmental stressors like sun and waves."
+                        id="primary-bottle"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0aCdn58v3S6CTOoyseRtPJKSaiKHhTFRTL7oDgH3HhyUVMGegOhI9Qg0qpAO1Y4ei-5-DTfopeLJQbyNJ03UFYIpkCaQiGGK8GTZydU_gHQt_jVn03YXD0cEHOG4u9-t54LND1uC1bNLARPlb0mTwygCCXvWlgDWlgCf6FhIcs1p9KVm7ZdpQlwPE9SCFP-4rtLdMHp3D1HXGJBKX5jzg_aZCcE_Tie4jgHo_3jeRPpN9Ct0nYk41AkQp6dfjMvL4sqIPw6oS0A" />
+                    <!-- Weathering Overlays (simulated via filters in JS) -->
+                    <div class="absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-700 bg-[url('https://www.transparenttextures.com/patterns/cracked-glass.png')] bg-contain"
+                        id="crack-overlay"></div>
+                </div>
+                <!-- Interaction Prompt -->
+                <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-on-secondary-container text-white px-md py-xs rounded-full shadow-lg flex items-center gap-xs whitespace-nowrap animate-bounce"
+                    id="wave-prompt">
+                    <span class="material-symbols-outlined text-[18px]" data-icon="waves">waves</span>
+                    <span class="font-label-md">Click to simulate Wave Force</span>
+                </div>
+            </div>
+            <!-- Mission Directive (Floating UI Overlay) -->
+            <div
+                class="absolute top-md right-md w-64 md:w-80 glass-card p-md rounded-xl shadow-lg border-l-4 border-secondary animate-pulse-subtle">
+                <div class="flex items-center gap-sm mb-xs">
+                    <span class="material-symbols-outlined text-secondary" data-icon="assignment_turned_in"
+                        style="font-variation-settings: 'FILL' 1;">assignment_turned_in</span>
+                    <h3 class="font-headline-md text-[18px] text-primary">Mission Directive</h3>
+                </div>
+                <p class="text-body-md text-on-surface">Accelerate the <span
+                        class="text-secondary font-bold">Weathering</span> process. Combine high UV radiation with
+                    mechanical wave energy to break the PET structure into microplastics.</p>
+                <div class="mt-md bg-secondary-container/30 h-1 rounded-full overflow-hidden">
+                    <div class="bg-secondary h-full transition-all duration-500" id="mission-progress"
+                        style="width: 15%;"></div>
+                </div>
+            </div>
+        </section>
+        <!-- Right Interaction Area: Mechanical Weathering Details -->
+        <aside class="hidden lg:flex w-80 p-md flex-col gap-md z-20">
+            <div class="glass-card p-md rounded-xl shadow-sm h-full">
+                <h3 class="font-headline-md text-headline-md text-primary mb-md">Environmental Data</h3>
+                <div class="space-y-md">
+                    <div class="bg-surface-container-low p-sm rounded-lg">
+                        <span class="text-label-sm text-outline block">SURFACE BRITTLENESS</span>
+                        <div class="flex items-center gap-sm">
+                            <span class="text-headline-md text-secondary" id="brittleness-value">12%</span>
+                            <span class="material-symbols-outlined text-secondary"
+                                data-icon="trending_up">trending_up</span>
+                        </div>
+                    </div>
+                    <div class="bg-surface-container-low p-sm rounded-lg">
+                        <span class="text-label-sm text-outline block">STRUCTURAL INTEGRITY</span>
+                        <div class="flex items-center gap-sm">
+                            <span class="text-headline-md text-error" id="integrity-value">88%</span>
+                            <span class="material-symbols-outlined text-error"
+                                data-icon="trending_down">trending_down</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-xl">
+                    <button
+                        class="w-full bg-primary-container text-white py-md rounded-xl font-label-md flex items-center justify-center gap-sm hover:brightness-110 active:scale-95 transition-all shadow-md"
+                        id="wave-btn">
+                        <span class="material-symbols-outlined" data-icon="tsunami">tsunami</span>
+                        SIMULATE STORM SURGE
+                    </button>
+                    <p class="text-label-sm text-outline mt-sm text-center italic">Force-multiplier: x2.5</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-highest dark:bg-inverse-surface full-width mt-auto">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center px-lg py-md max-w-container-max mx-auto w-full gap-md">
+            <div class="flex flex-col gap-xs">
+                <span
+                    class="text-label-md font-label-md font-bold text-secondary dark:text-secondary-fixed">MicroScout</span>
+                <span class="text-body-md font-body-md text-on-surface-variant dark:text-surface-variant">© 2024
+                    MicroScout Educational Initiative</span>
+            </div>
+            <nav class="flex gap-md">
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-sm hover:text-primary-container transition-colors"
+                    href="#">Curriculum Guide</a>
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-sm hover:text-primary-container transition-colors"
+                    href="#">Privacy Policy</a>
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-sm hover:text-primary-container transition-colors"
+                    href="#">Resource Center</a>
+                <a class="text-on-surface-variant dark:text-surface-variant font-label-sm hover:text-primary-container transition-colors"
+                    href="#">Support</a>
+            </nav>
+        </div>
+    </footer>
+    <script>
+        const uvSlider = document.getElementById('uv-slider');
+        const uvStatus = document.getElementById('uv-status');
+        const bottle = document.getElementById('primary-bottle');
+        const bottleContainer = document.getElementById('bottle-container');
+        const crackOverlay = document.getElementById('crack-overlay');
+        const logList = document.getElementById('log-list');
+        const brittlenessVal = document.getElementById('brittleness-value');
+        const integrityVal = document.getElementById('integrity-value');
+        const progressFill = document.getElementById('mission-progress');
+        const waveBtn = document.getElementById('wave-btn');
+
+        let uvLevel = 20;
+        let mechanicalWear = 0;
+        let totalWeathering = 12;
+
+        function updateUI() {
+            // UV Visual Effects
+            const opacity = 1 - (uvLevel / 200);
+            const sepia = (uvLevel / 100) * 0.5;
+            const saturate = 1 - (uvLevel / 200);
+            bottle.style.filter = `sepia(${sepia}) saturate(${saturate})`;
+            bottle.style.opacity = opacity;
+
+            // Log update
+            if (uvLevel > 80) {
+                uvStatus.innerText = "Current: Critical UV Index";
+                uvStatus.className = "mt-md p-sm bg-error-container text-on-error-container rounded-lg text-label-md text-center";
+            } else if (uvLevel > 50) {
+                uvStatus.innerText = "Current: Strong Radiation";
+                uvStatus.className = "mt-md p-sm bg-tertiary-container text-white rounded-lg text-label-md text-center";
+            } else {
+                uvStatus.innerText = "Current: Mild Sunlight";
+                uvStatus.className = "mt-md p-sm bg-primary-fixed text-on-primary-fixed rounded-lg text-label-md text-center";
+            }
+
+            // Calculation
+            totalWeathering = Math.min(100, Math.floor((uvLevel * 0.5) + (mechanicalWear * 0.5)));
+            brittlenessVal.innerText = `${totalWeathering}%`;
+            integrityVal.innerText = `${100 - totalWeathering}%`;
+            progressFill.style.width = `${totalWeathering}%`;
+
+            // Crack visibility
+            if (totalWeathering > 40) {
+                crackOverlay.style.opacity = (totalWeathering - 40) / 60;
+            }
+        }
+
+        function addLog(msg) {
+            const now = new Date();
+            const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const li = document.createElement('li');
+            li.className = "flex gap-sm items-start text-body-md border-l-2 border-secondary pl-sm animate-pulse";
+            li.innerHTML = `<span class="text-secondary font-bold">${time}</span><span>${msg}</span>`;
+            logList.prepend(li);
+        }
+
+        uvSlider.addEventListener('input', (e) => {
+            uvLevel = e.target.value;
+            updateUI();
+        });
+
+        uvSlider.addEventListener('change', () => {
+            if (uvLevel > 70) addLog("UV Stress: High photon density breaking polymer chains.");
+        });
+
+        function triggerWaveInteraction() {
+            bottleContainer.classList.add('shake-effect');
+            mechanicalWear = Math.min(100, mechanicalWear + 8);
+
+            // Random splash log
+            const msgs = [
+                "Hydrodynamic force applied to surface.",
+                "Salt crystallization observed in micro-fissures.",
+                "Wave impact stress detected at base neck.",
+                "Abrasion from suspended sediments occurring."
+            ];
+            addLog(msgs[Math.floor(Math.random() * msgs.length)]);
+
+            updateUI();
+            setTimeout(() => {
+                bottleContainer.classList.remove('shake-effect');
+            }, 500);
+        }
+
+        bottleContainer.addEventListener('click', triggerWaveInteraction);
+        waveBtn.addEventListener('click', triggerWaveInteraction);
+
+        // Initial setup
+        updateUI();
+    </script>
+
+    <div style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 9999;">
+        <a href="PerjalananBelajar-tahap1.html" style="background: white; border: 2px solid #006591; color: #006591; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Kembali</a>
+        <a href="PerjalananBelajar-tahap3.html" style="background: #006591; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Selanjutnya</a>
+    </div>
+</body>
+
+</html>

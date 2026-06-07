@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Penilaian LKPD - Rapor Guru</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#006591",
+                        "secondary": "#006e2f",
+                        "tertiary": "#785a00",
+                        "background": "#f7f9fb",
+                        "surface": "#ffffff",
+                        "surface-container": "#eceef0",
+                        "surface-container-low": "#f2f4f6",
+                        "on-background": "#191c1e",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#3e4850",
+                        "outline": "#6e7881",
+                        "outline-variant": "#bec8d2",
+                        "primary-container": "#c9e6ff",
+                    },
+                    fontFamily: {
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 bg-surface shadow-sm border-b-4 border-primary">
+        <nav class="flex justify-between items-center w-full px-6 max-w-7xl mx-auto h-20">
+            <div class="flex items-center gap-2">
+                <a href="Data-Siswa.html" class="material-symbols-outlined p-2 hover:bg-surface-container rounded-full transition-colors text-on-surface-variant mr-2">arrow_back</a>
+                <span class="font-headline-md font-bold text-on-surface tracking-tight">Penilaian Tugas Budi Santoso</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors shadow-md flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">save</span> Simpan & Kirim Nilai
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Hasil Kerja Siswa (Kiri) -->
+            <div class="space-y-6">
+                
+                <div class="bg-surface p-6 rounded-2xl shadow-sm border border-outline-variant/30">
+                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary">image</span> Bukti Pengamatan AR</h3>
+                    <div class="bg-black/90 rounded-xl overflow-hidden aspect-video flex items-center justify-center relative">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZmvIGufJoKC7GBLRcB8jXymU2xlQSBKNw8QYLyU3colAzmLVf4jxXhbV2eK1tu9q8rTrFeiOCDcfaJeFnnoPeaB92r49GYHrycP80O_Yl9EYkcMzN3-Qg_jM3WZ1_TZn4D9VSlOleM_PSd-ArLZ12MBbblB3zWTUV7gCvDSQXh7NJPHGtaZ90weyOtdZ3LD4XgkjxmjXjPAO3usvudsBAvrNhqph3ARhfVKvMgr6DSxt5RXQbPL4GXeblLEQH9w-rT3g3XCOIbA" alt="AR Capture" class="w-full h-full object-cover opacity-80" />
+                        <div class="absolute bottom-4 left-4 bg-black/60 text-white px-3 py-1 rounded text-xs">Diunggah: 2 menit yang lalu</div>
+                    </div>
+                </div>
+
+                <div class="bg-surface p-6 rounded-2xl shadow-sm border border-outline-variant/30">
+                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary">description</span> Lembar Analisis Siswa</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-surface-container-low p-4 rounded-lg">
+                            <p class="text-sm font-semibold text-on-surface-variant mb-1">A. Jenis ikan apa yang kamu pindai dalam simulasi AR?</p>
+                            <p class="text-on-surface font-bold">Ikan Sarden (Pemakan Plankton)</p>
+                        </div>
+
+                        <div class="bg-surface-container-low p-4 rounded-lg">
+                            <p class="text-sm font-semibold text-on-surface-variant mb-1">B. Persentase kandungan plastik (Polietilen) yang terdeteksi?</p>
+                            <p class="text-on-surface font-bold text-primary">72%</p>
+                        </div>
+                        
+                        <div class="bg-surface-container-low p-4 rounded-lg">
+                            <p class="text-sm font-semibold text-on-surface-variant mb-1">C. Menurut analisis kritismu, mengapa ikan tersebut bisa menelan plastik?</p>
+                            <p class="text-on-surface">Karena plastik tersebut sudah hancur menjadi mikroplastik yang sangat kecil akibat proses pelapukan (Tahap 2). Bentuk dan warnanya mirip dengan plankton, sehingga ikan kecil secara tidak sengaja memakannya ketika mencari makan di laut.</p>
+                        </div>
+                        
+                        <div class="bg-surface-container-low p-4 rounded-lg">
+                            <p class="text-sm font-semibold text-on-surface-variant mb-1">Refleksi: Apa dampak jangka panjang jika manusia mengonsumsi ikan ini?</p>
+                            <p class="text-on-surface">Jika kita terus makan ikan yang mengandung plastik, plastik tersebut akan menumpuk di tubuh kita (bioakumulasi). Ini bisa menyebabkan keracunan atau masalah pencernaan dalam jangka panjang karena plastik tidak bisa dicerna oleh manusia.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Penilaian (Kanan) -->
+            <div class="space-y-6">
+                
+                <div class="bg-surface p-6 rounded-2xl shadow-sm border-2 border-primary">
+                    <h3 class="font-headline-md font-bold text-primary mb-6 flex items-center gap-2"><span class="material-symbols-outlined">fact_check</span> Rubrik Penilaian Sains</h3>
+                    
+                    <form onsubmit="event.preventDefault(); alert('Nilai berhasil disimpan!'); window.location.href='Data-Siswa.html';">
+                        
+                        <div class="space-y-6">
+                            <!-- Kriteria 1 -->
+                            <div>
+                                <div class="flex justify-between items-end mb-2">
+                                    <label class="font-semibold text-on-surface">Keakuratan Data AR</label>
+                                    <span class="font-bold text-primary text-xl">25<span class="text-sm text-outline font-normal">/25</span></span>
+                                </div>
+                                <p class="text-xs text-on-surface-variant mb-2">Siswa berhasil mengidentifikasi jenis ikan dan persentase polietilen dengan tepat sesuai AR.</p>
+                                <input type="range" min="0" max="25" value="25" class="w-full h-2 bg-surface-container rounded-lg appearance-none cursor-pointer">
+                            </div>
+
+                            <!-- Kriteria 2 -->
+                            <div>
+                                <div class="flex justify-between items-end mb-2">
+                                    <label class="font-semibold text-on-surface">Kedalaman Analisis</label>
+                                    <span class="font-bold text-primary text-xl">30<span class="text-sm text-outline font-normal">/40</span></span>
+                                </div>
+                                <p class="text-xs text-on-surface-variant mb-2">Penjelasan logis tentang mengapa ikan memakan plastik (hubungan dengan plankton).</p>
+                                <input type="range" min="0" max="40" value="30" class="w-full h-2 bg-surface-container rounded-lg appearance-none cursor-pointer">
+                            </div>
+
+                            <!-- Kriteria 3 -->
+                            <div>
+                                <div class="flex justify-between items-end mb-2">
+                                    <label class="font-semibold text-on-surface">Kualitas Refleksi (HOTS)</label>
+                                    <span class="font-bold text-primary text-xl">30<span class="text-sm text-outline font-normal">/35</span></span>
+                                </div>
+                                <p class="text-xs text-on-surface-variant mb-2">Kemampuan mengaitkan konsep bioakumulasi dengan dampak kesehatan manusia.</p>
+                                <input type="range" min="0" max="35" value="30" class="w-full h-2 bg-surface-container rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+
+                        <div class="mt-8 border-t border-outline-variant/30 pt-6">
+                            <div class="flex justify-between items-center bg-primary-container text-on-primary-container p-4 rounded-xl">
+                                <span class="font-bold text-lg">Total Nilai Akhir</span>
+                                <span class="text-3xl font-headline-lg font-black">85</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <label class="block font-semibold text-on-surface mb-2">Umpan Balik Guru (Akan terkirim ke siswa)</label>
+                            <textarea rows="4" class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">Kerja bagus, Budi! Analisismu tentang kemiripan mikroplastik dan plankton sudah sangat tepat. Untuk refleksi, coba cari tahu lagi zat kimia spesifik apa yang biasanya menempel pada plastik PET yang bisa mengganggu hormon manusia.</textarea>
+                        </div>
+                        
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button type="button" class="px-4 py-2 border border-outline-variant text-on-surface font-semibold rounded-lg hover:bg-surface-container transition-colors">Tandai Revisi</button>
+                            <button type="submit" class="px-6 py-2 bg-primary text-white font-bold rounded-lg shadow-md hover:bg-primary/90 transition-colors flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">send</span> Publikasikan Nilai
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
