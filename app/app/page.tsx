@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/authStore';
 import { useJourneyStore } from '@/lib/journeyStore';
+import Navbar from '@/components/Navbar';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -28,62 +29,14 @@ export default function LandingPage() {
 
     reset();
     setStudent(finalName, finalClass);
-    router.push('/journey/tahap-1');
+    router.push('/perjalanan-belajar');
   }
 
   return (
     <div className="bg-[#f7f9fb] font-[family-name:var(--font-inter)] text-[#191c1e] overflow-x-hidden min-h-screen flex flex-col">
-      {/* Top Navigation Bar */}
-      <header className={`fixed top-0 left-0 right-0 z-50 bg-[#ffffff] transition-shadow duration-300 ${scrolled ? 'shadow-md' : 'shadow-[0_4px_12px_rgba(0,0,0,0.05)]'}`}>
-        <nav className="flex justify-between items-center w-full px-[24px] max-w-[1200px] mx-auto h-20">
-          <div className="flex items-center gap-2">
-            <span className="text-[24px] leading-[32px] font-semibold font-[family-name:var(--font-outfit)] font-extrabold text-[#006591] tracking-tight">
-              MicroJourney AR
-            </span>
-          </div>
-          <div className="hidden md:flex items-center gap-[40px]">
-            <Link className="text-[#006e2f] border-b-4 border-[#006e2f] pb-2 font-bold text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/">
-              Beranda
-            </Link>
-            <Link className="text-[#3e4850] hover:text-[#006591] pb-2 transition-colors text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/journey/tahap-1">
-              Perjalanan Belajar
-            </Link>
-            <Link className="text-[#3e4850] hover:text-[#006591] pb-2 transition-colors text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/materi">
-              Materi
-            </Link>
-            <Link className="text-[#3e4850] hover:text-[#006591] pb-2 transition-colors text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/e-lkpd">
-              E-LKPD
-            </Link>
-          </div>
-          <div className="flex items-center gap-[24px]">
-            {currentUser ? (
-              <>
-                <div className="hidden sm:block text-right">
-                  <p className="text-sm font-semibold">{currentUser.name}</p>
-                  <p className="text-[#3e4850] text-xs">
-                    {currentUser.role === 'student' ? `Siswa ${currentUser.className || ''}` : currentUser.role === 'teacher' ? 'Guru' : 'Super Admin'}
-                  </p>
-                </div>
-                {(currentUser.role === 'teacher' || currentUser.role === 'superadmin') && (
-                  <Link href="/dashboard" className="bg-[#006591] hover:bg-[#004c6e] text-white px-4 py-2 rounded-xl text-sm font-bold">
-                    Dashboard
-                  </Link>
-                )}
-                <button onClick={logout} className="text-[#3e4850] hover:text-[#191c1e] text-sm font-bold">
-                  Keluar
-                </button>
-              </>
-            ) : (
-              <Link href="/login" className="bg-[#006591] hover:bg-[#004c6e] text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2">
-                <span className="material-symbols-outlined text-base">login</span>
-                Login
-              </Link>
-            )}
-          </div>
-        </nav>
-      </header>
+      <Navbar />
 
-      <main className="mt-20 flex-grow">
+      <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative min-h-[870px] flex items-center overflow-hidden bg-gradient-to-br from-[#ffffff] to-[#c9e6ff]/20">
           <div className="max-w-[1200px] mx-auto px-[24px] grid grid-cols-1 lg:grid-cols-12 gap-[40px] items-center relative z-10 py-16">

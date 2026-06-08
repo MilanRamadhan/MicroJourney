@@ -6,7 +6,7 @@ import { useAuthStore } from '@/lib/authStore';
 
 const navLinks = [
   { href: '/',         label: 'Beranda' },
-  { href: '/journey/tahap-1', label: 'Perjalanan Belajar' },
+  { href: '/perjalanan-belajar', label: 'Perjalanan Belajar' },
   { href: '/materi',   label: 'Materi' },
   { href: '/e-lkpd',  label: 'E-LKPD' },
 ];

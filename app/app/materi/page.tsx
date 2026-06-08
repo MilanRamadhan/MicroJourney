@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import Navbar from '@/components/Navbar';
 
 const MODULES = [
   {
@@ -105,8 +106,10 @@ export default function MateriPage() {
   const [activeModule, setActiveModule] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#f7f9fb] relative overflow-hidden">
-      <div className="absolute inset-0 adventure-map opacity-30 pointer-events-none" />
+    <div className="min-h-screen bg-[#f7f9fb] flex flex-col">
+      <Navbar />
+      <div className="relative overflow-hidden flex-grow">
+        <div className="absolute inset-0 adventure-map opacity-30 pointer-events-none" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#006591]/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#006e2f]/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -227,6 +230,7 @@ export default function MateriPage() {
             Mulai Perjalanan Belajar
           </Link>
         </div>
+      </div>
       </div>
     </div>
   );
