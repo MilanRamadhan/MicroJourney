@@ -20,8 +20,8 @@ export default function NavbarGuru() {
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right hidden sm:block">
-            <p className="text-sm font-bold text-[var(--color-on-surface)]">Ibu Anisa S.Pd</p>
-            <p className="text-xs text-[var(--color-on-surface-variant)]">Guru IPA - SMPN 1</p>
+            <p className="text-sm font-bold text-[var(--color-on-surface)]">Dimas Fernanda, S.Pd</p>
+            <p className="text-xs text-[var(--color-on-surface-variant)]">Guru IPA - SMP N X</p>
           </div>
           <div className="w-10 h-10 rounded-full bg-[var(--color-primary-fixed)] flex items-center justify-center overflow-hidden border-2 border-[var(--color-primary)] shadow-sm">
             <span className="material-symbols-outlined text-[var(--color-primary)]">person</span>

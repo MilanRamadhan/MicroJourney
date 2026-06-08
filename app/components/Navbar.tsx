@@ -2,17 +2,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuthStore } from '@/lib/authStore';
 
 const navLinks = [
   { href: '/', label: 'Beranda' },
   { href: '/perjalanan-belajar', label: 'Perjalanan Belajar' },
   { href: '/materi', label: 'Materi' },
   { href: '/e-lkpd', label: 'E-LKPD' },
-  { href: '/rapor-guru', label: 'Rapor Guru' },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { currentUser, logout } = useAuthStore();
 
   return (
     <nav className="sticky top-0 z-50 bg-[var(--color-surface-container-lowest)] shadow-[0_4px_12px_rgba(0,0,0,0.05)] h-20 flex items-center">
@@ -53,9 +54,21 @@ export default function Navbar() {
             <button className="p-2 text-[var(--color-primary)] hover:bg-[var(--color-surface-container-low)] rounded-lg transition-all active:scale-95">
               <span className="material-symbols-outlined">notifications</span>
             </button>
-            <button className="p-2 text-[var(--color-primary)] hover:bg-[var(--color-surface-container-low)] rounded-lg transition-all active:scale-95">
-              <span className="material-symbols-outlined">emoji_events</span>
-            </button>
+            {currentUser && (currentUser.role === 'teacher' || currentUser.role === 'superadmin') && (
+              <Link href="/dashboard" className="p-2 text-[var(--color-primary)] hover:bg-[var(--color-surface-container-low)] rounded-lg transition-all active:scale-95">
+                <span className="material-symbols-outlined">dashboard</span>
+              </Link>
+            )}
+            {currentUser ? (
+              <button onClick={logout} className="px-3 py-2 text-[var(--color-primary)] hover:bg-[var(--color-surface-container-low)] rounded-lg transition-all active:scale-95 text-sm font-bold">
+                Keluar
+              </button>
+            ) : (
+              <Link href="/login" className="px-3 py-2 text-[var(--color-primary)] hover:bg-[var(--color-surface-container-low)] rounded-lg transition-all active:scale-95 text-sm font-bold flex items-center gap-1">
+                <span className="material-symbols-outlined text-base">login</span>
+                Login
+              </Link>
+            )}
             <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[var(--color-primary-container)] ml-2 bg-[var(--color-secondary-container)] flex items-center justify-center">
               <span className="material-symbols-outlined text-[var(--color-on-secondary-container)]">person</span>
             </div>

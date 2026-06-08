@@ -13,14 +13,15 @@ export default function DashboardLKPD() {
             <span className="material-symbols-outlined" style={{ fontSize: '200px' }}>science</span>
           </div>
           <h1 className="font-[family-name:var(--font-plus-jakarta)] text-3xl font-bold mb-2">Lembar Kerja Peserta Didik (E-LKPD)</h1>
-          <p className="text-[var(--color-primary-fixed)] mb-4 max-w-2xl">Modul Pembelajaran: Dampak Mikroplastik pada Ekosistem Kelautan (IPA Terpadu Kelas 7)</p>
+          <p className="text-[var(--color-primary-fixed)] mb-4 max-w-2xl">Modul Pembelajaran: Mikroplastik dan Pencemaran Lingkungan — IPA Kelas VIII / Fase D</p>
           <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20 mt-6 max-w-3xl">
             <h3 className="font-bold flex items-center gap-2 mb-2">
               <span className="material-symbols-outlined">flag</span> Tujuan Pembelajaran
             </h3>
             <ul className="list-disc list-inside text-sm space-y-1">
-              <li>Peserta didik mampu mengidentifikasi rute masuknya mikroplastik ke rantai makanan laut.</li>
-              <li>Peserta didik mampu menganalisis dampak bioakumulasi pada kesehatan makhluk hidup.</li>
+              <li>Peserta didik mampu mengidentifikasi jenis sampah serta membedakan bagaimana plastik besar dapat berubah menjadi partikel mikroplastik akibat fotodegradasi dan abrasi mekanis.</li>
+              <li>Peserta didik mampu menjelaskan perjalanan mikroplastik di lingkungan hingga mencemari bahan pangan melalui rantai makanan.</li>
+              <li>Peserta didik mampu menganalisis peran manusia sebagai pelaku utama pencemaran plastik serta merumuskan solusi konkret untuk mengatasinya.</li>
             </ul>
           </div>
         </div>

@@ -10,6 +10,7 @@ export interface Stage {
   icon: string;
   description: string;
   xpReward: number;
+  pemantik: string;
   quiz: {
     question: string;
     options: QuizOption[];
@@ -27,6 +28,7 @@ export const stages: Stage[] = [
     icon: 'domain_disabled',
     description: 'Plastik terbuang ke lingkungan dan memulai perjalanan panjangnya.',
     xpReward: 200,
+    pemantik: 'Pernahkah kamu berpikir — ke mana perginya botol plastik atau wadah styrofoam yang kita buang ke sungai atau laut? Apakah mereka benar-benar hancur dan lenyap dari bumi?',
     quiz: {
       question: 'AI mendeteksi ini plastik PET. Berapa lama botol ini hancur di tanah?',
       options: [
@@ -50,6 +52,7 @@ export const stages: Stage[] = [
     icon: 'wb_sunny',
     description: 'Sinar UV dan gelombang air memecah plastik menjadi partikel yang lebih kecil.',
     xpReward: 200,
+    pemantik: 'Pernahkah kamu melihat plastik yang terpapar panas matahari lama menjadi rapuh dan mudah hancur? Kira-kira, apa yang terjadi pada serpihan-serpihan kecil itu setelahnya?',
     quiz: {
       question: 'Proses apa yang paling berperan dalam memecah plastik di lingkungan?',
       options: [
@@ -73,6 +76,7 @@ export const stages: Stage[] = [
     icon: 'water_drop',
     description: 'Partikel mikroplastik kecil terbawa aliran sungai dan masuk ke samudra.',
     xpReward: 250,
+    pemantik: 'Bayangkan sungai di kotamu setelah hujan deras. Ke mana semua sampah yang ada di pinggiran sungai itu pergi? Apakah cukup berhenti di muara sungai saja?',
     quiz: {
       question: 'Berapa persen sampah plastik di lautan berasal dari daratan?',
       options: [
@@ -96,6 +100,7 @@ export const stages: Stage[] = [
     icon: 'set_meal',
     description: 'Hewan laut mengira partikel plastik adalah plankton dan menelannya.',
     xpReward: 300,
+    pemantik: 'Jika serpihan plastik berukuran mikroskopis melayang-layang di lautan, bagaimana caranya hewan laut bisa membedakannya dari makanan sungguhan seperti plankton?',
     quiz: {
       question: 'Mengapa ikan dan hewan laut sering memakan mikroplastik?',
       options: [
@@ -119,6 +124,7 @@ export const stages: Stage[] = [
     icon: 'vital_signs',
     description: 'Konsentrasi mikroplastik dan racun meningkat di setiap tingkat rantai makanan.',
     xpReward: 300,
+    pemantik: 'Kalau ikan kecil memakan plankton yang mengandung plastik, lalu ikan besar memakan banyak ikan kecil — menurut kamu, di tubuh siapakah plastik paling banyak menumpuk?',
     quiz: {
       question: 'Apa yang dimaksud dengan biomagnifikasi dalam konteks mikroplastik?',
       options: [
@@ -142,6 +148,7 @@ export const stages: Stage[] = [
     icon: 'person_celebrate',
     description: 'Mikroplastik akhirnya kembali ke tubuh manusia melalui makanan yang kita konsumsi.',
     xpReward: 400,
+    pemantik: 'Kita makan ikan, udang, dan hasil laut hampir setiap hari. Jika ikan-ikan itu sudah mengandung mikroplastik dari laut — apa artinya bagi tubuh kita?',
     quiz: {
       question: 'Di mana saja mikroplastik telah ditemukan di dalam tubuh manusia?',
       options: [

@@ -308,8 +308,14 @@ export default function TahapPage() {
                   </div>
                 </div>
                 <h3 className="font-[family-name:var(--font-plus-jakarta)] text-xl font-bold text-center mb-3 text-[var(--color-on-surface)]">
-                  Tantangan Cepat! — Tahap {stageId}
+                  Pertanyaan Pemantik — Tahap {stageId}
                 </h3>
+                <div className="bg-[var(--color-primary-fixed)] border-l-4 border-[var(--color-primary)] rounded-lg p-4 mb-5">
+                  <p className="text-sm text-[var(--color-on-primary-fixed)] leading-relaxed italic">
+                    &ldquo;{stage.pemantik}&rdquo;
+                  </p>
+                </div>
+                <p className="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wider text-center mb-2">Setelah dipikirkan, jawab pertanyaan ini:</p>
                 <p className="text-base text-center text-[var(--color-on-surface-variant)] mb-6">
                   {stage.quiz.question}
                 </p>

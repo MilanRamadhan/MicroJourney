@@ -11,9 +11,9 @@ const metrics = [
 ];
 
 const tpData = [
-  { label: 'TP 1: Mengidentifikasi Jenis Plastik (Tahap 1-2)', pct: 90, color: 'bg-[var(--color-secondary)]', text: '90% Tuntas', textColor: 'text-[var(--color-secondary)]' },
-  { label: 'TP 2: Analisis Rantai Makanan (Tahap 3-4)', pct: 75, color: 'bg-[var(--color-tertiary)]', text: '75% Tuntas', textColor: 'text-[var(--color-tertiary)]' },
-  { label: 'TP 3: Dampak Bioakumulasi (Tahap 5-6)', pct: 45, color: 'bg-orange-500', text: '45% Tuntas', textColor: 'text-orange-500', warning: 'Titik Kritis: Banyak siswa kesulitan pada konsep ini.' },
+  { label: 'TP 1: Mengidentifikasi jenis sampah & proses plastik → mikroplastik (Fotodegradasi)', pct: 90, color: 'bg-[var(--color-secondary)]', text: '90% Tuntas', textColor: 'text-[var(--color-secondary)]' },
+  { label: 'TP 2: Menjelaskan perjalanan mikroplastik di lingkungan → rantai makanan → pangan', pct: 75, color: 'bg-[var(--color-tertiary)]', text: '75% Tuntas', textColor: 'text-[var(--color-tertiary)]' },
+  { label: 'TP 3: Menganalisis peran manusia sebagai pelaku pencemaran & solusi konkret', pct: 45, color: 'bg-orange-500', text: '45% Tuntas', textColor: 'text-orange-500', warning: 'Titik Kritis: Banyak siswa kesulitan pada analisis solusi konkret.' },
 ];
 
 export default function DashboardGuru() {
@@ -24,8 +24,8 @@ export default function DashboardGuru() {
       <main className="flex-grow max-w-7xl mx-auto w-full px-6 py-8">
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h1 className="font-[family-name:var(--font-plus-jakarta)] text-3xl font-bold text-[var(--color-on-background)]">Overview Kelas VII-A</h1>
-            <p className="text-[var(--color-on-surface-variant)] mt-1">Materi: Pencemaran Mikroplastik & Rantai Makanan</p>
+            <h1 className="font-[family-name:var(--font-plus-jakarta)] text-3xl font-bold text-[var(--color-on-background)]">Overview Kelas VIII</h1>
+            <p className="text-[var(--color-on-surface-variant)] mt-1">Materi: Mikroplastik dan Pencemaran Lingkungan — Fase D</p>
           </div>
           <button className="bg-white border border-[var(--color-outline-variant)] text-[var(--color-primary)] font-semibold px-4 py-2 rounded-lg hover:bg-[var(--color-surface-container)] transition-colors flex items-center gap-2 shadow-sm">
             <span className="material-symbols-outlined text-[18px]">download</span> Unduh Laporan PDF
@@ -94,7 +94,7 @@ export default function DashboardGuru() {
               {[
                 { name: 'Budi Santoso', time: '2 menit yang lalu', sub: 'Butuh Penilaian', link: '/rapor-guru/penilaian-lkpd', icon: 'assignment_turned_in', iconColor: 'text-[var(--color-primary)] bg-[var(--color-primary)]/10' },
                 { name: 'Siti Aminah', time: '15 menit yang lalu', sub: 'Butuh Penilaian', link: '/rapor-guru/penilaian-lkpd', icon: 'assignment_turned_in', iconColor: 'text-[var(--color-primary)] bg-[var(--color-primary)]/10' },
-                { name: 'Kelas VII-A mencapai milestone "Pengamat Lingkungan"', time: '1 hari yang lalu', sub: 'Otomatis dari Sistem AR', icon: 'emoji_events', iconColor: 'text-[var(--color-tertiary)] bg-[var(--color-tertiary)]/10' },
+                { name: 'Kelas VIII mencapai milestone "Pengamat Lingkungan"', time: '1 hari yang lalu', sub: 'Otomatis dari Sistem AR', icon: 'emoji_events', iconColor: 'text-[var(--color-tertiary)] bg-[var(--color-tertiary)]/10' },
               ].map((item, i) => (
                 <div key={i} className={`flex items-start gap-4 p-3 hover:bg-[var(--color-surface-container-low)] rounded-lg transition-colors border border-transparent hover:border-[var(--color-outline-variant)]/30 ${item.link ? 'cursor-pointer' : ''}`} onClick={() => item.link && (window.location.href = item.link)}>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${item.iconColor}`}>
