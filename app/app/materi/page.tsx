@@ -1,148 +1,233 @@
+'use client';
+import { useState } from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
 
-const materiList = [
+const MODULES = [
   {
     id: 1,
-    category: 'Terpopuler',
-    categoryColor: 'text-[var(--color-primary)] bg-[var(--color-primary-container)]/10',
-    title: 'Jenis Plastik & Bahayanya',
-    desc: 'Pahami perbedaan antara PET, HDPE, hingga mikroplastik yang kasat mata namun sangat berbahaya bagi kesehatan.',
-    icon: 'category',
-    featured: true,
+    icon: '📡',
+    tag: 'TAHAP 1',
+    title: 'Scanner AR & Deteksi Plastik',
+    color: '#006591',
+    bgLight: '#c9e6ff',
+    border: '#006591',
+    desc: 'Menggunakan augmented reality berbasis TensorFlow.js dan COCO-SSD untuk mendeteksi botol plastik secara real-time melalui kamera perangkat.',
+    concepts: [
+      { label: 'Polimer Plastik', body: 'Plastik adalah polimer sintetis berbasis karbon — rantai panjang monomer yang terikat melalui polimerisasi. Jenis terbanyak: PET (botol minuman), HDPE (wadah), PP (kemasan makanan).' },
+      { label: 'Mikroplastik < 5mm', body: 'Partikel plastik berukuran < 5mm disebut mikroplastik. Terbentuk dari pelapukan fisik dan kimia plastik berukuran besar yang terbuang ke lingkungan.' },
+      { label: 'Sumber Mikroplastik', body: 'Primer: butiran microbeads produk perawatan. Sekunder: pecahan plastik besar akibat fotodegradasi + abrasi mekanis ombak/angin selama bertahun-tahun.' },
+    ],
+    fact: '🌊 1 botol plastik → jutaan partikel mikroplastik dalam 450 tahun',
   },
   {
     id: 2,
-    category: 'Ekosistem',
-    categoryColor: 'text-[var(--color-secondary)] bg-[var(--color-secondary-container)]/20',
-    title: 'Ekosistem Laut',
-    desc: 'Bagaimana laut bekerja sebagai paru-paru dunia dan rumah bagi jutaan spesies.',
-    icon: 'water',
-    featured: false,
+    icon: '⚗️',
+    tag: 'TAHAP 2',
+    title: 'Simulasi Pelapukan Plastik',
+    color: '#0ea5e9',
+    bgLight: '#e0f2fe',
+    border: '#0ea5e9',
+    desc: 'Simulasi interaktif proses fotodegradasi (sinar UV) dan abrasi mekanis (ombak) yang mengubah botol plastik menjadi jutaan partikel mikroplastik.',
+    concepts: [
+      { label: 'Fotodegradasi UV', body: 'Radiasi UV matahari memutus ikatan rantai polimer plastik (C-C dan C-H). Akibatnya plastik menjadi rapuh, berubah warna, dan mudah hancur secara mekanis.' },
+      { label: 'Abrasi Mekanis', body: 'Gesekan dan hantaman fisik ombak, pasir, dan angin memecah plastik yang sudah rapuh menjadi serpihan kecil hingga berukuran < 5mm (mikroplastik).' },
+      { label: 'Dua Proses Utama', body: 'FOTODEGRADASI (UV melemahkan polimer) + ABRASI MEKANIS (fisik memecah) = proses utama pembentukan mikroplastik sekunder di alam.' },
+    ],
+    fact: '☀️ UV + ombak = botol plastik pecah jadi jutaan partikel',
   },
   {
     id: 3,
-    category: 'Siklus Hidup',
-    categoryColor: 'text-[var(--color-tertiary)] bg-[var(--color-tertiary-fixed)]/30',
-    title: 'Rantai Makanan',
-    desc: 'Aliran energi yang menjaga keseimbangan alam, dari plankton hingga paus biru.',
-    icon: 'set_meal',
-    featured: false,
+    icon: '🍱',
+    tag: 'TAHAP 3',
+    title: 'Kontaminasi Pangan Sehari-hari',
+    color: '#ba1a1a',
+    bgLight: '#ffdad6',
+    border: '#ba1a1a',
+    desc: 'Investigasi kandungan mikroplastik tersembunyi dalam makanan Indonesia sehari-hari — dari garam dapur hingga udang laut.',
+    concepts: [
+      { label: 'Jalur Kontaminasi', body: 'Dua jalur utama: (1) Rantai makanan laut — ikan/udang makan plankton yang mengandung mikroplastik; (2) Kontaminasi langsung — air minum, garam, dan kemasan plastik melepaskan partikel ke makanan.' },
+      { label: 'Bioakumulasi', body: 'Mikroplastik terakumulasi dalam jaringan hewan laut. Semakin tinggi posisi dalam rantai makanan, semakin tinggi konsentrasi mikroplastik yang terkandung (biomagnifikasi).' },
+      { label: 'Indonesia #1 Dunia', body: 'Studi Orb Media (2019) menemukan Indonesia sebagai negara dengan konsumsi mikroplastik tertinggi per kapita — rata-rata menelan 15g plastik per bulan.' },
+    ],
+    fact: '🍽️ Rata-rata manusia menelan 5 gram plastik per minggu (setara kartu ATM)',
   },
   {
     id: 4,
-    category: 'Kesehatan',
-    categoryColor: 'text-[var(--color-error)] bg-[var(--color-error-container)]/20',
-    title: 'Dampak bagi Manusia',
-    desc: 'Mengapa laut yang bersih sangat penting bagi air minum dan makanan yang kita konsumsi.',
-    icon: 'person_celebrate',
-    featured: false,
+    icon: '🫀',
+    tag: 'TAHAP 4',
+    title: 'Dampak pada Organ Pencernaan',
+    color: '#ba1a1a',
+    bgLight: '#ffdad6',
+    border: '#ba1a1a',
+    desc: 'Investigasi interaktif perjalanan mikroplastik melewati 5 organ sistem pencernaan manusia dan dampak biologisnya.',
+    concepts: [
+      { label: 'Mulut → Lambung', body: 'Di mulut, plastik tidak bereaksi dengan enzim saliva. Di lambung, HCl (pH 1-2) gagal mencerna polimer sintetis — plastik tetap utuh karena ikatan C-C tahan asam.' },
+      { label: 'Usus Halus (KRITIS)', body: 'Organ paling kritis — partikel < 10μm dapat menembus epitel usus dan masuk ke aliran darah. Menyebabkan peradangan dan mengandung zat plastisizer berbahaya (BPA, ftalat).' },
+      { label: 'Usus Besar → Darah', body: 'Sebagian besar partikel dibuang melalui feses. Namun nanopartikel (<1μm) dapat masuk ke sirkulasi darah, berpotensi mencapai organ vital termasuk hati, ginjal, dan otak.' },
+    ],
+    fact: '🔬 Partikel < 10μm dapat menembus dinding usus masuk ke aliran darah',
+  },
+  {
+    id: 5,
+    icon: '📋',
+    tag: 'TAHAP 5',
+    title: 'E-LKPD & Penyelidikan Ilmiah',
+    color: '#006e2f',
+    bgLight: '#dcfce7',
+    border: '#006e2f',
+    desc: 'Lembar Kerja Peserta Didik digital yang merekap seluruh temuan dari 4 tahap investigasi sebagai bukti penyelidikan ilmiah berbasis data.',
+    concepts: [
+      { label: 'LKPD 1 — Pelapukan', body: 'Mencatat proses fotodegradasi dan abrasi mekanis. Pilihan ganda: mengidentifikasi dua proses utama yang mengubah plastik menjadi mikroplastik.' },
+      { label: 'LKPD 2 — Kontaminasi', body: 'Menganalisis jalur kontaminasi mikroplastik ke makanan. Pilihan ganda: memilih jalur paling tepat dari rantai makanan laut dan kontaminasi langsung.' },
+      { label: 'LKPD 3 — Organ', body: 'Dua pertanyaan esai: (1) mengapa asam lambung gagal mencerna plastik; (2) organ mana yang paling berbahaya dan alasannya berdasarkan investigasi.' },
+    ],
+    fact: '📊 Semua data investigasi tersimpan dan dapat dilihat guru di Dashboard',
+  },
+  {
+    id: 6,
+    icon: '🌿',
+    tag: 'TAHAP 6',
+    title: 'Komitmen & Aksi Nyata',
+    color: '#006e2f',
+    bgLight: '#dcfce7',
+    border: '#006e2f',
+    desc: 'Membuat pledges komitmen konkret untuk mengurangi konsumsi plastik dan mengunduh rapor personal berisi rekap perjalanan belajar.',
+    concepts: [
+      { label: 'Eco-Pledge', body: 'Peserta memilih komitmen aksi nyata: membawa tumbler, menolak sedotan plastik, memilah sampah, memilih produk ramah lingkungan, mengurangi plastik sekali pakai.' },
+      { label: 'Tanda Tangan Digital', body: 'Komitmen dikukuhkan dengan tanda tangan digital pada kanvas. Setiap pledge bersifat personal dan tercatat dalam rapor PDF yang dapat diunduh.' },
+      { label: 'Rapor PDF Personal', body: 'Sistem menggenerate rapor PDF menggunakan jsPDF — berisi rekap perjalanan: jumlah plastik terdeteksi, total partikel dikonsumsi, organ terdampak, dan pledge komitmen.' },
+    ],
+    fact: '♻️ Satu keputusan hari ini = ratusan kg plastik lebih sedikit sepanjang hidup',
   },
 ];
 
 export default function MateriPage() {
+  const [activeModule, setActiveModule] = useState<number | null>(null);
+
   return (
-    <div className="bg-[var(--color-background)] text-[var(--color-on-background)] min-h-screen flex flex-col">
-      <Navbar />
+    <div className="min-h-screen bg-[#f7f9fb] relative overflow-hidden">
+      <div className="absolute inset-0 adventure-map opacity-30 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#006591]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#006e2f]/5 rounded-full blur-3xl pointer-events-none" />
 
-      <main className="flex-grow bg-[radial-gradient(circle_at_2px_2px,#e0e3e5_1px,transparent_0)] [background-size:24px_24px] py-16 px-6 max-w-[1200px] mx-auto w-full">
-        {/* Header */}
-        <section className="mb-16">
-          <div className="flex items-center gap-1 text-[var(--color-on-surface-variant)] text-sm font-semibold mb-3">
-            <span>Perpustakaan</span>
-            <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-            <span className="text-[var(--color-primary)] font-bold">Materi</span>
+      <div className="relative z-10 max-w-5xl mx-auto px-4 py-12">
+
+        {/* Hero */}
+        <div className="text-center mb-14">
+          <div className="inline-flex items-center gap-2 bg-white border border-[#bec8d2] px-5 py-2 rounded-full mb-6 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#006591] animate-pulse" />
+            <span className="text-[#006591] text-xs font-[family-name:var(--font-mono)] uppercase tracking-widest">Modul Ajar Interaktif</span>
           </div>
-          <h1 className="font-[family-name:var(--font-plus-jakarta)] text-3xl font-bold text-[var(--color-on-background)] mb-3">Eksplorasi Materi</h1>
-          <p className="text-lg text-[var(--color-on-surface-variant)] max-w-2xl">
-            Pelajari dampak sampah plastik terhadap ekosistem laut dan diri kita melalui modul interaktif berbasis Augmented Reality.
+          <h1 className="font-[family-name:var(--font-outfit)] text-4xl md:text-5xl font-extrabold text-[#191c1e] mb-4 leading-tight">
+            Materi Pembelajaran<br/>
+            <span className="text-[#006591]">MicroJourney AR</span>
+          </h1>
+          <p className="text-[#3e4850] text-lg max-w-2xl mx-auto leading-relaxed">
+            6 tahap perjalanan ilmiah interaktif — dari deteksi plastik dengan AI,
+            simulasi pelapukan, investigasi pangan, hingga komitmen aksi nyata.
           </p>
-        </section>
 
-        {/* Bento Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          {/* Featured Card */}
-          <div className="md:col-span-8 group relative overflow-hidden bg-[var(--color-surface-container-lowest)] rounded-3xl p-16 shadow-sm border border-white hover:shadow-xl transition-all duration-300">
-            <div className="flex flex-col md:flex-row gap-16 items-center">
-              <div className="flex-1 space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[var(--color-primary-container)]/10 text-[var(--color-primary)] rounded-full text-sm font-semibold">
-                  <span className="material-symbols-outlined text-[18px]">category</span>
-                  Terpopuler
-                </div>
-                <h2 className="font-[family-name:var(--font-plus-jakarta)] text-2xl font-bold text-[var(--color-on-surface)]">Jenis Plastik & Bahayanya</h2>
-                <p className="text-[var(--color-on-surface-variant)]">Pahami perbedaan antara PET, HDPE, hingga mikroplastik yang kasat mata namun sangat berbahaya bagi kesehatan.</p>
-                <Link href="/perjalanan-belajar/1" className="inline-flex items-center gap-2 px-10 h-12 bg-[var(--color-primary)] text-[var(--color-on-primary)] rounded-full text-sm font-semibold hover:shadow-lg active:scale-95 transition-all">
-                  Mulai Belajar <span className="material-symbols-outlined">arrow_forward</span>
-                </Link>
+          <div className="flex flex-wrap justify-center gap-4 mt-8">
+            {[
+              { val:'6', label:'Tahap Modul', color:'#006591' },
+              { val:'4', label:'E-LKPD Digital', color:'#ba1a1a' },
+              { val:'AR', label:'Teknologi Kamera', color:'#006e2f' },
+              { val:'PDF', label:'Rapor Personal', color:'#785a00' },
+            ].map(s=>(
+              <div key={s.label} className="bg-white border border-[#bec8d2] rounded-xl px-5 py-3 text-center shadow-sm">
+                <div className="font-[family-name:var(--font-mono)] text-2xl font-bold" style={{ color: s.color }}>{s.val}</div>
+                <div className="text-[#6e7881] text-xs">{s.label}</div>
               </div>
-              <div className="w-full md:w-1/3 aspect-square rounded-2xl overflow-hidden shadow-sm border border-[var(--color-surface-container)] group-hover:scale-105 transition-transform duration-500">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0Lcoyap2STuwVD4DGKl44i07aG3AYfBtgEjniNDPzSTu4cyPhBQgc8jM_GGrhsjPg_YUU31Hl-MfBI5e8amyJeT0aBApkYB4nSaoEcAvxTIpEzjXO6gIgGqXnC_AbI1SKFrGWgTyFcgvSAZBt4yMCxds4dPhbpT6GDbo-fMSnf85Ez2JKuZAW4T2BUeOtwvP39UGE7OXxuF1Ajikm89QhBLyMylm_XkIw4AXRakh2dI4Vd82_e2f9HBt1r5MUB0dz7K709GJdqw" alt="Types of plastic" className="w-full h-full object-cover" />
-              </div>
-            </div>
-          </div>
-
-          {/* Side Card */}
-          <div className="md:col-span-4 group bg-[var(--color-surface-container-lowest)] rounded-3xl p-6 shadow-sm border border-white hover:shadow-xl transition-all duration-300 flex flex-col">
-            <div className="h-40 w-full rounded-2xl overflow-hidden mb-6 group-hover:scale-105 transition-transform duration-500">
-              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtbzX7023RJvDt4XbR3pSJ70SOQuMRHKeELdRtKCKDcZjnxe-lWS1q47MFRN69thSLFy9SMkU6e_bhemT6ZZZbg6nq0WxdFTD_aKy0aqfynfhXBc1HrjI6H53mMvD9XC3_322nhHbejwKjun0WV2mEQEwIs8bBNOulf7XkD33L_2uzhoFw4G7ziUHyf6HLZYVVVl14Mjvngbi1ZB9OUSdUTSl0VrEJO7j-4llk3bAXMRr9lqXBWOt3tnJbwl61tNbELbUZfwrb1A" alt="Ocean ecosystem" className="w-full h-full object-cover" />
-            </div>
-            <div className="space-y-3 flex-grow">
-              <div className="inline-flex px-3 py-1 bg-[var(--color-secondary-container)]/20 text-[var(--color-secondary)] rounded-full text-sm font-semibold">Ekosistem</div>
-              <h3 className="font-[family-name:var(--font-plus-jakarta)] text-2xl font-bold text-[var(--color-on-surface)]">Ekosistem Laut</h3>
-              <p className="text-base text-[var(--color-on-surface-variant)]">Bagaimana laut bekerja sebagai paru-paru dunia dan rumah bagi jutaan spesies.</p>
-            </div>
-            <Link href="/perjalanan-belajar/3" className="mt-6 flex items-center justify-center gap-2 w-full h-12 border-2 border-[var(--color-secondary)] text-[var(--color-secondary)] rounded-full text-sm font-semibold hover:bg-[var(--color-secondary)]/5 transition-all">
-              Lihat Materi
-            </Link>
-          </div>
-
-          {/* Bottom Cards */}
-          {[
-            { href: '/perjalanan-belajar/4', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRD2dtvqPsW_CzC2VGp6ildQg1cJUfAKGZhQTxmiUNd2a0O3lwS2OfltGOf9fXoYyqsfb106NDROcUPJd6st1T-x7QDc7vPyWd8DcxKBBEnA448-ZC2joQjHrIlL_FAx8VjKONLCvFErtILfsMTTBTDt9MX76JomV2fnw2xhbY1_znCUF0UO4vS57EFF3wy5253tBiQsjFQ3OKb5DsJzmryNb6VDopJEYJBGNzw5MQcf036KsDxGgLT9haKHDA55riDxhEc09LfA', cat: 'Siklus Hidup', catClass: 'bg-[var(--color-tertiary-fixed)]/30 text-[var(--color-tertiary)]', title: 'Rantai Makanan', desc: 'Aliran energi yang menjaga keseimbangan alam, dari plankton hingga paus biru.' },
-            { href: '/perjalanan-belajar/6', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCPu4q9I0P6tpkdDafiTJ22ZPHv2rUm54R8ZPB7GVOJWOzFx1BTNGue3k-g0Bj0GPTat7fgZBA-n8He8rgGleqURHVFKcaah3oKa6EokaK7CTLjaD1Qy2dHDRw03quogeaDtX-vXeb6wO3pFQ-TWiYsRoZKDYNw4tNuXb8HlTVDSXo7Q1ODMQy7SBFabMunAYdL0q3zBK3FR2d_NZbNDqC9glikdE18uo21HAZvQoZ33O8GgHJcDNne_VLRuGaO2CubZht1GUkIyw', cat: 'Kesehatan', catClass: 'bg-[var(--color-error-container)]/20 text-[var(--color-error)]', title: 'Dampak bagi Manusia', desc: 'Mengapa laut yang bersih sangat penting bagi air minum dan makanan yang kita konsumsi.' },
-          ].map((card) => (
-            <Link href={card.href} key={card.title} className="md:col-span-6 group bg-[var(--color-surface-container-lowest)] rounded-3xl p-6 shadow-sm border border-white hover:shadow-xl transition-all duration-300 flex items-start gap-6">
-              <div className="w-24 h-24 shrink-0 rounded-2xl overflow-hidden shadow-sm border border-[var(--color-surface-container)] group-hover:scale-105 transition-transform duration-500">
-                <img src={card.img} alt={card.title} className="w-full h-full object-cover" />
-              </div>
-              <div className="space-y-3">
-                <div className={`inline-flex px-3 py-1 ${card.catClass} rounded-full text-sm font-semibold`}>{card.cat}</div>
-                <h3 className="font-[family-name:var(--font-plus-jakarta)] text-2xl font-bold text-[var(--color-on-surface)]">{card.title}</h3>
-                <p className="text-base text-[var(--color-on-surface-variant)]">{card.desc}</p>
-              </div>
-            </Link>
-          ))}
-        </section>
-
-        {/* Progress Banner */}
-        <section className="mt-16 bg-[var(--color-primary)] text-[var(--color-on-primary)] rounded-3xl p-16 flex flex-col md:flex-row justify-between items-center gap-10">
-          <div className="space-y-3">
-            <h2 className="font-[family-name:var(--font-plus-jakarta)] text-2xl font-bold">Lanjutkan Petualanganmu!</h2>
-            <p className="text-[var(--color-on-primary)]/80">Kamu telah menyelesaikan 2 dari 4 materi hari ini. Sedikit lagi!</p>
-          </div>
-          <div className="w-full md:w-64 space-y-3">
-            <div className="flex justify-between text-sm font-semibold">
-              <span>Progres Belajar</span>
-              <span>50%</span>
-            </div>
-            <div className="h-3 w-full bg-[var(--color-on-primary)]/20 rounded-full overflow-hidden">
-              <div className="h-full bg-[var(--color-secondary-fixed)] w-1/2 rounded-full shadow-[0_0_8px_rgba(107,255,143,0.5)]" />
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="bg-[var(--color-surface-container)] border-t border-[var(--color-outline-variant)] mt-16">
-        <div className="w-full py-16 px-6 flex flex-col md:flex-row justify-between items-center gap-6 max-w-[1200px] mx-auto">
-          <span className="font-[family-name:var(--font-plus-jakarta)] text-2xl font-bold text-[var(--color-on-surface)]">MicroJourney AR</span>
-          <p className="text-sm text-[var(--color-on-surface-variant)]">© 2024 MicroJourney AR. Petualangan Sains untuk Penjelajah Muda.</p>
-          <div className="flex gap-6">
-            {['Tentang Kami', 'Bantuan', 'Kebijakan Privasi'].map(l => (
-              <a key={l} href="#" className="text-sm text-[var(--color-on-surface-variant)] hover:text-[var(--color-secondary)] transition-colors">{l}</a>
             ))}
           </div>
         </div>
-      </footer>
+
+        {/* Module cards */}
+        <div className="space-y-4 mb-14">
+          {MODULES.map(mod => {
+            const isOpen = activeModule === mod.id;
+            return (
+              <div key={mod.id}
+                className="bg-white border border-[#bec8d2] rounded-2xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"
+                style={{ borderLeft: `4px solid ${mod.border}` }}>
+                <button className="w-full flex items-center gap-4 p-5 text-left hover:bg-[#f7f9fb] transition-colors"
+                  onClick={() => setActiveModule(isOpen ? null : mod.id)}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+                    style={{ backgroundColor: mod.bgLight }}>
+                    {mod.icon}
+                  </div>
+                  <div className="flex-grow">
+                    <div className="mb-0.5">
+                      <span className="text-xs font-[family-name:var(--font-mono)] font-bold px-2 py-0.5 rounded"
+                        style={{ backgroundColor: mod.bgLight, color: mod.color }}>
+                        {mod.tag}
+                      </span>
+                    </div>
+                    <h3 className="font-[family-name:var(--font-outfit)] text-lg font-bold text-[#191c1e]">{mod.title}</h3>
+                    <p className="text-[#6e7881] text-xs mt-0.5 leading-relaxed">{mod.desc}</p>
+                  </div>
+                  <span className="material-symbols-outlined text-[#bec8d2] transition-transform flex-shrink-0"
+                    style={{ transform: isOpen ? 'rotate(180deg)' : 'none' }}>
+                    expand_more
+                  </span>
+                </button>
+
+                {isOpen && (
+                  <div className="px-5 pb-5 border-t border-[#f2f4f6]">
+                    <div className="grid md:grid-cols-3 gap-3 mt-4 mb-4">
+                      {mod.concepts.map((c, ci) => (
+                        <div key={ci} className="bg-[#f7f9fb] border border-[#bec8d2] rounded-xl p-4">
+                          <p className="font-bold text-sm mb-2" style={{ color: mod.color }}>{c.label}</p>
+                          <p className="text-[#3e4850] text-xs leading-relaxed">{c.body}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="rounded-xl p-4 flex items-center gap-3"
+                      style={{ backgroundColor: mod.bgLight }}>
+                      <p className="text-sm font-semibold" style={{ color: mod.color }}>{mod.fact}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Key concepts */}
+        <div className="bg-white border border-[#bec8d2] rounded-2xl p-8 mb-10 shadow-sm">
+          <h2 className="font-[family-name:var(--font-outfit)] text-2xl font-bold text-[#191c1e] mb-6 text-center">Konsep Sains Utama</h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            {[
+              { icon:'🔬', title:'Polimer & Mikroplastik', body:'Plastik adalah polimer sintetis yang tidak dapat dicerna oleh enzim biologis maupun asam organik, termasuk asam lambung (HCl).' },
+              { icon:'☀️', title:'Fotodegradasi UV', body:'Radiasi UV memecah ikatan kimia C-C dalam polimer plastik, membuatnya rapuh sebelum abrasi mekanis mengubahnya jadi mikroplastik.' },
+              { icon:'🌊', title:'Rantai Makanan Terkontaminasi', body:'Bioakumulasi mikroplastik terjadi di sepanjang rantai makanan laut — dari plankton, ikan kecil, hingga ikan besar yang kita konsumsi.' },
+              { icon:'🫀', title:'Dampak Organ Pencernaan', body:'Usus halus adalah organ paling kritis — partikel < 10μm dapat menembus epitel dan masuk ke aliran darah, membawa zat kimia berbahaya.' },
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4 p-4 bg-[#f7f9fb] border border-[#bec8d2] rounded-xl">
+                <span className="text-2xl">{item.icon}</span>
+                <div>
+                  <p className="font-bold text-[#191c1e] text-sm mb-1">{item.title}</p>
+                  <p className="text-[#3e4850] text-xs leading-relaxed">{item.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="text-center bg-gradient-to-br from-[#006591] to-[#006e2f] rounded-2xl p-10 text-white shadow-xl">
+          <div className="text-4xl mb-4">🚀</div>
+          <h2 className="font-[family-name:var(--font-outfit)] text-2xl font-bold mb-3">Siap Memulai Perjalanan?</h2>
+          <p className="text-white/80 mb-6 max-w-md mx-auto text-sm leading-relaxed">
+            Mulai dari Tahap 1 — Scanner AR akan mendeteksi plastik di sekitarmu menggunakan kamera perangkat dan kecerdasan buatan.
+          </p>
+          <Link href="/journey/tahap-1"
+            className="inline-flex items-center gap-2 bg-white text-[#006591] font-bold px-8 py-4 rounded-xl text-lg hover:bg-[#f0f9ff] transition-all hover:scale-105 active:scale-95 shadow-md">
+            <span className="material-symbols-outlined">play_arrow</span>
+            Mulai Perjalanan Belajar
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

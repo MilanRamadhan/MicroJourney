@@ -95,26 +95,25 @@ export default function Tahap1() {
           setConfidence(conf);
           setDetectedClass(plastic.class);
           setScanHint(plastic.score >= MIN_LOCK_SCORE
-            ? 'Objek terkunci. Membuka pertanyaan pemantik...'
+            ? 'Objek terkunci! Membuka pertanyaan pemantik...'
             : `Terdeteksi ${plastic.class} ${conf}%. Dekatkan lagi atau perbaiki cahaya.`);
 
-          const color = plastic.score >= MIN_LOCK_SCORE ? '#22C55E' : '#F59E0B';
+          const color = plastic.score >= MIN_LOCK_SCORE ? '#006e2f' : '#c39400';
           ctx.strokeStyle = color;
           ctx.lineWidth = 2.5;
           ctx.strokeRect(x, y, w, h);
 
-          // Corner marks
           const cl = 18;
-          ctx.strokeStyle = '#fff';
+          ctx.strokeStyle = '#006591';
           ctx.lineWidth = 3;
           [[x,y+cl,x,y,x+cl,y],[x+w-cl,y,x+w,y,x+w,y+cl],
            [x,y+h-cl,x,y+h,x+cl,y+h],[x+w-cl,y+h,x+w,y+h,x+w,y+h-cl]].forEach(([x1,y1,x2,y2,x3,y3])=>{
             ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.lineTo(x3,y3); ctx.stroke();
           });
 
-          ctx.fillStyle = plastic.score >= MIN_LOCK_SCORE ? 'rgba(34,197,94,0.85)' : 'rgba(245,158,11,0.85)';
+          ctx.fillStyle = plastic.score >= MIN_LOCK_SCORE ? 'rgba(0,110,47,0.85)' : 'rgba(195,148,0,0.85)';
           ctx.fillRect(x, y - 28, 190, 26);
-          ctx.fillStyle = '#000';
+          ctx.fillStyle = '#fff';
           ctx.font = 'bold 12px monospace';
           ctx.fillText(`${plastic.class.toUpperCase()} · ${conf}%`, x + 6, y - 10);
 
@@ -155,15 +154,15 @@ export default function Tahap1() {
 
       {/* Init */}
       {phase === 'init' && !cameraError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#060F1E]">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#f7f9fb]">
           <div className="text-center p-8 max-w-sm">
-            <div className="w-20 h-20 rounded-full bg-[#0A1628] border border-[#1E3A5F] flex items-center justify-center mx-auto mb-6">
-              <span className="material-symbols-outlined text-[#3B82F6] text-4xl">photo_camera</span>
+            <div className="w-20 h-20 rounded-full bg-[#0ea5e9]/10 border-2 border-[#bec8d2] flex items-center justify-center mx-auto mb-6">
+              <span className="material-symbols-outlined text-[#006591] text-4xl">photo_camera</span>
             </div>
-            <h2 className="font-[family-name:var(--font-outfit)] text-2xl font-bold mb-3">Scanner AI Plastik</h2>
-            <p className="text-[#94A3B8] text-sm mb-8">Arahkan kamera ke botol plastik atau sampah plastik di sekitarmu. AI akan mendeteksinya secara real-time.</p>
+            <h2 className="font-[family-name:var(--font-outfit)] text-2xl font-bold mb-3 text-[#191c1e]">Scanner AI Plastik</h2>
+            <p className="text-[#3e4850] text-sm mb-8 leading-relaxed">Arahkan kamera ke botol plastik atau sampah plastik di sekitarmu. AI akan mendeteksinya secara real-time.</p>
             <button onClick={startCamera}
-              className="w-full bg-[#22C55E] hover:bg-[#16A34A] text-black font-bold py-4 rounded-xl text-lg transition-colors flex items-center justify-center gap-2">
+              className="w-full bg-[#006591] hover:bg-[#004c6e] text-white font-bold py-4 rounded-xl text-lg transition-colors flex items-center justify-center gap-2 shadow-md shadow-[#006591]/20">
               <span className="material-symbols-outlined">qr_code_scanner</span> Aktifkan Kamera
             </button>
           </div>
@@ -172,58 +171,54 @@ export default function Tahap1() {
 
       {/* Error */}
       {cameraError && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#060F1E] gap-5 p-8">
-          <span className="material-symbols-outlined text-[#EF4444] text-6xl">no_photography</span>
-          <p className="text-[#94A3B8] text-center text-sm">{cameraError}</p>
-          <button onClick={startCamera} className="bg-[#3B82F6] text-white font-bold px-6 py-3 rounded-xl">Coba Lagi</button>
-          <button onClick={() => setPhase('pemantik')} className="text-[#4A6080] text-sm underline">Lanjut tanpa scan</button>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#f7f9fb] gap-5 p-8">
+          <span className="material-symbols-outlined text-[#ba1a1a] text-6xl">no_photography</span>
+          <p className="text-[#3e4850] text-center text-sm leading-relaxed">{cameraError}</p>
+          <button onClick={startCamera} className="bg-[#006591] text-white font-bold px-6 py-3 rounded-xl">Coba Lagi</button>
+          <button onClick={() => setPhase('pemantik')} className="text-[#6e7881] text-sm underline">Lanjut tanpa scan</button>
         </div>
       )}
 
       {/* Scanning HUD */}
       {phase === 'scanning' && (
         <div className="absolute inset-0 pointer-events-none">
-          {/* Corners */}
           {[['top-6 left-6','border-t-4 border-l-4'],['top-6 right-6','border-t-4 border-r-4'],
             ['bottom-6 left-6','border-b-4 border-l-4'],['bottom-6 right-6','border-b-4 border-r-4']].map(([pos,cls])=>(
-            <div key={pos} className={`absolute ${pos} w-12 h-12 ${cls} border-[#22C55E] opacity-60`} />
+            <div key={pos} className={`absolute ${pos} w-12 h-12 ${cls} border-[#006591] opacity-70`} />
           ))}
 
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm px-5 py-2 rounded-full border border-[#22C55E]/30">
-            <p className="text-[#22C55E] text-sm font-[family-name:var(--font-mono)] font-bold tracking-widest">
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-5 py-2 rounded-full border border-[#bec8d2] shadow-sm">
+            <p className="text-[#006591] text-sm font-[family-name:var(--font-mono)] font-bold tracking-widest">
               {modelLoading ? 'MEMUAT MODEL AI...' : confidence > 0 ? `TERDETEKSI - ${confidence}%` : 'ARAHKAN KE BOTOL / GELAS PLASTIK'}
             </p>
           </div>
 
           <div className="absolute bottom-24 left-1/2 -translate-x-1/2 w-[min(90vw,420px)] text-center">
-            <p className="bg-black/65 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 text-white/80 text-sm">
+            <p className="bg-white/85 backdrop-blur-sm border border-[#bec8d2] rounded-xl px-4 py-3 text-[#191c1e] text-sm shadow-sm">
               {scanHint}
             </p>
           </div>
 
           {confidence > 0 && (
             <div className="absolute bottom-40 left-1/2 -translate-x-1/2 w-64">
-              <p className="text-white text-xs text-center mb-2 font-[family-name:var(--font-mono)] uppercase">{detectedClass}</p>
-              <div className="w-full bg-white/10 h-2.5 rounded-full overflow-hidden">
+              <p className="text-white text-xs text-center mb-2 font-[family-name:var(--font-mono)] uppercase drop-shadow">{detectedClass}</p>
+              <div className="w-full bg-white/30 h-2.5 rounded-full overflow-hidden">
                 <div className="h-full rounded-full transition-all duration-200"
-                  style={{ width:`${confidence}%`, background: confidence >= Math.round(MIN_LOCK_SCORE * 100) ? '#22C55E' : confidence >= 30 ? '#F59E0B' : '#EF4444' }} />
+                  style={{ width:`${confidence}%`, background: confidence >= Math.round(MIN_LOCK_SCORE * 100) ? '#006e2f' : confidence >= 30 ? '#c39400' : '#ba1a1a' }} />
               </div>
-              <p className="text-center text-white/40 text-xs mt-1">{confidence}% / {Math.round(MIN_LOCK_SCORE * 100)}% untuk lock</p>
+              <p className="text-center text-white/70 text-xs mt-1 drop-shadow">{confidence}% / {Math.round(MIN_LOCK_SCORE * 100)}% untuk lock</p>
             </div>
           )}
 
           {showManualFallback && (
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-auto w-[min(90vw,320px)] text-center">
               <button
-                onClick={() => {
-                  stopCamera();
-                  setPhase('pemantik');
-                }}
-                className="w-full bg-black/75 backdrop-blur-sm border border-[#1E3A5F] text-[#F1F5F9] text-sm font-semibold px-5 py-3 rounded-xl"
+                onClick={() => { stopCamera(); setPhase('pemantik'); }}
+                className="w-full bg-white/90 backdrop-blur-sm border border-[#bec8d2] text-[#191c1e] text-sm font-semibold px-5 py-3 rounded-xl shadow-sm"
               >
                 Lanjut tanpa scan
               </button>
-              <p className="text-white/45 text-[11px] mt-2">
+              <p className="text-white/70 text-[11px] mt-2 drop-shadow">
                 Tips: dekatkan botol/gelas plastik ke kamera dan pastikan cahaya cukup.
               </p>
             </div>
@@ -233,30 +228,30 @@ export default function Tahap1() {
 
       {/* Pemantik modal */}
       {phase === 'pemantik' && (
-        <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-6">
-          <div className="bg-[#0A1628] border border-[#1E3A5F] rounded-2xl max-w-md w-full p-8">
+        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6">
+          <div className="bg-white border border-[#bec8d2] rounded-2xl max-w-md w-full p-8 shadow-xl">
             <div className="flex justify-center mb-5">
-              <div className="w-16 h-16 bg-[#22C55E]/10 border border-[#22C55E]/30 rounded-full flex items-center justify-center">
-                <span className="material-symbols-outlined text-[#22C55E] text-3xl">check_circle</span>
+              <div className="w-16 h-16 bg-[#6bff8f]/20 border border-[#006e2f]/30 rounded-full flex items-center justify-center">
+                <span className="material-symbols-outlined text-[#006e2f] text-3xl">check_circle</span>
               </div>
             </div>
-            <p className="text-xs font-[family-name:var(--font-mono)] text-[#22C55E] uppercase tracking-widest text-center mb-2">
+            <p className="text-xs font-[family-name:var(--font-mono)] text-[#006e2f] uppercase tracking-widest text-center mb-2">
               Plastik PET Terdeteksi ✓
             </p>
-            <p className="text-center text-[#94A3B8] text-xs mb-5 font-[family-name:var(--font-mono)]">Waktu hancur alami: 450 TAHUN</p>
+            <p className="text-center text-[#6e7881] text-xs mb-5 font-[family-name:var(--font-mono)]">Waktu hancur alami: 450 TAHUN</p>
 
-            <h3 className="font-[family-name:var(--font-outfit)] text-xl font-bold text-center mb-5">Pertanyaan Pemantik</h3>
+            <h3 className="font-[family-name:var(--font-outfit)] text-xl font-bold text-center mb-5 text-[#191c1e]">Pertanyaan Pemantik</h3>
 
-            <div className="bg-[#060F1E] border-l-4 border-[#3B82F6] rounded-xl p-5 mb-5">
-              <p className="text-[#94A3B8] text-sm leading-relaxed italic">
+            <div className="bg-[#f2f4f6] border-l-4 border-[#006591] rounded-xl p-5 mb-5">
+              <p className="text-[#3e4850] text-sm leading-relaxed italic">
                 &ldquo;Bagaimana mungkin benda padat sintetis ini bisa menembus dan menetap di dalam usus manusia — padahal tubuh kita dirancang untuk mencerna makanan?&rdquo;
               </p>
             </div>
 
-            <p className="text-[#4A6080] text-xs text-center mb-6">Pikirkan jawabannya. Mulai investigasi untuk membuktikannya.</p>
+            <p className="text-[#6e7881] text-xs text-center mb-6">Pikirkan jawabannya. Mulai investigasi untuk membuktikannya.</p>
 
             <button onClick={proceed}
-              className="w-full bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold py-4 rounded-xl text-lg transition-colors flex items-center justify-center gap-2">
+              className="w-full bg-[#006591] hover:bg-[#004c6e] text-white font-bold py-4 rounded-xl text-lg transition-colors flex items-center justify-center gap-2 shadow-md shadow-[#006591]/20">
               Mulai Investigasi <span className="material-symbols-outlined">arrow_forward</span>
             </button>
           </div>

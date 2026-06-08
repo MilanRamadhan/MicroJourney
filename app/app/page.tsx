@@ -45,7 +45,7 @@ export default function LandingPage() {
             <Link className="text-[#006e2f] border-b-4 border-[#006e2f] pb-2 font-bold text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/">
               Beranda
             </Link>
-            <Link className="text-[#3e4850] hover:text-[#006591] pb-2 transition-colors text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/perjalanan-belajar">
+            <Link className="text-[#3e4850] hover:text-[#006591] pb-2 transition-colors text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/journey/tahap-1">
               Perjalanan Belajar
             </Link>
             <Link className="text-[#3e4850] hover:text-[#006591] pb-2 transition-colors text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/materi">
@@ -53,9 +53,6 @@ export default function LandingPage() {
             </Link>
             <Link className="text-[#3e4850] hover:text-[#006591] pb-2 transition-colors text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/e-lkpd">
               E-LKPD
-            </Link>
-            <Link className="text-[#3e4850] hover:text-[#006591] pb-2 transition-colors text-[16px] leading-[24px] font-[family-name:var(--font-inter)]" href="/rapor-guru">
-              Rapor Guru
             </Link>
           </div>
           <div className="flex items-center gap-[24px]">

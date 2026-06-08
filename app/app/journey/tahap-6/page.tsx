@@ -43,7 +43,7 @@ export default function Tahap6() {
     const ctx = canvasRef.current.getContext('2d')!;
     const pos = getPos(e, canvasRef.current);
     ctx.beginPath(); ctx.moveTo(lastPos.current.x, lastPos.current.y);
-    ctx.lineTo(pos.x, pos.y); ctx.strokeStyle = '#3B82F6'; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.stroke();
+    ctx.lineTo(pos.x, pos.y); ctx.strokeStyle = '#006591'; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.stroke();
     lastPos.current = pos; setHasSig(true);
   }
   function stopDraw() { drawing.current = false; lastPos.current = null; }
@@ -60,23 +60,22 @@ export default function Tahap6() {
     const doc = new jsPDF();
 
     // Header block
-    doc.setFillColor(6, 15, 30);
+    doc.setFillColor(0, 101, 145); // #006591 primary
     doc.rect(0, 0, 210, 42, 'F');
-    doc.setTextColor(241, 245, 249);
+    doc.setTextColor(255, 255, 255);
     doc.setFontSize(22); doc.setFont('helvetica', 'bold');
     doc.text('MICROJOURNEY AR', 15, 18);
     doc.setFontSize(10); doc.setFont('helvetica', 'normal');
-    doc.setTextColor(148, 163, 184);
+    doc.setTextColor(201, 230, 255); // primary-fixed
     doc.text('Rapor Jurnal Investigasi Mikroplastik — IPA Kelas VIII / Kurikulum Merdeka', 15, 28);
     doc.text(`Nama: ${studentName || '-'}    Kelas: ${studentClass || '-'}    Tanggal: ${new Date().toLocaleDateString('id-ID', { day:'numeric',month:'long',year:'numeric' })}`, 15, 36);
 
     doc.setTextColor(0, 0, 0);
 
-    // Summary stats
     const { totalParticles, selectedFoods, mostDangerousOrgan, lkpdAnswers: answers } = useJourneyStore.getState();
     let y = 52;
     doc.setFontSize(13); doc.setFont('helvetica', 'bold');
-    doc.setTextColor(239, 68, 68);
+    doc.setTextColor(186, 26, 26); // error color
     doc.text('HASIL EKSPLORASI', 15, y); y += 8;
     doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(0);
     doc.text(`Total mikroplastik tertelan hari ini: ${totalParticles.toLocaleString('id-ID')} partikel`, 15, y); y += 6;
@@ -93,7 +92,7 @@ export default function Tahap6() {
 
     sections.forEach(s => {
       if (y > 255) { doc.addPage(); y = 20; }
-      doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(59, 130, 246);
+      doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 101, 145);
       doc.text(s.label, 15, y); y += 6;
       doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(0);
       const lines = doc.splitTextToSize(s.text || '(tidak diisi)', 180);
@@ -102,7 +101,7 @@ export default function Tahap6() {
 
     // Commitment
     if (y > 240) { doc.addPage(); y = 20; }
-    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(34, 197, 94);
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 110, 47);
     doc.text('KOMITMEN EKOLOGI', 15, y); y += 7;
     doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(0);
     const clines = doc.splitTextToSize(commitment || '-', 180);
@@ -114,7 +113,7 @@ export default function Tahap6() {
       doc.addImage(canvasRef.current.toDataURL('image/png'), 'PNG', 15, y, 70, 25); y += 30;
     }
 
-    doc.setFontSize(8); doc.setTextColor(148, 163, 184);
+    doc.setFontSize(8); doc.setTextColor(110, 120, 129);
     doc.text('MicroJourney AR · LIDM 2026 · Kurikulum Merdeka Fase D', 15, 290);
 
     doc.save(`rapor-microjourney-${studentName || 'siswa'}.pdf`);
@@ -122,36 +121,35 @@ export default function Tahap6() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-88px)] bg-[#060F1E] flex flex-col">
+    <div className="min-h-[calc(100vh-88px)] bg-[#f7f9fb] flex flex-col">
       <div className="max-w-2xl mx-auto px-4 py-8 w-full">
         {/* Conclusion */}
         <div className="text-center mb-10">
           <div className="text-6xl mb-5 floating">🌱</div>
-          <h2 className="font-[family-name:var(--font-outfit)] text-3xl font-bold mb-5">Generalisasi & Refleksi</h2>
-          <div className="bg-[#0A1628] border border-[#1E3A5F] rounded-2xl p-6 max-w-lg mx-auto">
-            <p className="text-[#94A3B8] leading-relaxed italic text-base">
+          <h2 className="font-[family-name:var(--font-outfit)] text-3xl font-bold mb-5 text-[#191c1e]">Generalisasi &amp; Refleksi</h2>
+          <div className="bg-white border border-[#bec8d2] rounded-2xl p-6 max-w-lg mx-auto shadow-sm">
+            <p className="text-[#3e4850] leading-relaxed italic text-base">
               &ldquo;Manusia adalah pelaku utama pencemaran sekaligus korban akhir dari kecerobohannya sendiri. Setiap keputusan kecil — menolak sedotan plastik, membawa tas belanja — adalah tindakan konkret yang bermakna.&rdquo;
             </p>
-            <p className="text-[#4A6080] text-xs mt-3">— Kesimpulan Kurikulum, Modul Ajar IPA Kelas VIII</p>
+            <p className="text-[#6e7881] text-xs mt-3">— Kesimpulan Kurikulum, Modul Ajar IPA Kelas VIII</p>
           </div>
         </div>
 
         {/* Eco-pledge */}
-        <div className="bg-[#0A1628] border border-[#22C55E]/20 rounded-2xl p-6 mb-6">
-          <h3 className="font-[family-name:var(--font-outfit)] font-bold text-lg mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#22C55E]">park</span>
+        <div className="bg-white border border-[#006e2f]/15 rounded-2xl p-6 mb-6 shadow-sm">
+          <h3 className="font-[family-name:var(--font-outfit)] font-bold text-lg mb-4 flex items-center gap-2 text-[#191c1e]">
+            <span className="material-symbols-outlined text-[#006e2f]">park</span>
             Eco-Pledge — Komitmen Nyata
           </h3>
 
-          {/* Quick toggles */}
-          <p className="text-[#94A3B8] text-sm mb-3">Pilih komitmen cepat atau tulis sendiri:</p>
+          <p className="text-[#3e4850] text-sm mb-3">Pilih komitmen cepat atau tulis sendiri:</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
             {QUICK_PLEDGES.map(p => (
               <button key={p} onClick={() => togglePledge(p)}
-                className={`text-left text-sm px-4 py-3 rounded-xl border transition-all ${
+                className={`text-left text-sm px-4 py-3 rounded-xl border-2 transition-all ${
                   selectedPledges.has(p)
-                    ? 'bg-[#22C55E]/10 border-[#22C55E]/50 text-[#22C55E]'
-                    : 'bg-[#060F1E] border-[#1E3A5F] text-[#94A3B8] hover:border-[#22C55E]/30'
+                    ? 'bg-[#6bff8f]/20 border-[#006e2f] text-[#006e2f] font-semibold'
+                    : 'bg-[#f7f9fb] border-[#bec8d2] text-[#3e4850] hover:border-[#006e2f]/40 hover:bg-[#6bff8f]/10'
                 }`}>
                 {selectedPledges.has(p) ? '✓ ' : '□ '}{p}
               </button>
@@ -159,49 +157,49 @@ export default function Tahap6() {
           </div>
 
           <textarea value={commitment} onChange={e => setCommitment(e.target.value)}
-            className="w-full bg-[#060F1E] border border-[#1E3A5F] rounded-xl p-4 text-[#F1F5F9] placeholder-[#4A6080] text-sm resize-none h-24 focus:outline-none focus:border-[#22C55E] transition-colors"
+            className="w-full bg-[#f7f9fb] border border-[#bec8d2] rounded-xl p-4 text-[#191c1e] placeholder-[#6e7881] text-sm resize-none h-24 focus:outline-none focus:border-[#006e2f] focus:ring-1 focus:ring-[#006e2f] transition-colors"
             placeholder="Tulis komitmenmu sendiri di sini, atau edit pilihan di atas..." />
         </div>
 
         {/* Signature */}
-        <div className="bg-[#0A1628] border border-[#1E3A5F] rounded-2xl p-6 mb-6">
-          <h3 className="font-bold mb-3 flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#3B82F6]">draw</span>
+        <div className="bg-white border border-[#bec8d2] rounded-2xl p-6 mb-6 shadow-sm">
+          <h3 className="font-bold mb-3 flex items-center gap-2 text-[#191c1e]">
+            <span className="material-symbols-outlined text-[#006591]">draw</span>
             Tanda Tangan Digital
           </h3>
-          <p className="text-[#94A3B8] text-sm mb-3">Tandatangani komitmenmu:</p>
-          <div className="bg-white rounded-xl overflow-hidden border border-[#1E3A5F]">
+          <p className="text-[#3e4850] text-sm mb-3">Tandatangani komitmenmu:</p>
+          <div className="bg-[#f7f9fb] rounded-xl overflow-hidden border border-[#bec8d2]">
             <canvas ref={canvasRef} width={500} height={110} className="w-full touch-none cursor-crosshair block"
               onMouseDown={startDraw} onMouseMove={draw} onMouseUp={stopDraw} onMouseLeave={stopDraw}
               onTouchStart={startDraw} onTouchMove={draw} onTouchEnd={stopDraw} />
           </div>
           {hasSig && (
-            <button onClick={clearSig} className="text-[#4A6080] text-xs mt-2 underline">Hapus dan ulangi</button>
+            <button onClick={clearSig} className="text-[#6e7881] text-xs mt-2 underline hover:text-[#3e4850]">Hapus dan ulangi</button>
           )}
-          {!hasSig && <p className="text-[#4A6080] text-xs mt-2 font-[family-name:var(--font-mono)]">Tanda tangani di area putih di atas</p>}
+          {!hasSig && <p className="text-[#6e7881] text-xs mt-2 font-[family-name:var(--font-mono)]">Tanda tangani di area abu-abu di atas</p>}
         </div>
 
         {/* Generate PDF */}
         <button onClick={generatePDF} disabled={!isReady}
-          className="w-full bg-gradient-to-r from-[#22C55E] to-[#3B82F6] text-white font-bold py-5 rounded-xl text-xl transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:cursor-not-allowed mb-4">
+          className="w-full bg-gradient-to-r from-[#006591] to-[#006e2f] text-white font-bold py-5 rounded-xl text-xl transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:cursor-not-allowed mb-4 shadow-lg shadow-[#006591]/25 hover:shadow-xl hover:scale-[1.01]">
           <span className="material-symbols-outlined">picture_as_pdf</span>
-          {pdfDone ? 'Unduh Lagi' : 'Selesaikan & Unduh Rapor PDF'}
+          {pdfDone ? 'Unduh Lagi' : 'Selesaikan &amp; Unduh Rapor PDF'}
         </button>
 
         {!isReady && (
-          <p className="text-center text-[#4A6080] text-xs mb-4 font-[family-name:var(--font-mono)]">
+          <p className="text-center text-[#6e7881] text-xs mb-4 font-[family-name:var(--font-mono)]">
             {!commitment.trim() ? '← Isi komitmenmu dahulu' : '← Tanda tangan diperlukan'}
           </p>
         )}
 
         {pdfDone && (
           <div className="text-center">
-            <div className="bg-[#0A1628] border border-[#22C55E]/30 rounded-xl p-5 mb-4">
-              <span className="material-symbols-outlined text-[#22C55E] text-4xl block mb-2">check_circle</span>
-              <p className="text-[#22C55E] font-bold">Rapor PDF berhasil diunduh!</p>
-              <p className="text-[#94A3B8] text-sm mt-1">Serahkan file kepada gurumu sebagai bukti selesainya perjalanan.</p>
+            <div className="bg-white border border-[#006e2f]/20 rounded-xl p-5 mb-4 shadow-sm">
+              <span className="material-symbols-outlined text-[#006e2f] text-4xl block mb-2">check_circle</span>
+              <p className="text-[#006e2f] font-bold">Rapor PDF berhasil diunduh!</p>
+              <p className="text-[#3e4850] text-sm mt-1">Serahkan file kepada gurumu sebagai bukti selesainya perjalanan.</p>
             </div>
-            <button onClick={() => router.push('/')} className="text-[#4A6080] text-sm underline">
+            <button onClick={() => router.push('/')} className="text-[#6e7881] text-sm underline hover:text-[#3e4850]">
               Kembali ke Beranda
             </button>
           </div>
