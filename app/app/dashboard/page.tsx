@@ -20,6 +20,25 @@ interface Submission {
   selectedFoods: string[];
 }
 
+// Extract short organ label from free-text essay or organ ID
+const ORGAN_LABEL_MAP: Record<string, string> = {
+  mouth: 'Mulut',
+  stomach: 'Lambung',
+  smallIntestine: 'Usus Halus',
+  largeIntestine: 'Usus Besar',
+  blood: 'Darah',
+};
+function parseOrganLabel(raw: string): string {
+  if (!raw) return '-';
+  const r = raw.toLowerCase();
+  if (r.includes('usus halus') || r.includes('small') || r.includes('intestinum') || r.includes('villus') || r.includes('vili')) return 'Usus Halus';
+  if (r.includes('usus besar') || r.includes('large') || r.includes('kolon')) return 'Usus Besar';
+  if (r.includes('lambung') || r.includes('stomach') || r.includes('gaster') || r.includes('hcl')) return 'Lambung';
+  if (r.includes('darah') || r.includes('blood') || r.includes('sirkulasi') || r.includes('jantung')) return 'Darah';
+  if (r.includes('mulut') || r.includes('mouth') || r.includes('saliva')) return 'Mulut';
+  return ORGAN_LABEL_MAP[raw] ?? (raw.length > 20 ? raw.slice(0, 18) + '…' : raw);
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const { currentUser, users, logout, registerStudent, deleteStudent } = useAuthStore();
@@ -62,7 +81,10 @@ export default function Dashboard() {
   const avgParticles = filtered.length ? Math.round(filtered.reduce((s, d) => s + d.totalParticles, 0) / filtered.length) : 0;
   const organCounts: Record<string, number> = {};
   filtered.forEach(d => {
-    if (d.mostDangerousOrgan) organCounts[d.mostDangerousOrgan] = (organCounts[d.mostDangerousOrgan] || 0) + 1;
+    if (d.mostDangerousOrgan) {
+      const label = parseOrganLabel(d.mostDangerousOrgan);
+      organCounts[label] = (organCounts[label] || 0) + 1;
+    }
   });
   const topOrgan = Object.entries(organCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
   const registeredStudents = users.filter((user): user is AppUser => user.role === 'student');
@@ -100,6 +122,13 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          {adminUser.role === 'superadmin' && (
+            <Link href="/superadmin"
+              className="flex items-center gap-1.5 bg-[#006591] hover:bg-[#004c6e] text-white text-sm font-bold px-4 py-2 rounded-lg transition-all hover:scale-105 active:scale-95 shadow-sm">
+              <span className="material-symbols-outlined text-base">admin_panel_settings</span>
+              Kelola Guru
+            </Link>
+          )}
           <button onClick={refreshSubmissions} className="text-[#3e4850] hover:text-[#191c1e] flex items-center gap-1 text-sm transition-colors">
             <span className="material-symbols-outlined text-base">refresh</span> Refresh
           </button>
@@ -112,17 +141,54 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[
-            { label: 'Total Siswa Submit', value: filtered.length, color: '#006591' },
-            { label: 'Rata-rata Partikel', value: avgParticles.toLocaleString('id-ID'), color: '#ba1a1a' },
-            { label: 'Organ Paling Dipilih', value: topOrgan, color: '#c39400', small: true },
-            { label: 'Akun Siswa', value: registeredStudents.length, color: '#006e2f' },
-          ].map(s => (
-            <div key={s.label} className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
-              <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase tracking-wider mb-2">{s.label}</p>
-              <p className={`font-[family-name:var(--font-mono)] font-bold ${s.small ? 'text-lg' : 'text-3xl'}`} style={{ color: s.color }}>{s.value}</p>
+          {/* Siswa submit */}
+          <div className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-[#c9e6ff]/60 flex items-center justify-center">
+                <span className="material-symbols-outlined text-[#006591] text-base">assignment_turned_in</span>
+              </div>
+              <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase tracking-wider leading-tight">Total Siswa Submit</p>
             </div>
-          ))}
+            <p className="font-[family-name:var(--font-mono)] text-3xl font-bold text-[#006591]">{filtered.length}</p>
+          </div>
+
+          {/* Rata-rata partikel */}
+          <div className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-[#ffdad6]/80 flex items-center justify-center">
+                <span className="material-symbols-outlined text-[#ba1a1a] text-base">scatter_plot</span>
+              </div>
+              <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase tracking-wider leading-tight">Rata-rata Partikel</p>
+            </div>
+            <p className="font-[family-name:var(--font-mono)] text-3xl font-bold text-[#ba1a1a]">{avgParticles.toLocaleString('id-ID')}</p>
+          </div>
+
+          {/* Organ paling dipilih */}
+          <div className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-[#ffdf9a]/60 flex items-center justify-center">
+                <span className="material-symbols-outlined text-[#785a00] text-base">favorite</span>
+              </div>
+              <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase tracking-wider leading-tight">Organ Paling Dipilih</p>
+            </div>
+            <p className="font-[family-name:var(--font-mono)] text-xl font-bold text-[#785a00] truncate">{topOrgan}</p>
+            {topOrgan !== '-' && (
+              <p className="text-[#bec8d2] text-[10px] font-[family-name:var(--font-mono)] mt-0.5">
+                {organCounts[topOrgan]}× dipilih
+              </p>
+            )}
+          </div>
+
+          {/* Akun siswa */}
+          <div className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-[#dcfce7]/80 flex items-center justify-center">
+                <span className="material-symbols-outlined text-[#006e2f] text-base">group</span>
+              </div>
+              <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase tracking-wider leading-tight">Akun Siswa</p>
+            </div>
+            <p className="font-[family-name:var(--font-mono)] text-3xl font-bold text-[#006e2f]">{registeredStudents.length}</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-[420px_1fr] gap-6 mb-8">
@@ -274,7 +340,7 @@ export default function Dashboard() {
                   <p className="text-[#6e7881] text-xs">partikel</p>
                 </div>
                 <div className="bg-[#f7f9fb] border border-[#bec8d2] rounded-xl p-3 flex-1 text-center">
-                  <p className="font-semibold text-sm text-[#785a00]">{selected.mostDangerousOrgan || '-'}</p>
+                  <p className="font-semibold text-sm text-[#785a00]">{parseOrganLabel(selected.mostDangerousOrgan)}</p>
                   <p className="text-[#6e7881] text-xs">organ kritis</p>
                 </div>
               </div>

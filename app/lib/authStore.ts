@@ -20,6 +20,9 @@ interface AuthState {
   logout: () => void;
   registerStudent: (input: { name: string; email: string; password: string; className: string; createdBy: string }) => AppUser;
   deleteStudent: (id: string) => void;
+  registerTeacher: (input: { name: string; email: string; password: string }) => { success: boolean; message: string; teacher?: AppUser };
+  deleteTeacher: (id: string) => void;
+  updateTeacher: (id: string, input: { name: string; email: string; password: string }) => { success: boolean; message: string };
 }
 
 const DEFAULT_USERS: AppUser[] = [
@@ -92,6 +95,40 @@ export const useAuthStore = create<AuthState>()(
       deleteStudent: (id) => set(state => ({
         users: mergeDefaultUsers(state.users).filter(user => user.id !== id || user.role !== 'student'),
       })),
+
+      registerTeacher: ({ name, email, password }) => {
+        const users = mergeDefaultUsers(get().users);
+        const normalized = normalizeEmail(email);
+        const existing = users.find(u => normalizeEmail(u.email) === normalized);
+        if (existing) return { success: false, message: 'Email sudah terdaftar.' };
+        const teacher: AppUser = {
+          id: `teacher-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          name: name.trim(),
+          email: normalized,
+          password,
+          role: 'teacher',
+        };
+        set({ users: [...users, teacher] });
+        return { success: true, message: 'Akun guru berhasil dibuat.', teacher };
+      },
+
+      deleteTeacher: (id) => set(state => ({
+        users: mergeDefaultUsers(state.users).filter(u => !(u.id === id && u.role === 'teacher')),
+      })),
+
+      updateTeacher: (id, { name, email, password }) => {
+        const users = mergeDefaultUsers(get().users);
+        const normalized = normalizeEmail(email);
+        const conflict = users.find(u => normalizeEmail(u.email) === normalized && u.id !== id);
+        if (conflict) return { success: false, message: 'Email sudah digunakan akun lain.' };
+        const nextUsers = users.map(u =>
+          u.id === id && u.role === 'teacher'
+            ? { ...u, name: name.trim(), email: normalized, password }
+            : u
+        );
+        set({ users: nextUsers });
+        return { success: true, message: 'Data guru berhasil diperbarui.' };
+      },
     }),
     {
       name: 'microjourney-auth',
