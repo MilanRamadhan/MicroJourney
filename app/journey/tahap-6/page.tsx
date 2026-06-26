@@ -2,6 +2,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useJourneyStore } from '@/lib/journeyStore';
+import MikaMascot from '@/components/MikaMascot';
 
 const QUICK_PLEDGES = [
   'Bawa tumbler sendiri ke sekolah setiap hari',
@@ -125,7 +126,9 @@ export default function Tahap6() {
       <div className="max-w-2xl mx-auto px-4 py-8 w-full">
         {/* Conclusion */}
         <div className="text-center mb-10">
-          <div className="text-6xl mb-5 floating">🌱</div>
+          <div className="flex justify-center mb-5">
+            <MikaMascot size={120} bubbleSide="top" pop message="Penyelidikan selesai! Kamu sudah jadi penyelidik hebat. Sekarang, apa janjimu untuk menjaga samudra kita?" />
+          </div>
           <h2 className="font-[family-name:var(--font-outfit)] text-3xl font-bold mb-5 text-[#191c1e]">Generalisasi &amp; Refleksi</h2>
           <div className="bg-white border border-[#bec8d2] rounded-2xl p-6 max-w-lg mx-auto shadow-sm">
             <p className="text-[#3e4850] leading-relaxed italic text-base">

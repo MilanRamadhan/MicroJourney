@@ -68,9 +68,6 @@ export default function BottomNav() {
           })}
         </div>
       </nav>
-
-      {/* Spacer so content is not hidden behind bottom nav */}
-      <div className="md:hidden h-[68px]" />
     </>
   );
 }
