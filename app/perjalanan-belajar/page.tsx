@@ -148,7 +148,7 @@ export default function PerjalananBelajarPage() {
           </div>
 
           {/* Header */}
-          <div className="absolute inset-x-0 top-0 z-30 flex flex-col items-center text-center px-5 pt-[118px]">
+          <div className="absolute inset-x-0 top-0 z-30 flex flex-col items-center text-center px-5 pt-[170px]">
             <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-sm text-[#0a7d52] text-xs font-bold shadow-sm mb-3">
               <span className="material-symbols-outlined text-base">map</span> Peta Petualangan
             </span>

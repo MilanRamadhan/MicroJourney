@@ -33,11 +33,11 @@ export default function LandingPage() {
           {/* Soften vividness + lift text contrast */}
           <div className="absolute inset-0 bg-white/15" />
           <div className="absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-white/55 to-transparent pointer-events-none" />
-          {/* Blend bawah ke section putih (tutup gap) */}
-          <div className="absolute inset-x-0 bottom-0 h-28 md:h-44 bg-gradient-to-b from-transparent to-white pointer-events-none z-[2]" />
+          {/* Shadow/blend bawah MENYELURUH — lapisan paling atas, menutup seluruh dasar hero (pantai + signpost + Mika) seragam ke putih */}
+          <div className="absolute inset-x-0 bottom-0 h-16 sm:h-32 md:h-40 lg:h-48 pointer-events-none z-30" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, #ffffff 86%)" }} />
 
           {/* Hero content */}
-          <div className="absolute inset-0 z-10 flex flex-col items-center text-center px-5 pt-[70px] md:pt-[190px]">
+          <div className="absolute inset-0 z-10 flex flex-col items-center text-center px-5 pt-[70px] md:pt-[170px]">
             <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-sm text-[#0a7d52] text-xs sm:text-sm font-bold shadow-sm">
               <span className="material-symbols-outlined text-base">auto_awesome</span>
               Ekspedisi Mikroplastik
@@ -63,8 +63,8 @@ export default function LandingPage() {
               </div>
             )}
 
-            {/* CTA */}
-            <div className="mt-5 flex flex-col sm:flex-row gap-3">
+            {/* CTA teks lama — diganti signpost kayu di semua ukuran */}
+            <div className="mt-5 flex flex-col sm:flex-row gap-3 hidden">
               <button
                 onClick={handleStart}
                 className="bg-[#006591] hover:bg-[#004c6e] active:scale-[0.98] text-white font-bold px-7 py-3.5 rounded-full text-[15px] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#004c6e]/30"
@@ -79,7 +79,7 @@ export default function LandingPage() {
             </div>
 
             {/* Stats */}
-            <div className="mt-6 hidden sm:flex gap-2.5">
+            <div className="mt-6 hidden sm:flex md:hidden gap-2.5">
               {[
                 { val: "6", label: "Tahap Misi" },
                 { val: "AR", label: "Kamera AI" },
@@ -91,6 +91,33 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Signpost CTA — desktop (papan kayu tertancap di pasir) */}
+          <div className="block absolute bottom-0 left-[32%] sm:left-[26%] md:left-[20%] -translate-x-1/2 z-20 w-[185px] sm:w-[235px] md:w-[280px] lg:w-[320px]" style={{ aspectRatio: "790 / 1092" }}>
+            <img src="/signpost.png" alt="" draggable={false} className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none" style={{ filter: "drop-shadow(0 12px 16px rgba(30,55,25,0.28))" }} />
+            {/* Keping atas — tombol utama */}
+            <button onClick={handleStart} aria-label="Mulai Investigasi" className="group absolute left-[13%] right-[13%] top-[16%] h-[15.5%] flex items-center justify-center pointer-events-auto cursor-pointer">
+              {/* Glow panel saat hover/tap → terlihat sebagai tombol */}
+              <span className="absolute inset-x-[3%] inset-y-[12%] rounded-[7px] bg-[#ffdd86]/0 group-hover:bg-[#ffdd86]/45 group-active:bg-[#ffdd86]/55 transition-all duration-200 pointer-events-none group-hover:shadow-[0_0_14px_3px_rgba(255,210,105,0.6)]" />
+              <span
+                className="relative font-[family-name:var(--font-outfit)] font-extrabold text-[12px] sm:text-[14px] lg:text-[16px] tracking-tight leading-none text-center transition-transform duration-150 group-hover:scale-[1.05] group-active:translate-y-[1px]"
+                style={{ color: "#43280f", textShadow: "0 1px 0 rgba(255,249,228,0.5), 0 -1px 1px rgba(35,18,4,0.4)" }}
+              >
+                Mulai Investigasi
+              </span>
+            </button>
+            {/* Keping bawah — tombol sekunder */}
+            <Link href="/perjalanan-belajar" aria-label="Lihat Peta Perjalanan" className="group absolute left-[13%] right-[13%] top-[39.5%] h-[15.5%] flex items-center justify-center pointer-events-auto cursor-pointer">
+              {/* Glow panel saat hover/tap → terlihat sebagai tombol */}
+              <span className="absolute inset-x-[3%] inset-y-[12%] rounded-[7px] bg-[#ffdd86]/0 group-hover:bg-[#ffdd86]/45 group-active:bg-[#ffdd86]/55 transition-all duration-200 pointer-events-none group-hover:shadow-[0_0_14px_3px_rgba(255,210,105,0.6)]" />
+              <span
+                className="relative font-[family-name:var(--font-outfit)] font-extrabold text-[10.5px] sm:text-[12.5px] lg:text-[14px] tracking-tight leading-none text-center transition-transform duration-150 group-hover:scale-[1.05] group-active:translate-y-[1px]"
+                style={{ color: "#43280f", textShadow: "0 1px 0 rgba(255,249,228,0.5), 0 -1px 1px rgba(35,18,4,0.4)" }}
+              >
+                Lihat Peta Perjalanan
+              </span>
+            </Link>
           </div>
 
           {/* Mika in scene */}
