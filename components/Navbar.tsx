@@ -145,7 +145,7 @@ export default function Navbar() {
           <svg viewBox="0 0 1500 325" preserveAspectRatio="xMidYMid meet" className="absolute inset-0 w-full h-full overflow-visible pointer-events-none">
             {navLinks.map((link, idx) => {
               const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.match ?? link.href);
-              const cx = [416, 600, 809, 1020, 1203][idx] ?? 809;
+              const cx = [420, 605, 809, 1020, 1203][idx] ?? 809;
               return (
                 <text
                   key={link.href}
@@ -154,10 +154,17 @@ export default function Navbar() {
                   textAnchor="middle"
                   onClick={() => router.push(link.href)}
                   className="pointer-events-auto cursor-pointer"
-                  fill={isActive ? "#ffffff" : "#5b3a14"}
-                  stroke={isActive ? "rgba(45,22,0,0.5)" : "rgba(255,247,222,0.55)"}
-                  strokeWidth={isActive ? 3 : 2}
-                  style={{ fontFamily: "var(--font-outfit), sans-serif", fontWeight: 800, fontSize: 28, letterSpacing: "0.5px", paintOrder: "stroke" }}
+                  fill={isActive ? "#FFF7D8" : "#5A3718"}
+                  stroke={isActive ? "#D2A24A" : "#F2D59C"}
+                  strokeWidth={isActive ? 1.8 : 1}
+                  style={{
+                    fontFamily: '"Fredoka", sans-serif',
+                    fontWeight: 700,
+                    fontSize: 25,
+                    letterSpacing: "1px",
+                    paintOrder: "stroke fill",
+                    filter: isActive ? "drop-shadow(0 2px 0 rgba(60,30,5,.45)) drop-shadow(0 0 6px rgba(255,215,100,.35))" : "drop-shadow(0 2px 0 rgba(60,30,5,.3))",
+                  }}
                 >
                   {link.label.toUpperCase()}
                 </text>

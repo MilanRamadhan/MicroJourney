@@ -18,7 +18,7 @@ export default function LandingPage() {
       // Hanya set guest jika belum ada nama (belum pernah mulai)
       setStudent("Siswa Tamu", "Mode Latihan");
     }
-    router.push("/perjalanan-belajar");
+    router.push("/journey/tahap-1");
   }
 
   return (
@@ -32,9 +32,9 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url(/hero-bg.png)" }} />
           {/* Soften vividness + lift text contrast */}
           <div className="absolute inset-0 bg-white/15" />
-          <div className="absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-white/55 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-1/3 md:h-2/5 bg-gradient-to-b from-white to-transparent pointer-events-none" />
           {/* Shadow/blend bawah MENYELURUH — lapisan paling atas, menutup seluruh dasar hero (pantai + signpost + Mika) seragam ke putih */}
-          <div className="absolute inset-x-0 bottom-0 h-16 sm:h-32 md:h-40 lg:h-48 pointer-events-none z-30" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, #ffffff 86%)" }} />
+          <div className="absolute inset-x-0 bottom-0 h-50 sm:h-40 md:h-52 lg:h-60 pointer-events-none z-30" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, #ffffff 86%)" }} />
 
           {/* Hero content */}
           <div className="absolute inset-0 z-10 flex flex-col items-center text-center px-5 pt-[70px] md:pt-[170px]">
@@ -94,7 +94,7 @@ export default function LandingPage() {
           </div>
 
           {/* Signpost CTA — desktop (papan kayu tertancap di pasir) */}
-          <div className="block absolute bottom-0 left-[32%] sm:left-[26%] md:left-[20%] -translate-x-1/2 z-20 w-[185px] sm:w-[235px] md:w-[280px] lg:w-[320px]" style={{ aspectRatio: "790 / 1092" }}>
+          <div className="block absolute bottom-[5%] md:bottom-0 left-[32%] sm:left-[26%] md:left-[20%] -translate-x-1/2 -rotate-[5deg] z-20 w-[185px] sm:w-[235px] md:w-[280px] lg:w-[320px]" style={{ aspectRatio: "790 / 1092" }}>
             <img src="/signpost.png" alt="" draggable={false} className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none" style={{ filter: "drop-shadow(0 12px 16px rgba(30,55,25,0.28))" }} />
             {/* Keping atas — tombol utama */}
             <button onClick={handleStart} aria-label="Mulai Investigasi" className="group absolute left-[13%] right-[13%] top-[16%] h-[15.5%] flex items-center justify-center pointer-events-auto cursor-pointer">
@@ -121,7 +121,7 @@ export default function LandingPage() {
           </div>
 
           {/* Mika in scene */}
-          <img src="/mika.png" alt="Mika, maskot pemandu" draggable={false} className="absolute bottom-0 right-0 sm:right-[4%] lg:right-[6%] z-20 mika-float pointer-events-none select-none h-[45%] sm:h-[46%] lg:h-[60%]" />
+          <img src="/mika.png" alt="Mika, maskot pemandu" draggable={false} className="absolute bottom-[5%] md:bottom-0 right-0 sm:right-[4%] lg:right-[6%] z-30 mika-float pointer-events-none select-none h-[50%] sm:h-[46%] lg:h-[60%]" />
         </section>
 
         {/* Misi Penyelidikan — 3 kartu */}
@@ -261,7 +261,7 @@ export default function LandingPage() {
         <div className="w-full py-[64px] px-[24px] flex flex-col md:flex-row justify-between items-center gap-[24px] max-w-[1200px] mx-auto">
           <div className="flex flex-col items-center md:items-start gap-4">
             <span className="text-[24px] leading-[32px] font-semibold font-[family-name:var(--font-outfit)] font-bold text-[#191c1e]">MicroJourney AR</span>
-            <p className="text-[14px] leading-[20px] font-semibold font-[family-name:var(--font-inter)] text-[#3e4850] text-center md:text-left">© 2024 MicroJourney AR. Petualangan Sains untuk Penjelajah Muda.</p>
+            <p className="text-[14px] leading-[20px] font-semibold font-[family-name:var(--font-inter)] text-[#3e4850] text-center md:text-left">© 2026 MicroJourney AR. Petualangan Sains untuk Penjelajah Muda.</p>
           </div>
           <div className="flex gap-[40px] flex-wrap justify-center">
             <Link className="text-[14px] leading-[20px] font-semibold font-[family-name:var(--font-inter)] text-[#3e4850] hover:text-[#006e2f] transition-colors" href="#">
