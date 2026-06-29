@@ -145,7 +145,7 @@ export default function Navbar() {
           <svg viewBox="0 0 1500 325" preserveAspectRatio="xMidYMid meet" className="absolute inset-0 w-full h-full overflow-visible pointer-events-none">
             {navLinks.map((link, idx) => {
               const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.match ?? link.href);
-              const cx = [420, 605, 809, 1020, 1203][idx] ?? 809;
+              const cx = [420, 600, 809, 1020, 1203][idx] ?? 809;
               return (
                 <text
                   key={link.href}
@@ -158,8 +158,8 @@ export default function Navbar() {
                   stroke={isActive ? "#D2A24A" : "#F2D59C"}
                   strokeWidth={isActive ? 1.8 : 1}
                   style={{
-                    fontFamily: '"Fredoka", sans-serif',
-                    fontWeight: 700,
+                    fontFamily: "var(--font-fredoka), sans-serif",
+                    fontWeight: 600,
                     fontSize: 25,
                     letterSpacing: "1px",
                     paintOrder: "stroke fill",

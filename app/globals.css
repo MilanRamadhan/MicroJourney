@@ -67,6 +67,18 @@
 
 html { scroll-behavior: smooth; }
 
+/* ─── Transisi pindah halaman (fade halus, dipakai app/template.tsx) ─── */
+@keyframes pageFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.page-transition {
+  animation: pageFade 0.34s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-transition { animation: none; }
+}
+
 body {
   background-color: #f7f9fb;
   color: #191c1e;
