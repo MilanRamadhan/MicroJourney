@@ -96,28 +96,28 @@ export default function LandingPage() {
           {/* Signpost CTA — desktop (papan kayu tertancap di pasir) */}
           <div className="block absolute bottom-[5%] md:bottom-0 left-[32%] sm:left-[26%] md:left-[20%] -translate-x-1/2 -rotate-[5deg] z-20 w-[185px] sm:w-[235px] md:w-[280px] lg:w-[320px]" style={{ aspectRatio: "790 / 1092" }}>
             <img src="/signpost.png" alt="" draggable={false} className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none" style={{ filter: "drop-shadow(0 12px 16px rgba(30,55,25,0.28))" }} />
-            {/* Keping atas — tombol utama */}
-            <button onClick={handleStart} aria-label="Mulai Investigasi" className="group absolute left-[13%] right-[13%] top-[16%] h-[15.5%] flex items-center justify-center pointer-events-auto cursor-pointer">
+            {/* Keping atas — Lihat Peta (sekunder) */}
+            <Link href="/perjalanan-belajar" aria-label="Lihat Peta" className="group absolute left-[13%] right-[13%] top-[16%] h-[15.5%] flex items-center justify-center pointer-events-auto cursor-pointer">
               {/* Glow panel saat hover/tap → terlihat sebagai tombol */}
               <span className="absolute inset-x-[3%] inset-y-[12%] rounded-[7px] bg-[#ffdd86]/0 group-hover:bg-[#ffdd86]/45 group-active:bg-[#ffdd86]/55 transition-all duration-200 pointer-events-none group-hover:shadow-[0_0_14px_3px_rgba(255,210,105,0.6)]" />
               <span
-                className="relative font-[family-name:var(--font-outfit)] font-extrabold text-[12px] sm:text-[14px] lg:text-[16px] tracking-tight leading-none text-center transition-transform duration-150 group-hover:scale-[1.05] group-active:translate-y-[1px]"
+                className="relative font-[family-name:var(--font-outfit)] font-extrabold text-[11px] sm:text-[13px] lg:text-[15px] tracking-tight leading-none text-center transition-transform duration-150 group-hover:scale-[1.05] group-active:translate-y-[1px]"
+                style={{ color: "#43280f", textShadow: "0 1px 0 rgba(255,249,228,0.5), 0 -1px 1px rgba(35,18,4,0.4)" }}
+              >
+                Lihat Peta
+              </span>
+            </Link>
+            {/* Keping bawah — Mulai Investigasi (utama) */}
+            <button onClick={handleStart} aria-label="Mulai Investigasi" className="group absolute left-[13%] right-[13%] top-[39.5%] h-[15.5%] flex items-center justify-center pointer-events-auto cursor-pointer">
+              {/* Glow panel saat hover/tap → terlihat sebagai tombol */}
+              <span className="absolute inset-x-[3%] inset-y-[12%] rounded-[7px] bg-[#ffdd86]/0 group-hover:bg-[#ffdd86]/45 group-active:bg-[#ffdd86]/55 transition-all duration-200 pointer-events-none group-hover:shadow-[0_0_14px_3px_rgba(255,210,105,0.6)]" />
+              <span
+                className="relative font-[family-name:var(--font-outfit)] font-extrabold text-[11px] sm:text-[13px] lg:text-[15px] tracking-tight leading-none text-center transition-transform duration-150 group-hover:scale-[1.05] group-active:translate-y-[1px]"
                 style={{ color: "#43280f", textShadow: "0 1px 0 rgba(255,249,228,0.5), 0 -1px 1px rgba(35,18,4,0.4)" }}
               >
                 Mulai Investigasi
               </span>
             </button>
-            {/* Keping bawah — tombol sekunder */}
-            <Link href="/perjalanan-belajar" aria-label="Lihat Peta Perjalanan" className="group absolute left-[13%] right-[13%] top-[39.5%] h-[15.5%] flex items-center justify-center pointer-events-auto cursor-pointer">
-              {/* Glow panel saat hover/tap → terlihat sebagai tombol */}
-              <span className="absolute inset-x-[3%] inset-y-[12%] rounded-[7px] bg-[#ffdd86]/0 group-hover:bg-[#ffdd86]/45 group-active:bg-[#ffdd86]/55 transition-all duration-200 pointer-events-none group-hover:shadow-[0_0_14px_3px_rgba(255,210,105,0.6)]" />
-              <span
-                className="relative font-[family-name:var(--font-outfit)] font-extrabold text-[10.5px] sm:text-[12.5px] lg:text-[14px] tracking-tight leading-none text-center transition-transform duration-150 group-hover:scale-[1.05] group-active:translate-y-[1px]"
-                style={{ color: "#43280f", textShadow: "0 1px 0 rgba(255,249,228,0.5), 0 -1px 1px rgba(35,18,4,0.4)" }}
-              >
-                Lihat Peta Perjalanan
-              </span>
-            </Link>
           </div>
 
           {/* Mika in scene */}

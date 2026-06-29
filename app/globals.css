@@ -67,13 +67,18 @@
 
 html { scroll-behavior: smooth; }
 
-/* ─── Transisi pindah halaman (fade halus, dipakai app/template.tsx) ─── */
-@keyframes pageFade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+/* ─── Transisi pindah halaman (blur + fade saja, dipakai app/template.tsx) ─── */
+@keyframes pageEnter {
+  from { opacity: 0; filter: blur(11px); }
+  to   { opacity: 1; filter: blur(0); }
 }
 .page-transition {
-  animation: pageFade 0.34s ease-out;
+  /* backwards (BUKAN both): jangan tahan filter setelah animasi.
+     JANGAN pakai `will-change: filter/transform` — itu membuat elemen jadi
+     containing-block untuk navbar `position:fixed` di dalamnya secara PERMANEN
+     (walau filter sudah none) → BottomNav (fixed bottom-0) lompat ke dasar
+     halaman panjang (beranda) → hilang dari layar. */
+  animation: pageEnter 0.4s ease-out backwards;
 }
 @media (prefers-reduced-motion: reduce) {
   .page-transition { animation: none; }

@@ -21,6 +21,7 @@ export default function Navbar() {
   const isTeacher = currentUser?.role === "teacher" || currentUser?.role === "superadmin";
 
   const [avatarOpen, setAvatarOpen] = useState(false);
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
   // Auto-hide navbar: sembunyi saat scroll ke bawah, muncul saat scroll ke atas
   const [hideNav, setHideNav] = useState(false);
@@ -153,17 +154,27 @@ export default function Navbar() {
                   y={272}
                   textAnchor="middle"
                   onClick={() => router.push(link.href)}
+                  onMouseEnter={() => setHoverIdx(idx)}
+                  onMouseLeave={() => setHoverIdx((v) => (v === idx ? null : v))}
                   className="pointer-events-auto cursor-pointer"
-                  fill={isActive ? "#FFF7D8" : "#5A3718"}
-                  stroke={isActive ? "#D2A24A" : "#F2D59C"}
-                  strokeWidth={isActive ? 1.8 : 1}
+                  fill={isActive ? "#FFF7D8" : hoverIdx === idx ? "#FFE3A1" : "#5A3718"}
+                  stroke={isActive ? "#D2A24A" : hoverIdx === idx ? "#E8BE6A" : "#F2D59C"}
+                  strokeWidth={isActive ? 1.8 : hoverIdx === idx ? 1.4 : 1}
                   style={{
                     fontFamily: "var(--font-fredoka), sans-serif",
                     fontWeight: 600,
                     fontSize: 25,
                     letterSpacing: "1px",
                     paintOrder: "stroke fill",
-                    filter: isActive ? "drop-shadow(0 2px 0 rgba(60,30,5,.45)) drop-shadow(0 0 6px rgba(255,215,100,.35))" : "drop-shadow(0 2px 0 rgba(60,30,5,.3))",
+                    transformBox: "fill-box",
+                    transformOrigin: "center",
+                    transform: hoverIdx === idx ? "translateY(-2.5px) scale(1.07)" : "translateY(0) scale(1)",
+                    transition: "transform 220ms cubic-bezier(0.34,1.5,0.6,1), fill 160ms ease, stroke 160ms ease, filter 200ms ease",
+                    filter: isActive
+                      ? "drop-shadow(0 2px 0 rgba(60,30,5,.45)) drop-shadow(0 0 6px rgba(255,215,100,.35))"
+                      : hoverIdx === idx
+                        ? "drop-shadow(0 4px 2px rgba(48,24,4,.42)) drop-shadow(0 0 9px rgba(255,205,110,.6))"
+                        : "drop-shadow(0 2px 0 rgba(60,30,5,.3))",
                   }}
                 >
                   {link.label.toUpperCase()}

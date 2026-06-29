@@ -259,14 +259,18 @@ export default function PerjalananBelajarPage() {
             <h1 className="text-[22px] font-extrabold font-[family-name:var(--font-outfit)] text-[#083b54] tracking-tight leading-tight" style={{ textShadow: "0 2px 12px rgba(255,255,255,0.8)" }}>
               Ekspedisi Mikroplastik
             </h1>
-            <div className="w-full max-w-[220px] mt-2 bg-white/80 backdrop-blur-sm rounded-xl px-3 py-2 shadow-sm">
-              <div className="flex justify-between text-[10px] text-[#0c4a66] font-bold mb-1">
+          </div>
+
+          {/* Progress (mobile) — dipindah ke bawah, di atas bottom-nav */}
+          <div className="absolute inset-x-0 z-30 flex justify-center px-4" style={{ bottom: "calc(env(safe-area-inset-bottom) + 90px)" }}>
+            <div className="w-full max-w-[340px] bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-2.5 shadow-lg border border-white/70">
+              <div className="flex justify-between text-[12px] text-[#0c4a66] font-bold mb-1.5">
                 <span>
                   {completedCount}/{stages.length} Misi
                 </span>
                 <span>{progressPercent}%</span>
               </div>
-              <div className="h-1.5 bg-[#d6e6ee] rounded-full overflow-hidden">
+              <div className="h-2 bg-[#d6e6ee] rounded-full overflow-hidden">
                 <div className="h-full bg-[#006e2f] rounded-full transition-all duration-700" style={{ width: `${progressPercent}%` }} />
               </div>
             </div>
