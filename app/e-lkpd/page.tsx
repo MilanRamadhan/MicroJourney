@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useJourneyStore } from '@/lib/journeyStore';
 import { useAuthStore } from '@/lib/authStore';
+import BottomNav from '@/components/BottomNav';
 
 const LKPD_DEFS = [
   {
@@ -295,6 +296,9 @@ export default function ELKPDPage() {
           </div>
         )}
       </div>
+
+      {/* Mobile bottom nav */}
+      <BottomNav />
     </div>
   );
 }

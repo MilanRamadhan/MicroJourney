@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useJourneyStore } from '@/lib/journeyStore';
+import BottomNav from '@/components/BottomNav';
 
 const STAGES = [
   { id: 1, label: 'Scanner AI',         path: '/journey/tahap-1' },
@@ -21,7 +22,7 @@ export default function JourneyLayout({ children }: { children: React.ReactNode 
   return (
     <div className="min-h-screen bg-[#f7f9fb] flex flex-col">
       {/* Top bar */}
-      <header className="bg-white border-b border-[#bec8d2] px-4 py-3 flex items-center justify-between sticky top-0 z-50 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+      <header className="bg-white border-b border-[#eceef0] px-4 h-14 flex items-center justify-between fixed top-0 left-0 right-0 z-50 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
         <button
           onClick={() => router.push('/')}
           className="text-[#3e4850] hover:text-[#191c1e] transition-colors flex items-center gap-1 text-sm"
@@ -59,6 +60,9 @@ export default function JourneyLayout({ children }: { children: React.ReactNode 
         </div>
       </header>
 
+      {/* Spacer for fixed header */}
+      <div className="h-14" />
+
       {/* Stage label */}
       <div className="bg-white border-b border-[#eceef0] px-4 py-2">
         <div className="max-w-6xl mx-auto flex items-center gap-3">
@@ -70,6 +74,9 @@ export default function JourneyLayout({ children }: { children: React.ReactNode 
 
       {/* Content */}
       <main className="flex-grow">{children}</main>
+
+      {/* Mobile bottom nav */}
+      <BottomNav />
     </div>
   );
 }
