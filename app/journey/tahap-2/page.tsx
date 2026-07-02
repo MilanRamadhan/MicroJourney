@@ -12,7 +12,7 @@ export default function Tahap2() {
   const router = useRouter();
   const { completeStage, setLkpdAnswer, lkpdAnswers } = useJourneyStore();
   const [phase, setPhase] = useState<Phase>('intro');
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/dQw4w9WgXcQ');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/3D6tIkBV2RM');
 
   function handleComplete() {
     completeStage(2);

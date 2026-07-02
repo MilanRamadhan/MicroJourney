@@ -26,7 +26,7 @@ export default function StageIntro({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 z-40 bg-[url('/hero-bg.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center font-[family-name:var(--font-inter)] overflow-hidden"
+      className="absolute inset-0 z-40 bg-[url('/hero-bg.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center font-[family-name:var(--font-inter)] overflow-hidden py-10 overflow-y-auto"
     >
       {/* Overlay Tipis agar teks bisa terbaca */}
       <div className="absolute inset-0 bg-[#083b54]/60 mix-blend-multiply pointer-events-none" />
@@ -45,7 +45,7 @@ export default function StageIntro({
 
       {layout === 'split' ? (
         /* Kontainer Utama 2-Kolom (Untuk Tahap 2 dst) */
-        <div className="relative z-10 w-full max-w-6xl px-6 flex flex-col md:flex-row items-center justify-between gap-10">
+        <div className="relative z-10 w-full max-w-6xl px-4 md:px-6 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 md:gap-10 mt-8 md:mt-0">
           
           {/* Kolom Kiri: Ilustrasi / Mika */}
           <motion.div 
@@ -58,7 +58,7 @@ export default function StageIntro({
               illustration
             ) : (
               // Default Illustration (Mika)
-              <div className="relative w-full max-w-sm aspect-square drop-shadow-2xl">
+              <div className="relative w-40 sm:w-56 md:w-full max-w-sm aspect-square drop-shadow-2xl">
                 <Image 
                   src="/mika.png" 
                   alt="Penjelajah" 
@@ -74,7 +74,7 @@ export default function StageIntro({
             initial={{ opacity: 0, x: 50, scale: 0.9 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ type: "spring", stiffness: 120, damping: 14, delay: 0.3 }}
-            className="w-full md:w-1/2 bg-white/10 backdrop-blur-md border border-white/30 p-8 sm:p-12 text-left shadow-[0_32px_64px_rgba(0,0,0,0.4)]"
+            className="w-full md:w-1/2 bg-white/10 backdrop-blur-md border border-white/30 p-6 sm:p-12 text-center md:text-left shadow-[0_32px_64px_rgba(0,0,0,0.4)] flex flex-col items-center md:items-start"
             style={{ 
               // Bentuk Gelembung Organik
               borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%'
@@ -83,27 +83,27 @@ export default function StageIntro({
             {/* Ikon Mengambang (Opsional) */}
             {icon && (
               <motion.div 
-                className="w-20 h-20 mb-6 flex items-center justify-center rounded-full bg-[#006591]/40 border-2 border-[#6bff8f]/60 backdrop-blur-sm shadow-[0_0_20px_rgba(107,255,143,0.3)]"
+                className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-[#006591]/40 border-2 border-[#6bff8f]/60 backdrop-blur-sm shadow-[0_0_20px_rgba(107,255,143,0.3)]"
                 animate={{ y: [-5, 5, -5] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <span className="material-symbols-outlined text-5xl text-[#6bff8f] drop-shadow-md">
+                <span className="material-symbols-outlined text-4xl md:text-5xl text-[#6bff8f] drop-shadow-md">
                   {icon}
                 </span>
               </motion.div>
             )}
 
             {/* Label Pill */}
-            <div className="inline-flex items-center gap-2 bg-[#006591]/60 backdrop-blur-sm border border-[#6bff8f]/40 px-4 py-1.5 rounded-full mb-4 shadow-sm">
+            <div className="inline-flex items-center gap-2 bg-[#006591]/60 backdrop-blur-sm border border-[#6bff8f]/40 px-3 py-1 md:px-4 md:py-1.5 rounded-full mb-3 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#6bff8f] animate-pulse" />
-              <span className="text-white text-xs font-bold uppercase tracking-widest font-[family-name:var(--font-outfit)]">MISI AKTIF</span>
+              <span className="text-white text-[10px] md:text-xs font-bold uppercase tracking-widest font-[family-name:var(--font-outfit)]">MISI AKTIF</span>
             </div>
 
             {/* Judul & Deskripsi */}
-            <h1 className="text-4xl sm:text-5xl font-extrabold font-[family-name:var(--font-outfit)] text-white mb-4 drop-shadow-[0_2px_4px_rgba(0,101,145,0.8)] leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-extrabold font-[family-name:var(--font-outfit)] text-white mb-3 md:mb-4 drop-shadow-[0_2px_4px_rgba(0,101,145,0.8)] leading-tight">
               {title}
             </h1>
-            <p className="text-white/90 text-lg mb-10 max-w-xl drop-shadow-sm font-medium leading-relaxed">
+            <p className="text-white/90 text-sm md:text-lg mb-6 md:mb-10 max-w-xl drop-shadow-sm font-medium leading-relaxed">
               {description}
             </p>
 

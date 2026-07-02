@@ -102,7 +102,7 @@ export default function ELKPDPage() {
             <span className="w-2 h-2 rounded-full bg-[#006e2f] animate-pulse" />
             <span className="text-[#006e2f] text-xs font-[family-name:var(--font-mono)] uppercase tracking-widest">Lembar Kerja Peserta Didik Digital</span>
           </div>
-          <h1 className="font-[family-name:var(--font-outfit)] text-4xl font-extrabold text-[#191c1e] mb-3">E-LKPD</h1>
+          <h1 className="font-[family-name:var(--font-outfit)] text-4xl font-extrabold text-[#191c1e] mb-3">Jurnal Misi</h1>
           <p className="text-[#3e4850] max-w-xl mx-auto text-sm leading-relaxed">
             Kumpulan lembar kerja digital dari seluruh tahap perjalanan investigasi mikroplastik.
             Jawaban tersimpan otomatis saat kamu mengerjakan setiap tahap.
