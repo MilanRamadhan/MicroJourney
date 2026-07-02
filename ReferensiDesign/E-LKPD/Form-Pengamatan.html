@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Form Pengamatan LKPD - MicroJourney AR</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#006591",
+                        "secondary": "#006e2f",
+                        "tertiary": "#785a00",
+                        "background": "#f7f9fb",
+                        "surface": "#ffffff",
+                        "surface-container": "#eceef0",
+                        "surface-container-low": "#f2f4f6",
+                        "on-background": "#191c1e",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#3e4850",
+                        "outline": "#6e7881",
+                        "outline-variant": "#bec8d2",
+                        "primary-container": "#c9e6ff",
+                    },
+                    fontFamily: {
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 bg-surface shadow-sm">
+        <nav class="flex justify-between items-center w-full px-6 max-w-3xl mx-auto h-20">
+            <div class="flex items-center gap-2">
+                <a href="Dashboard-LKPD.html" class="material-symbols-outlined p-2 hover:bg-surface-container rounded-full transition-colors text-on-surface-variant mr-2">arrow_back</a>
+                <span class="font-headline-md font-bold text-on-surface tracking-tight">Form Pengamatan</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors shadow-md">
+                    Kirim Jawaban
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow max-w-3xl mx-auto w-full px-6 py-8">
+        
+        <!-- Konteks Edukasi -->
+        <div class="bg-secondary/10 border-l-4 border-secondary p-6 rounded-r-2xl mb-8">
+            <div class="flex gap-4">
+                <span class="material-symbols-outlined text-secondary text-3xl">menu_book</span>
+                <div>
+                    <h2 class="text-lg font-bold text-secondary-container-on mb-1">Materi: Masuk ke Rantai Makanan (Tahap 4)</h2>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">
+                        Partikel mikroplastik di lautan sering disangka sebagai plankton oleh hewan-hewan laut kecil. 
+                        Ketika ikan memakan plankton tersebut, mikroplastik ikut tertelan dan terjebak di dalam sistem pencernaan mereka.
+                        Melalui simulasi AR sebelumnya, kamu telah memindai organ dalam ikan. Gunakan temuanmu untuk mengisi form di bawah ini!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <form class="space-y-8" onsubmit="event.preventDefault(); alert('Laporan berhasil dikirim ke Guru!'); window.location.href='Dashboard-LKPD.html';">
+            
+            <!-- Unggah Bukti AR -->
+            <div class="bg-surface p-8 rounded-2xl shadow-sm border border-outline-variant/30">
+                <h3 class="text-xl font-headline-md font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary">add_a_photo</span> 1. Unggah Bukti Pengamatan AR</h3>
+                <p class="text-sm text-on-surface-variant mb-4">Pilih *screenshot* atau hasil *Capture* dari kamera AR kamu saat melihat isi perut ikan.</p>
+                
+                <div class="border-2 border-dashed border-outline-variant rounded-xl p-8 text-center hover:bg-surface-container-low transition-colors cursor-pointer group">
+                    <span class="material-symbols-outlined text-4xl text-outline mb-2 group-hover:text-primary transition-colors">cloud_upload</span>
+                    <p class="font-semibold text-on-surface">Klik untuk mengunggah gambar</p>
+                    <p class="text-xs text-on-surface-variant mt-1">PNG, JPG up to 10MB</p>
+                    <input type="file" class="hidden" accept="image/*" />
+                </div>
+            </div>
+
+            <!-- Pertanyaan Analisis -->
+            <div class="bg-surface p-8 rounded-2xl shadow-sm border border-outline-variant/30">
+                <h3 class="text-xl font-headline-md font-bold mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-primary">biotech</span> 2. Lembar Analisis Data</h3>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block font-semibold text-on-surface mb-2">A. Jenis ikan apa yang kamu pindai dalam simulasi AR?</label>
+                        <select class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                            <option value="">Pilih jenis ikan...</option>
+                            <option value="tuna">Ikan Tuna</option>
+                            <option value="sarden">Ikan Sarden (Pemakan Plankton)</option>
+                            <option value="kakap">Ikan Kakap</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-on-surface mb-2">B. Berdasarkan Composition Analysis di AR, berapa persentase kandungan plastik (Polietilen) yang terdeteksi?</label>
+                        <div class="flex items-center gap-4">
+                            <input type="range" min="0" max="100" value="0" class="flex-grow h-2 bg-surface-container rounded-lg appearance-none cursor-pointer" oninput="document.getElementById('rangeValue').innerText = this.value + '%'" />
+                            <span id="rangeValue" class="font-bold text-primary w-12 text-right">0%</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block font-semibold text-on-surface mb-2">C. Menurut analisis kritismu, mengapa ikan tersebut bisa menelan plastik dalam jumlah sebanyak itu?</label>
+                        <textarea rows="4" placeholder="Tulis analisis ilmiahmu di sini..." class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pertanyaan Refleksi -->
+            <div class="bg-surface p-8 rounded-2xl shadow-sm border border-outline-variant/30">
+                <h3 class="text-xl font-headline-md font-bold mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-primary">psychology</span> 3. Refleksi Lingkungan</h3>
+                
+                <div>
+                    <label class="block font-semibold text-on-surface mb-2">Apa dampak jangka panjang jika manusia mengonsumsi ikan yang mengandung mikroplastik tersebut? (Bioakumulasi)</label>
+                    <textarea rows="4" placeholder="Berikan pendapatmu dari sudut pandang kesehatan..." class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-4 mt-8">
+                <button type="button" class="px-6 py-3 border border-outline-variant text-on-surface font-semibold rounded-xl hover:bg-surface-container transition-colors" onclick="window.location.href='Dashboard-LKPD.html'">Batal</button>
+                <button type="submit" class="px-8 py-3 bg-primary text-white font-bold rounded-xl shadow-lg hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all">
+                    Kirim & Selesaikan Misi
+                </button>
+            </div>
+        </form>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MicroJourney AR - Tahap 4: Masuk Rantai Makanan</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#006591",
+                        "on-tertiary-fixed": "#251a00",
+                        "outline": "#6e7881",
+                        "primary-fixed-dim": "#89ceff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005321",
+                        "surface-container": "#eceef0",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary-container": "#6bff8f",
+                        "on-tertiary-fixed-variant": "#5a4300",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "background": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#003751",
+                        "on-background": "#191c1e",
+                        "primary-fixed": "#c9e6ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002109",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#f7be1d",
+                        "on-surface": "#191c1e",
+                        "inverse-primary": "#89ceff",
+                        "surface-container-low": "#f2f4f6",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#785a00",
+                        "on-tertiary-container": "#423000",
+                        "tertiary-container": "#c39400",
+                        "primary-container": "#0ea5e9",
+                        "surface-bright": "#f7f9fb",
+                        "primary": "#006591",
+                        "surface": "#f7f9fb",
+                        "surface-dim": "#d8dadc",
+                        "on-surface-variant": "#3e4850",
+                        "secondary": "#006e2f",
+                        "on-secondary-container": "#007432",
+                        "secondary-fixed-dim": "#4ae176",
+                        "outline-variant": "#bec8d2",
+                        "surface-variant": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdf9a",
+                        "secondary-fixed": "#6bff8f",
+                        "on-primary-fixed": "#001e2f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "64px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "md": "24px",
+                        "container-max": "1200px",
+                        "lg": "40px",
+                        "sm": "12px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .scanning-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #0ea5e9, transparent);
+            animation: scan 3s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 10%;
+            }
+
+            50% {
+                top: 90%;
+            }
+
+            100% {
+                top: 10%;
+            }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .wave-bar {
+            width: 3px;
+            background: #006e2f;
+            border-radius: 4px;
+            transition: height 0.2s ease;
+        }
+
+        .particle-glow {
+            filter: drop-shadow(0 0 8px #0ea5e9);
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                opacity: 0.6;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <nav
+        class="bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.05)] docked full-width top-0 sticky z-50">
+        <div class="flex justify-between items-center w-full px-md py-4 max-w-container-max mx-auto">
+            <div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">
+                MicroJourney AR</div>
+            <div class="hidden md:flex items-center space-x-lg">
+                <a class="text-on-surface-variant dark:text-outline-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md"
+                    href="../LandingPage/LandingPage.html">Beranda</a>
+                <a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-bold font-label-md text-label-md"
+                    href="PerjalananBelajarHome.html">Perjalanan Belajar</a>
+                <a class="text-on-surface-variant dark:text-outline-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md"
+                    href="../Materi/Materi.html">Materi</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../E-LKPD/Dashboard-LKPD.html">E-LKPD</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../RaporGuru/Dashboard-Guru.html">Rapor Guru</a>
+            </div>
+            <div class="flex items-center space-x-sm">
+                <button class="p-2 hover:bg-surface-container rounded-full transition-colors">
+                    <span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+                </button>
+                <img alt="Student Profile Avatar" class="w-10 h-10 rounded-full border-2 border-primary object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5F6RT-ZS8BfHcJJJWoPiVgW7k79vfUt-lL-P0ArfW0qKhzyT5wxxsWLdDsYMPXK2jIybXPW7KpxJZgxlGw6ayiDYb6KTBki43qkud-m91HWPICTEzOVn_9lQ3qQrSiR9ueTQ3yb15t-tBg8OTl-7RSuifaAun9uN6Nun-uQMdxetaEtcmey8_gNei0OuLCiiUxmOLMkJbUcVtdn-18D3vEoyFz6K2HzX8MNrA8fUWt32S-Yt0409IS7vhEWtKwpU6ISSNqjn0OQ" />
+            </div>
+        </div>
+    </nav>
+    <!-- Main Experience Canvas -->
+    <main class="flex-grow relative flex flex-col items-center justify-center p-md overflow-hidden">
+        <!-- Underwater Environment Background Simulation -->
+        <div class="absolute inset-0 z-0 opacity-40 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-b from-primary-fixed/20 to-secondary-fixed/10"></div>
+            <div class="absolute top-20 left-1/4 w-96 h-96 bg-primary-container/20 rounded-full blur-[100px] floating">
+            </div>
+            <div class="absolute bottom-20 right-1/4 w-80 h-80 bg-secondary-container/20 rounded-full blur-[100px] floating"
+                style="animation-delay: -3s;"></div>
+        </div>
+        <div class="w-full max-w-container-max grid grid-cols-1 lg:grid-cols-12 gap-md items-center z-10">
+            <!-- Left Panel: Missions -->
+            <div class="lg:col-span-3 space-y-md">
+                <div class="glass-panel p-md rounded-xl shadow-lg border-primary/10">
+                    <div class="flex items-center space-x-2 mb-sm">
+                        <span class="material-symbols-outlined text-primary font-bold"
+                            data-icon="task_alt">task_alt</span>
+                        <h2 class="font-headline-md text-headline-md text-primary">Misi Berlangsung</h2>
+                    </div>
+                    <div class="space-y-sm">
+                        <div
+                            class="flex items-center space-x-sm p-sm bg-surface-container-low rounded-lg border-l-4 border-primary">
+                            <span class="material-symbols-outlined text-primary" data-icon="check_circle"
+                                style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            <span class="font-label-md text-label-md text-on-surface">Scan mouth</span>
+                        </div>
+                        <div
+                            class="flex items-center space-x-sm p-sm bg-surface-container-lowest rounded-lg border-l-4 border-outline-variant">
+                            <span class="material-symbols-outlined text-outline"
+                                data-icon="radio_button_unchecked">radio_button_unchecked</span>
+                            <span class="font-label-md text-label-md text-on-surface-variant">Compare particles</span>
+                        </div>
+                        <div
+                            class="flex items-center space-x-sm p-sm bg-surface-container-lowest rounded-lg border-l-4 border-outline-variant">
+                            <span class="material-symbols-outlined text-outline"
+                                data-icon="radio_button_unchecked">radio_button_unchecked</span>
+                            <span class="font-label-md text-label-md text-on-surface-variant">Observe
+                                accumulation</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-md rounded-xl shadow-lg">
+                    <h3 class="font-label-md text-label-md text-secondary mb-xs uppercase tracking-wider">Status
+                        Bio-Sensor</h3>
+                    <div class="flex justify-between items-end h-16 space-x-1">
+                        <div class="flex-1 bg-secondary-container/40 rounded-t-sm h-1/2"></div>
+                        <div class="flex-1 bg-secondary-container/40 rounded-t-sm h-3/4"></div>
+                        <div class="flex-1 bg-secondary-container/60 rounded-t-sm h-full animate-pulse"></div>
+                        <div class="flex-1 bg-secondary-container/40 rounded-t-sm h-2/3"></div>
+                        <div class="flex-1 bg-secondary-container/40 rounded-t-sm h-5/6"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Center: Spatial X-Ray Viewer -->
+            <div
+                class="lg:col-span-6 relative aspect-square lg:aspect-auto lg:h-[600px] flex items-center justify-center">
+                <!-- X-Ray Frame -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <!-- AR Target Overlay -->
+                    <div class="absolute inset-0 border-2 border-dashed border-primary/30 rounded-full animate-spin-slow opacity-20 pointer-events-none"
+                        style="animation-duration: 20s;"></div>
+                    <!-- Main Image (Fish) -->
+                    <div class="relative z-10 w-full max-w-md floating">
+                        <img alt="3D fish model with x-ray visualization"
+                            class="w-full rounded-3xl mix-blend-multiply opacity-90 shadow-2xl"
+                            data-alt="A highly detailed 3D scientific visualization of a small coral fish rendered with a translucent spatial x-ray effect. Inside its semi-transparent body, glowing cyan and mint green microplastic particles are clustered in the stomach area. The lighting is high-tech and educational, using a clean light blue background simulating clear tropical water. Subtle data overlays and thin scanning lines crisscross the fish, creating a modern student-friendly AR learning experience."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs72Bjnc2y_q4UG6n4NJLLyPl3pWczJCeJCHd741RMK9yApAxlTTMYIuBMrFa9X3xBuc4A6UR_I7cdh2h-fkKTbJkLAzgua0uKag_IkirC3h1p8vuNdBubE7yWWrWU2cVE0P0faZtR1eccwl84r7OkPWYK0yov6AIJVpPDtWPBL1Z3tjLEXix6e2DHniyb7fAgySPh9wWYsq-ReYQb-aVdQBSEkGQEw78xxUb5S80FqVNPzgyHlN3qWdLKKUzoFViLVFBROdREaw" />
+                        <!-- Scanning Line Effect -->
+                        <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+                            <div class="absolute scanning-line w-full"></div>
+                        </div>
+                        <!-- Glowing Microplastics Overlays -->
+                        <div
+                            class="absolute top-[55%] left-[45%] w-4 h-4 bg-primary-container rounded-full particle-glow">
+                        </div>
+                        <div class="absolute top-[58%] left-[48%] w-3 h-3 bg-secondary-container rounded-full particle-glow"
+                            style="animation-delay: -0.5s;"></div>
+                        <div class="absolute top-[54%] left-[52%] w-2 h-2 bg-primary-container rounded-full particle-glow"
+                            style="animation-delay: -1.2s;"></div>
+                    </div>
+                    <!-- Instruction Overlay: Pinch to Zoom -->
+                    <div
+                        class="absolute bottom-8 left-1/2 -translate-x-1/2 glass-panel px-6 py-3 rounded-full flex items-center space-x-3 shadow-xl border-primary/20 animate-bounce">
+                        <span class="material-symbols-outlined text-primary text-3xl" data-icon="pinch">pinch</span>
+                        <p class="font-label-md text-label-md text-on-surface font-bold">Pinch-to-Zoom untuk Detail</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Panel: Audio Analysis -->
+            <div class="lg:col-span-3 space-y-md">
+                <div class="glass-panel p-md rounded-xl shadow-lg">
+                    <div class="flex items-center justify-between mb-md">
+                        <div class="flex items-center space-x-2">
+                            <span class="material-symbols-outlined text-secondary"
+                                data-icon="graphic_eq">graphic_eq</span>
+                            <h2 class="font-headline-md text-headline-md text-secondary">Analisis Audio</h2>
+                        </div>
+                        <div class="w-3 h-3 bg-error rounded-full animate-pulse"></div>
+                    </div>
+                    <!-- Waveform Visualization -->
+                    <div
+                        class="flex items-center justify-center space-x-1 h-32 mb-md bg-surface-container/30 rounded-lg p-sm">
+                        <div class="wave-bar h-12"></div>
+                        <div class="wave-bar h-24"></div>
+                        <div class="wave-bar h-16"></div>
+                        <div class="wave-bar h-20"></div>
+                        <div class="wave-bar h-28"></div>
+                        <div class="wave-bar h-14"></div>
+                        <div class="wave-bar h-10"></div>
+                        <div class="wave-bar h-18"></div>
+                        <div class="wave-bar h-22"></div>
+                        <div class="wave-bar h-12"></div>
+                        <div class="wave-bar h-16"></div>
+                        <div class="wave-bar h-26"></div>
+                        <div class="wave-bar h-10"></div>
+                        <div class="wave-bar h-14"></div>
+                    </div>
+                    <div class="p-sm bg-secondary-container/10 border border-secondary/20 rounded-lg">
+                        <div class="flex justify-between items-center mb-xs">
+                            <span class="font-label-sm text-label-sm text-secondary font-bold">DETEKSI FREKUENSI</span>
+                            <span class="font-label-sm text-label-sm text-on-surface-variant">44.1 kHz</span>
+                        </div>
+                        <p class="text-xs text-on-surface-variant leading-relaxed">
+                            Suara pergerakan partikel dalam saluran pencernaan terdeteksi sebagai "Low-Thud" signature.
+                        </p>
+                    </div>
+                </div>
+                <!-- Info Card -->
+                <div class="bg-primary p-md rounded-xl shadow-lg text-on-primary">
+                    <div class="flex items-start space-x-3">
+                        <span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+                        <div>
+                            <h4 class="font-label-md text-label-md font-bold mb-1">Tahukah Kamu?</h4>
+                            <p class="font-label-sm text-label-sm opacity-90 leading-relaxed">
+                                Ikan sering salah mengira mikroplastik sebagai plankton karena bentuk dan baunya yang
+                                mirip setelah lama di air.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Progress Footer (Mobile Bottom Bar) -->
+        <div
+            class="md:hidden fixed bottom-0 left-0 right-0 glass-panel p-sm flex justify-around items-center border-t border-primary/10">
+            <button class="flex flex-col items-center text-primary">
+                <span class="material-symbols-outlined" data-icon="home"
+                    style="font-variation-settings: 'FILL' 1;">home</span>
+                <span class="text-[10px] font-bold">Beranda</span>
+            </button>
+            <button class="flex flex-col items-center text-on-surface-variant">
+                <span class="material-symbols-outlined" data-icon="explore">explore</span>
+                <span class="text-[10px] font-bold">Misi</span>
+            </button>
+            <button class="flex flex-col items-center text-on-surface-variant">
+                <span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                <span class="text-[10px] font-bold">Koleksi</span>
+            </button>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-low dark:bg-surface-container-lowest full-width py-xl mt-auto">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center w-full px-md max-w-container-max mx-auto space-y-md md:space-y-0">
+            <div class="font-headline-md text-headline-md text-on-surface dark:text-on-surface">MicroJourney AR</div>
+            <p
+                class="text-on-surface-variant dark:text-outline-variant font-body-md text-body-md text-center md:text-left">
+                © 2024 MicroJourney AR. Petualangan Ekosistem Digital.
+            </p>
+            <div class="flex space-x-md">
+                <a class="text-on-surface-variant dark:text-outline-variant hover:text-secondary transition-colors font-label-sm text-label-sm"
+                    href="#">Kurikulum</a>
+                <a class="text-on-surface-variant dark:text-outline-variant hover:text-secondary transition-colors font-label-sm text-label-sm"
+                    href="#">Pusat Bantuan</a>
+                <a class="text-on-surface-variant dark:text-outline-variant hover:text-secondary transition-colors font-label-sm text-label-sm"
+                    href="#">Privasi</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Micro-interaction for Audio Waveform
+        const bars = document.querySelectorAll('.wave-bar');
+        function animateWave() {
+            bars.forEach(bar => {
+                const height = Math.random() * 80 + 20;
+                bar.style.height = `${height}%`;
+            });
+            requestAnimationFrame(() => {
+                setTimeout(animateWave, 150);
+            });
+        }
+        animateWave();
+
+        // Spatial X-Ray simple interaction simulation
+        const centerView = document.querySelector('.lg:col-span-6');
+        centerView.addEventListener('mousemove', (e) => {
+            const { left, top, width, height } = centerView.getBoundingClientRect();
+            const x = (e.clientX - left) / width - 0.5;
+            const y = (e.clientY - top) / height - 0.5;
+            const fish = centerView.querySelector('.floating');
+            if (fish) {
+                fish.style.transform = `translate(${x * 30}px, ${y * 30}px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
+            }
+        });
+
+        centerView.addEventListener('mouseleave', () => {
+            const fish = centerView.querySelector('.floating');
+            if (fish) {
+                fish.style.transform = `translate(0, 0) rotateY(0) rotateX(0)`;
+            }
+        });
+    </script>
+
+    <div style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 9999;">
+        <a href="PerjalananBelajar-tahap3.html" style="background: white; border: 2px solid #006591; color: #006591; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Kembali</a>
+        <a href="PerjalananBelajar-tahap5.html" style="background: #006591; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Selanjutnya</a>
+    </div>
+</body>
+
+</html>

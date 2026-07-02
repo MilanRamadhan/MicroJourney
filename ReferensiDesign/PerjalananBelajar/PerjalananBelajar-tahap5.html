@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tahap 5: Bioakumulasi - MicroJourney AR</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#006591",
+                        "on-tertiary-fixed": "#251a00",
+                        "outline": "#6e7881",
+                        "primary-fixed-dim": "#89ceff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005321",
+                        "surface-container": "#eceef0",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary-container": "#6bff8f",
+                        "on-tertiary-fixed-variant": "#5a4300",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "background": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#003751",
+                        "on-background": "#191c1e",
+                        "primary-fixed": "#c9e6ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002109",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#f7be1d",
+                        "on-surface": "#191c1e",
+                        "inverse-primary": "#89ceff",
+                        "surface-container-low": "#f2f4f6",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#785a00",
+                        "on-tertiary-container": "#423000",
+                        "tertiary-container": "#c39400",
+                        "primary-container": "#0ea5e9",
+                        "surface-bright": "#f7f9fb",
+                        "primary": "#006591",
+                        "surface": "#f7f9fb",
+                        "surface-dim": "#d8dadc",
+                        "on-surface-variant": "#3e4850",
+                        "secondary": "#006e2f",
+                        "on-secondary-container": "#007432",
+                        "secondary-fixed-dim": "#4ae176",
+                        "outline-variant": "#bec8d2",
+                        "surface-variant": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdf9a",
+                        "secondary-fixed": "#6bff8f",
+                        "on-primary-fixed": "#001e2f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "64px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "md": "24px",
+                        "container-max": "1200px",
+                        "lg": "40px",
+                        "sm": "12px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+        .active-card {
+            border: 3px solid #006591;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .flow-line {
+            background: linear-gradient(90deg, #0ea5e9 0%, #006e2f 100%);
+            height: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flow-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            animation: flow 2s infinite linear;
+        }
+
+        @keyframes flow {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .toxin-bar {
+            transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+    <!-- TopNavBar -->
+    <header
+        class="bg-surface/80 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.05)] docked full-width top-0 sticky z-50">
+        <nav class="flex justify-between items-center w-full px-md py-4 max-w-container-max mx-auto">
+            <div class="flex items-center gap-2">
+                <span class="font-headline-md text-headline-md font-bold text-primary">MicroJourney AR</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md"
+                    href="../LandingPage/LandingPage.html">Beranda</a>
+                <a class="text-primary border-b-2 border-primary pb-1 font-bold font-label-md text-label-md"
+                    href="PerjalananBelajarHome.html">Perjalanan Belajar</a>
+                <a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md"
+                    href="../Materi/Materi.html">Materi</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../E-LKPD/Dashboard-LKPD.html">E-LKPD</a>
+                <a class="text-on-surface-variant hover:text-primary pb-2 transition-colors font-body-md text-body-md" href="../RaporGuru/Dashboard-Guru.html">Rapor Guru</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <div class="w-10 h-10 rounded-full bg-primary-fixed overflow-hidden border-2 border-primary-container">
+                    <img alt="Student Profile Avatar" class="w-full h-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz7CICBlhi-SOP9SLUa5F0mXDj1LG20gVuoxgbByT1y1bTZPZERpdoV8ndYumY_F7cYw2FiHWuSpA8hpGt8J1e7mJ0SmOXyZkzg1joJvB6-VVPt2fJsvfend-5i1zKcE-16NLwDYUUVJOrcgTECFoI0oMfJXIjWAgeP3NJ8FCIF8D0P4EEVzRxq0ghNmovYNuQlZYYkUMbdt7wpLpC6_gDsJ5o1vGk-sYudT6S-Kdb5d-8TWEHTRgURtMbeGIKv5olSb4tIuLB2w" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="flex-grow w-full max-w-container-max mx-auto px-md py-lg">
+        <!-- Hero Title -->
+        <div class="mb-lg">
+            <div class="flex items-center gap-3 mb-2">
+                <span
+                    class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-md text-label-md">Modul
+                    Ekosistem</span>
+                <span class="text-outline-variant font-label-md">•</span>
+                <span class="text-primary font-label-md">Misi Terakhir</span>
+            </div>
+            <h1 class="font-display-lg text-display-lg text-on-surface">Tahap 5: Bioakumulasi</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-4">
+                Pelajari bagaimana racun mikroplastik berpindah dan berlipat ganda melalui rantai makanan di lautan
+                kita.
+            </p>
+        </div>
+        <!-- Main Simulation Container -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-md items-start">
+            <!-- Left Panel: Data Visualization -->
+            <div
+                class="lg:col-span-3 bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/30 h-full flex flex-col">
+                <div class="flex items-center gap-2 mb-md text-primary">
+                    <span class="material-symbols-outlined">biotech</span>
+                    <h2 class="font-headline-md text-[18px]">Level Toksisitas</h2>
+                </div>
+                <div class="flex-grow flex flex-col justify-between space-y-md">
+                    <div class="space-y-4" id="info-display">
+                        <div class="p-sm bg-surface-container rounded-lg">
+                            <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Sumber Polutan</p>
+                            <p class="font-headline-md text-[20px] text-error">Mikroplastik</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-xs border-b border-outline-variant/20">
+                                <span class="text-label-md">Plankton</span>
+                                <span class="font-bold text-primary">Level 1</span>
+                            </div>
+                            <div class="flex justify-between items-center p-xs border-b border-outline-variant/20">
+                                <span class="text-label-md">Ikan Kecil</span>
+                                <span class="font-bold text-secondary">Level 10</span>
+                            </div>
+                            <div class="flex justify-between items-center p-xs border-b border-outline-variant/20">
+                                <span class="text-label-md">Ikan Besar</span>
+                                <span class="font-bold text-tertiary">Level 100+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-sm bg-primary-container/10 border border-primary-container/30 rounded-lg">
+                        <p class="text-label-sm italic text-on-primary-container">"Racun tidak hilang, ia berpindah dan
+                            menumpuk pada predator puncak."</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Center Panel: Interactive Simulation -->
+            <div class="lg:col-span-6 space-y-md">
+                <div class="bg-surface-container-lowest p-md rounded-xl shadow-md relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="material-symbols-outlined text-[120px]">waves</span>
+                    </div>
+                    <div class="text-center mb-lg relative z-10">
+                        <p class="text-primary font-label-md mb-2">Simulasi Hierarki</p>
+                        <h3 class="font-headline-md text-headline-md text-on-surface">Alur Rantai Makanan</h3>
+                        <p class="text-on-surface-variant font-body-md mt-2">Tap pada organisme untuk melihat proses
+                            akumulasi racun.</p>
+                    </div>
+                    <!-- Hierarchy Visual -->
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-md py-lg px-4 relative">
+                        <!-- Connecting Lines (Desktop only) -->
+                        <div
+                            class="hidden md:block absolute top-1/2 left-1/4 right-1/4 -translate-y-1/2 h-1 bg-surface-container z-0">
+                            <div class="h-full bg-primary transition-all duration-500 w-0" id="flow-indicator"></div>
+                        </div>
+                        <!-- Plankton -->
+                        <div class="organism-card cursor-pointer group flex flex-col items-center z-10"
+                            onclick="selectOrganism('plankton', 1, '#89ceff')">
+                            <div
+                                class="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center border-4 border-surface-container group-hover:border-primary-container transition-all duration-300 active:scale-95">
+                                <img alt="Plankton" class="w-16 h-16"
+                                    data-alt="A stylized micro-illustration of aquatic plankton cells floating in clear blue water. The art style is modern educational with vibrant teal and light blue colors, soft rounded edges, and high-key lighting that creates a bright and friendly feel. The background is a clean, sunny aquatic environment."
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5UObK2YhJFJMFwvay0b1KRuOkr9dSpjGzacZL1pYZ_mHiZKwvIV6guwWWHzmyRX5akMGW5Mm9-ZLOq2vjNjnHbNKiRm1EWVGt6ATse9Q3zDPaOVTGpCyYKeO-vnat7eNA7YvA66jipuRnsCsrfdIXvUI4sbAwAFhoe7lGw4yC6hxANRzioVZzUQ99tn_ZakVMgW14fA7GkaMfMgxiZSDemLsNt4L-5f7HQzr7ney_9PrrTZiZmKGnA9rDQszjNxj7iHLRUngSXA" />
+                            </div>
+                            <span class="mt-4 font-label-md text-on-surface group-hover:text-primary">Plankton</span>
+                        </div>
+                        <span class="material-symbols-outlined text-outline-variant md:hidden">arrow_downward</span>
+                        <!-- Small Fish -->
+                        <div class="organism-card cursor-pointer group flex flex-col items-center z-10"
+                            onclick="selectOrganism('smallfish', 10, '#4ae176')">
+                            <div
+                                class="w-32 h-32 rounded-full bg-white shadow-lg flex items-center justify-center border-4 border-surface-container group-hover:border-secondary transition-all duration-300 active:scale-95">
+                                <img alt="Ikan Kecil" class="w-20 h-20"
+                                    data-alt="A friendly, chunky 2D character of a small tropical fish with large expressive eyes. The style is modern vector art suitable for middle schoolers, using bright leaf green and sky blue tones. The lighting is sunny and optimistic, depicting the fish in a clean coral reef setting."
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBufsFUHR_phG7ZQGH9-4oFqGt3NPBb-pXvO6MDNKUJdn3V5fsY1EtvlCd0ZRuumQQrBEFAGH-VYFQzzB4kv5_WtL5dNNCmD-fYKuTsty1cV88-P406E3y8zsS7qOLG2vry2VkOMPgwiEla5bI84sMvO4r0OQAYTYjh7D9DSISh3BUyX233auPHvWgjeEAG-qx4OIHPULS9Opmxms8HDQrjlMsNsm-Ww3ld0sZL7Tp4I1nn9UdcShsYQVdXPHwAqfzmpyFrni1o9g" />
+                            </div>
+                            <span class="mt-4 font-label-md text-on-surface group-hover:text-secondary">Ikan
+                                Kecil</span>
+                        </div>
+                        <span class="material-symbols-outlined text-outline-variant md:hidden">arrow_downward</span>
+                        <!-- Big Fish -->
+                        <div class="organism-card cursor-pointer group flex flex-col items-center z-10"
+                            onclick="selectOrganism('bigfish', 100, '#f7be1d')">
+                            <div
+                                class="w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center border-4 border-surface-container group-hover:border-tertiary transition-all duration-300 active:scale-95">
+                                <img alt="Ikan Besar" class="w-24 h-24"
+                                    data-alt="A large, impressive cartoon tuna fish character with vibrant yellow and deep blue coloring. The design is bold and energetic, presented as a hero character in a marine biology app. The lighting is bright and clear, emphasizing the scale of the fish in the open ocean."
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVL7WcT6M6yRScBkxCHtYUojFrJeSizg1bW7yKtTaL6xQ39z3vAGGoqTg7LundRF_J2nqlc-GOeOuVIMzrmD6O0UN3AiaNN-8Rjhx8o01THQkhJELhmagjn1uAengCxgLt06g9HbGLFQ5Qycegugs1cQd9QnUITYV3KfQ0q_Xn3ZaRn0Kn6q_9jGV10eClBtfEyyQwsCJBe_0dbM8xObk1bvh-tYSumTmVj7rR5JyWxuX8S7uv4sk6fbpLHKnJYu6a7tu3CI7ssg" />
+                            </div>
+                            <span class="mt-4 font-label-md text-on-surface group-hover:text-tertiary">Ikan Besar</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="bg-primary-container p-md rounded-xl text-on-primary-container flex items-start gap-4 shadow-sm">
+                    <span class="material-symbols-outlined text-[32px]">lightbulb</span>
+                    <div>
+                        <h4 class="font-label-md text-[16px]">Fakta Edukasi</h4>
+                        <p class="font-body-md opacity-90 mt-1">Satu ikan besar memakan ribuan ikan kecil sepanjang
+                            hidupnya. Setiap kali ia makan, ia menyerap semua racun yang ada di tubuh mangsanya.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Panel: Statistics -->
+            <div
+                class="lg:col-span-3 bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/30 h-full">
+                <div class="flex items-center gap-2 mb-md text-secondary">
+                    <span class="material-symbols-outlined">bar_chart</span>
+                    <h2 class="font-headline-md text-[18px]">Statistik Akumulasi</h2>
+                </div>
+                <div class="space-y-8 py-4">
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-label-sm">
+                            <span>Kerapatan Toksin</span>
+                            <span class="font-bold" id="toxin-percentage">0%</span>
+                        </div>
+                        <div class="h-4 bg-surface-container rounded-full overflow-hidden">
+                            <div class="h-full bg-error transition-all duration-700 w-0" id="toxin-progress"></div>
+                        </div>
+                    </div>
+                    <div class="h-48 flex items-end justify-around gap-2 px-2">
+                        <div class="flex flex-col items-center gap-2 w-full">
+                            <div class="toxin-bar w-full bg-primary-fixed-dim rounded-t-lg h-2" id="bar-plankton"></div>
+                            <span class="text-[10px] text-on-surface-variant font-label-md uppercase">PLK</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-2 w-full">
+                            <div class="toxin-bar w-full bg-secondary-fixed-dim rounded-t-lg h-2" id="bar-smallfish">
+                            </div>
+                            <span class="text-[10px] text-on-surface-variant font-label-md uppercase">IKC</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-2 w-full">
+                            <div class="toxin-bar w-full bg-tertiary-fixed-dim rounded-t-lg h-2" id="bar-bigfish"></div>
+                            <span class="text-[10px] text-on-surface-variant font-label-md uppercase">IBS</span>
+                        </div>
+                    </div>
+                    <div class="text-center p-sm rounded-lg bg-surface-container text-label-md animate-pulse"
+                        id="interaction-feedback">
+                        Siap memulai simulasi?
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-low full-width py-xl mt-auto">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center w-full px-md max-w-container-max mx-auto space-y-md md:space-y-0">
+            <div class="flex flex-col gap-2">
+                <span class="font-headline-md text-headline-md text-on-surface">MicroJourney AR</span>
+                <p class="font-body-md text-body-md text-on-surface-variant">© 2024 MicroJourney AR. Petualangan
+                    Ekosistem Digital.</p>
+            </div>
+            <div class="flex items-center space-x-8">
+                <a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors"
+                    href="#">Kurikulum</a>
+                <a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Pusat
+                    Bantuan</a>
+                <a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors"
+                    href="#">Privasi</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        function selectOrganism(type, level, color) {
+            // Update UI elements
+            const feedback = document.getElementById('interaction-feedback');
+            const progress = document.getElementById('toxin-progress');
+            const percentage = document.getElementById('toxin-percentage');
+            const flow = document.getElementById('flow-indicator');
+
+            // Remove previous active states
+            document.querySelectorAll('.organism-card').forEach(card => {
+                card.classList.remove('active-card');
+            });
+
+            // Add active state to target
+            event.currentTarget.classList.add('active-card');
+
+            // Logic for growth
+            if (type === 'plankton') {
+                feedback.innerHTML = "Plankton menyerap mikroplastik dari air.";
+                feedback.className = "text-center p-sm rounded-lg bg-primary-container/20 text-on-primary-container font-label-md";
+                document.getElementById('bar-plankton').style.height = "15%";
+                progress.style.width = "5%";
+                percentage.innerText = "5%";
+                flow.style.width = "0%";
+            } else if (type === 'smallfish') {
+                feedback.innerHTML = "Ikan Kecil memakan banyak plankton. Toksin meningkat!";
+                feedback.className = "text-center p-sm rounded-lg bg-secondary-container/20 text-on-secondary-container font-label-md";
+                document.getElementById('bar-smallfish').style.height = "40%";
+                progress.style.width = "25%";
+                percentage.innerText = "25%";
+                flow.style.width = "40%";
+            } else if (type === 'bigfish') {
+                feedback.innerHTML = "BAHAYA! Ikan Besar memiliki konsentrasi racun tertinggi.";
+                feedback.className = "text-center p-sm rounded-lg bg-error-container text-on-error-container font-label-md";
+                document.getElementById('bar-bigfish').style.height = "90%";
+                progress.style.width = "100%";
+                percentage.innerText = "100%";
+                flow.style.width = "100%";
+            }
+        }
+
+        // Initialize first state
+        window.onload = () => {
+            console.log("Simulasi Bioakumulasi Dimulai");
+        }
+    </script>
+
+    <div style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 9999;">
+        <a href="PerjalananBelajar-tahap4.html" style="background: white; border: 2px solid #006591; color: #006591; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Kembali</a>
+        <a href="PerjalananBelajar-tahap6.html" style="background: #006591; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Selanjutnya</a>
+    </div>
+</body>
+
+</html>
