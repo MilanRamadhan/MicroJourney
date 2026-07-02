@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
-import Progress from '@/models/Progress';
+import Progress from '@/lib/models/Progress';
 
 const DEFAULT_STUDENT_ID = 'student_001';
 

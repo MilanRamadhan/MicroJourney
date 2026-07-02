@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import { stages, getStageById } from '@/lib/stagesData';
+import { stages, getStageById, type Stage } from '@/lib/stagesData';
 
 // Per-stage: background environment, centered AR object, extra left/right panel content
 const stageConfig: Record<number, {
@@ -75,8 +75,8 @@ export default function TahapPage() {
     );
   }
 
-  const nextStage = stages.find(s => s.id === stageId + 1);
-  const prevStage = stages.find(s => s.id === stageId - 1);
+  const nextStage = stages.find((s: Stage) => s.id === stageId + 1);
+  const prevStage = stages.find((s: Stage) => s.id === stageId - 1);
 
   function handleAnswer(idx: number) {
     if (quizState === 'answered') return;
@@ -130,7 +130,7 @@ export default function TahapPage() {
             <span className="material-symbols-outlined">arrow_back</span>
           </Link>
           <div className="flex items-center gap-2 flex-1">
-            {stages.map((s) => (
+            {stages.map((s: Stage) => (
               <div key={s.id} className="flex-1 flex items-center gap-1">
                 <div className={`h-2 flex-1 rounded-full transition-all duration-500 ${
                   s.id < stageId ? 'bg-[var(--color-secondary)]'
@@ -173,7 +173,7 @@ export default function TahapPage() {
               <h2 className="font-[family-name:var(--font-plus-jakarta)] text-lg text-[var(--color-primary)] font-bold">Scientific Log</h2>
             </div>
             <div className="flex-grow overflow-y-auto space-y-4 pr-2">
-              {stage.scientificFacts.map((fact, i) => (
+              {stage.scientificFacts.map((fact: string, i: number) => (
                 <div key={i} className="bg-[var(--color-surface-container-low)] p-3 rounded-lg border border-[var(--color-outline-variant)]/30">
                   <span className="text-[10px] font-bold text-[var(--color-primary)] block mb-1">LOG #{String(i + 1).padStart(4, '0')}</span>
                   <p className="text-xs leading-relaxed text-[var(--color-on-surface-variant)]">{fact}</p>
@@ -320,7 +320,7 @@ export default function TahapPage() {
                   {stage.quiz.question}
                 </p>
                 <div className="grid grid-cols-1 gap-3">
-                  {stage.quiz.options.map((opt, idx) => (
+                  {stage.quiz.options.map((opt: any, idx: number) => (
                     <button
                       key={idx}
                       className={getOptionClass(idx)}

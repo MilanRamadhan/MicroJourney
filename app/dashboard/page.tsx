@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AppUser, useAuthStore } from '@/lib/authStore';
+import ImportCsvModal from '@/components/dashboard/ImportCsvModal';
 
 interface Submission {
   _id: string;
@@ -48,6 +49,7 @@ export default function Dashboard() {
   const [filterClass, setFilterClass] = useState('');
   const [studentForm, setStudentForm] = useState({ name: '', email: '', password: '', className: '' });
   const [studentMessage, setStudentMessage] = useState('');
+  const [showImport, setShowImport] = useState(false);
 
   useEffect(() => {
     fetch('/api/lkpd')
@@ -194,9 +196,21 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 xl:grid-cols-[420px_1fr] gap-6 mb-8">
           {/* Register student form */}
           <form onSubmit={handleRegisterStudent} className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="material-symbols-outlined text-[#006e2f]">person_add</span>
-              <h2 className="font-[family-name:var(--font-outfit)] font-bold text-lg text-[#191c1e]">Daftarkan Siswa</h2>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#006e2f]">person_add</span>
+                <h2 className="font-[family-name:var(--font-outfit)] font-bold text-lg text-[#191c1e]">Daftarkan Siswa</h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowImport(true)}
+                className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl transition-all active:scale-95 hover:scale-105"
+                style={{ background: 'linear-gradient(to bottom, #0095d4, #006591)', color: 'white', border: '1.5px solid #004a6b' }}
+                title="Import banyak siswa sekaligus via file CSV"
+              >
+                <span className="material-symbols-outlined text-[15px]">upload_file</span>
+                Import CSV
+              </button>
             </div>
             <div className="space-y-3">
               <input value={studentForm.name} onChange={e => setStudentForm(s => ({ ...s, name: e.target.value }))}
@@ -364,6 +378,14 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {/* Import CSV Modal */}
+      {showImport && (
+        <ImportCsvModal
+          onClose={() => setShowImport(false)}
+          createdBy={adminUser.email}
+        />
+      )}
     </div>
   );
 }
