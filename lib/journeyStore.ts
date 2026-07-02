@@ -11,7 +11,7 @@ export interface LkpdAnswers {
 }
 
 export interface SelectedFood {
-  id: number;
+  id: string;
   name: string;
   particles: number;
 }

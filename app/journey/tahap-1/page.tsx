@@ -2,6 +2,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useJourneyStore } from '@/lib/journeyStore';
+import StageIntro from '@/components/stages/StageIntro';
+import { AnimatePresence } from 'framer-motion';
 
 type Phase = 'init' | 'scanning' | 'detected' | 'pemantik';
 
@@ -98,24 +100,39 @@ export default function Tahap1() {
             ? 'Objek terkunci! Membuka pertanyaan pemantik...'
             : `Terdeteksi ${plastic.class} ${conf}%. Dekatkan lagi atau perbaiki cahaya.`);
 
-          const color = plastic.score >= MIN_LOCK_SCORE ? '#006e2f' : '#c39400';
+          const color = plastic.score >= MIN_LOCK_SCORE ? '#6bff8f' : '#f0a345';
           ctx.strokeStyle = color;
-          ctx.lineWidth = 2.5;
-          ctx.strokeRect(x, y, w, h);
-
-          const cl = 18;
-          ctx.strokeStyle = '#006591';
           ctx.lineWidth = 3;
-          [[x,y+cl,x,y,x+cl,y],[x+w-cl,y,x+w,y,x+w,y+cl],
-           [x,y+h-cl,x,y+h,x+cl,y+h],[x+w-cl,y+h,x+w,y+h,x+w,y+h-cl]].forEach(([x1,y1,x2,y2,x3,y3])=>{
-            ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.lineTo(x3,y3); ctx.stroke();
-          });
+          ctx.lineJoin = 'round';
+          ctx.lineCap = 'round';
+          
+          // Draw rounded detection box
+          const radius = 16;
+          ctx.beginPath();
+          ctx.moveTo(x + radius, y);
+          ctx.lineTo(x + w - radius, y);
+          ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+          ctx.lineTo(x + w, y + h - radius);
+          ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+          ctx.lineTo(x + radius, y + h);
+          ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+          ctx.lineTo(x, y + radius);
+          ctx.quadraticCurveTo(x, y, x + radius, y);
+          ctx.closePath();
+          ctx.stroke();
 
-          ctx.fillStyle = plastic.score >= MIN_LOCK_SCORE ? 'rgba(0,110,47,0.85)' : 'rgba(195,148,0,0.85)';
-          ctx.fillRect(x, y - 28, 190, 26);
+          // Organic Bubble for Label
+          const isLocked = plastic.score >= MIN_LOCK_SCORE;
+          ctx.fillStyle = isLocked ? 'rgba(0,110,47,0.9)' : 'rgba(210,123,34,0.9)';
+          ctx.beginPath();
+          ctx.roundRect(x + (w/2) - 80, y - 40, 160, 30, 15);
+          ctx.fill();
+          
           ctx.fillStyle = '#fff';
-          ctx.font = 'bold 12px monospace';
-          ctx.fillText(`${plastic.class.toUpperCase()} · ${conf}%`, x + 6, y - 10);
+          ctx.font = 'bold 13px var(--font-outfit), sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(`${plastic.class.toUpperCase()} · ${conf}%`, x + (w/2), y - 20);
+          ctx.textAlign = 'left';
 
           if (plastic.score >= MIN_LOCK_SCORE && activeRef.current) {
             clearTimeout(fallbackTimer);
@@ -152,22 +169,19 @@ export default function Tahap1() {
       <canvas ref={overlayRef} className="absolute inset-0 w-full h-full pointer-events-none" />
       {phase === 'scanning' && <div className="ar-scanline" />}
 
-      {/* Init */}
-      {phase === 'init' && !cameraError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#f7f9fb]">
-          <div className="text-center p-8 max-w-sm">
-            <div className="w-20 h-20 rounded-full bg-[#0ea5e9]/10 border-2 border-[#bec8d2] flex items-center justify-center mx-auto mb-6">
-              <span className="material-symbols-outlined text-[#006591] text-4xl">photo_camera</span>
-            </div>
-            <h2 className="font-[family-name:var(--font-outfit)] text-2xl font-bold mb-3 text-[#191c1e]">Scanner AI Plastik</h2>
-            <p className="text-[#3e4850] text-sm mb-8 leading-relaxed">Arahkan kamera ke botol plastik atau sampah plastik di sekitarmu. AI akan mendeteksinya secara real-time.</p>
-            <button onClick={startCamera}
-              className="w-full bg-[#006591] hover:bg-[#004c6e] text-white font-bold py-4 rounded-xl text-lg transition-colors flex items-center justify-center gap-2 shadow-md shadow-[#006591]/20">
-              <span className="material-symbols-outlined">qr_code_scanner</span> Aktifkan Kamera
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Init Phase with StageIntro */}
+      <AnimatePresence>
+        {phase === 'init' && !cameraError && (
+          <StageIntro
+            title="Tahap 1: Scanner AI Plastik"
+            description="Arahkan kamera ke botol plastik atau sampah plastik di sekitarmu. AI akan mendeteksinya secara real-time."
+            icon="qr_code_scanner"
+            layout="centered"
+            actionText="Aktifkan Kamera"
+            onStart={startCamera}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Error */}
       {cameraError && (
@@ -182,19 +196,26 @@ export default function Tahap1() {
       {/* Scanning HUD */}
       {phase === 'scanning' && (
         <div className="absolute inset-0 pointer-events-none">
-          {[['top-6 left-6','border-t-4 border-l-4'],['top-6 right-6','border-t-4 border-r-4'],
-            ['bottom-6 left-6','border-b-4 border-l-4'],['bottom-6 right-6','border-b-4 border-r-4']].map(([pos,cls])=>(
-            <div key={pos} className={`absolute ${pos} w-12 h-12 ${cls} border-[#006591] opacity-70`} />
+          {/* Rounded Corner Brackets (Kamera) */}
+          {[
+            ['top-8 left-8', 'border-t-4 border-l-4 rounded-tl-3xl'],
+            ['top-8 right-8', 'border-t-4 border-r-4 rounded-tr-3xl'],
+            ['bottom-8 left-8', 'border-b-4 border-l-4 rounded-bl-3xl'],
+            ['bottom-8 right-8', 'border-b-4 border-r-4 rounded-br-3xl']
+          ].map(([pos,cls])=>(
+            <div key={pos} className={`absolute ${pos} w-16 h-16 ${cls} border-[#6bff8f] opacity-80 shadow-[0_0_15px_rgba(107,255,143,0.5)]`} />
           ))}
 
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-5 py-2 rounded-full border border-[#bec8d2] shadow-sm">
-            <p className="text-[#006591] text-sm font-[family-name:var(--font-mono)] font-bold tracking-widest">
-              {modelLoading ? 'MEMUAT MODEL AI...' : confidence > 0 ? `TERDETEKSI - ${confidence}%` : 'ARAHKAN KE BOTOL / GELAS PLASTIK'}
+          {/* Top Status Bubble */}
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-[#083b54]/80 backdrop-blur-md px-6 py-2.5 rounded-full border-2 border-[#6bff8f]/30 shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
+            <p className="text-[#6bff8f] text-sm font-[family-name:var(--font-outfit)] font-bold tracking-wider">
+              {modelLoading ? 'MEMUAT ALAT...' : confidence > 0 ? `TERDETEKSI - ${confidence}%` : 'CARI OBJEK PLASTIK'}
             </p>
           </div>
 
-          <div className="absolute bottom-24 left-1/2 -translate-x-1/2 w-[min(90vw,420px)] text-center">
-            <p className="bg-white/85 backdrop-blur-sm border border-[#bec8d2] rounded-xl px-4 py-3 text-[#191c1e] text-sm shadow-sm">
+          {/* Bottom Hint Bubble */}
+          <div className="absolute bottom-28 left-1/2 -translate-x-1/2 w-[min(90vw,420px)] text-center">
+            <p className="bg-[#f0a345] bg-opacity-90 backdrop-blur-md border-2 border-[#8e4912] rounded-[24px] px-5 py-3.5 text-[#3b2313] text-sm font-bold shadow-[0_8px_16px_rgba(0,0,0,0.3)] font-[family-name:var(--font-inter)]">
               {scanHint}
             </p>
           </div>

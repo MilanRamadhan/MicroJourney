@@ -18,7 +18,7 @@ export default function LandingPage() {
       // Hanya set guest jika belum ada nama (belum pernah mulai)
       setStudent("Siswa Tamu", "Mode Latihan");
     }
-    router.push("/journey/tahap-1");
+    router.push("/journey");
   }
 
   return (
