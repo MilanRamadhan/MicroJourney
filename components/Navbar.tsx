@@ -8,10 +8,10 @@ import BottomNav from "@/components/BottomNav";
 
 const navLinks: { href: string; label: string; match?: string }[] = [
   { href: "/", label: "Beranda" },
-  { href: "/perjalanan-belajar", label: "Peta" },
-  { href: "/journey/tahap-1", label: "Perjalanan", match: "/journey" },
   { href: "/materi", label: "Materi" },
-  { href: "/e-lkpd", label: "E-LKPD" },
+  { href: "/perjalanan-belajar", label: "Peta" },
+  { href: "/journey", label: "Perjalanan", match: "/journey" },
+  { href: "/e-lkpd", label: "Modul" },
 ];
 
 export default function Navbar() {
@@ -47,11 +47,11 @@ export default function Navbar() {
 
   const initials = currentUser?.name
     ? currentUser.name
-        .split(" ")
-        .map((w) => w[0])
-        .join("")
-        .slice(0, 2)
-        .toUpperCase()
+      .split(" ")
+      .map((w) => w[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase()
     : null;
 
   // Isi dropdown profil (dipakai ulang di bar mobile & papan desktop)
@@ -61,9 +61,8 @@ export default function Navbar() {
         <p className="text-[13px] font-bold text-[#191c1e] truncate">{currentUser.name}</p>
         <p className="text-[11px] text-[#6e7881] truncate">{currentUser.email}</p>
         <span
-          className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
-            currentUser.role === "superadmin" ? "bg-[#ba1a1a]/10 text-[#ba1a1a]" : currentUser.role === "teacher" ? "bg-[#006591]/10 text-[#006591]" : "bg-[#006e2f]/10 text-[#006e2f]"
-          }`}
+          className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${currentUser.role === "superadmin" ? "bg-[#ba1a1a]/10 text-[#ba1a1a]" : currentUser.role === "teacher" ? "bg-[#006591]/10 text-[#006591]" : "bg-[#006e2f]/10 text-[#006e2f]"
+            }`}
         >
           {currentUser.role === "superadmin" ? "Super Admin" : currentUser.role === "teacher" ? "Guru" : "Siswa"}
         </span>
@@ -102,9 +101,8 @@ export default function Navbar() {
     <div className="relative pointer-events-auto">
       <button
         onClick={() => setAvatarOpen((v) => !v)}
-        className={`${sizeClass} rounded-full border-2 flex items-center justify-center transition-all active:scale-95 select-none shadow-sm ${
-          currentUser ? "bg-[#006591] border-white text-white font-bold text-[13px]" : "bg-white border-[#006591]/60 text-[#006591]"
-        }`}
+        className={`${sizeClass} rounded-full border-2 flex items-center justify-center transition-all active:scale-95 select-none shadow-sm ${currentUser ? "bg-[#006591] border-white text-white font-bold text-[13px]" : "bg-white border-[#006591]/60 text-[#006591]"
+          }`}
         aria-label="Menu profil"
       >
         {initials ? <span className="leading-none">{initials}</span> : <span className="material-symbols-outlined text-[18px]">person</span>}

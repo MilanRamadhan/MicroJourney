@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation';
 // Isi sama dengan navbar desktop (Navbar.tsx navLinks)
 const NAV_ITEMS: { href: string; label: string; icon: string; match?: string }[] = [
   { href: '/',                   label: 'Beranda',    icon: 'home' },
-  { href: '/perjalanan-belajar', label: 'Peta',       icon: 'map' },
-  { href: '/journey/tahap-1',    label: 'Perjalanan', icon: 'hiking', match: '/journey' },
   { href: '/materi',             label: 'Materi',     icon: 'menu_book' },
-  { href: '/e-lkpd',             label: 'E-LKPD',     icon: 'assignment' },
+  { href: '/perjalanan-belajar', label: 'Peta',       icon: 'map' },
+  { href: '/journey',            label: 'Perjalanan', icon: 'hiking', match: '/journey' },
+  { href: '/e-lkpd',             label: 'Modul',      icon: 'assignment' },
 ];
 
 export default function BottomNav() {

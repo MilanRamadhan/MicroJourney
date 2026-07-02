@@ -12,9 +12,14 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"
 // Font display bergaya game anak (untuk teks ukiran kayu di navbar) — rounded, bobot bisa diatur
 const fredoka = Fredoka({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-fredoka" });
 
+import NextTopLoader from 'nextjs-toploader';
+
 export const metadata: Metadata = {
   title: "MicroJourney AR",
   description: "Petualangan Sains Mikroplastik — IPA Kelas VIII Kurikulum Merdeka",
+  icons: {
+    icon: "/logo/no-bg.webp"
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -26,7 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#f7f9fb] text-[#191c1e]">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#f7f9fb] text-[#191c1e]">
+        <NextTopLoader color="#ba1a1a" showSpinner={false} />
+        {children}
+      </body>
     </html>
   );
 }
