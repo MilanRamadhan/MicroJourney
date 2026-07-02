@@ -19,13 +19,15 @@ export default function JourneyDashboard() {
   return (
     <div className="max-w-[1000px] mx-auto px-5 pb-16 font-[family-name:var(--font-inter)]">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-br from-[#006591] to-[#004c6e] rounded-[32px] p-8 sm:p-12 text-center text-white mb-10 shadow-lg relative overflow-hidden">
+      <div className="bg-gradient-to-br from-[#006591] to-[#004c6e] rounded-[32px] p-8 sm:p-10 text-white mb-10 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
         <div className="absolute inset-0 bg-[url('/hero-bg.png')] opacity-10 bg-cover bg-center pointer-events-none mix-blend-overlay" />
-        <div className="relative z-10">
+        
+        {/* Text Content */}
+        <div className="relative z-10 flex-1 text-center md:text-left">
           <h1 className="text-3xl md:text-4xl font-extrabold font-[family-name:var(--font-outfit)] mb-3">
             Peta Ekspedisi Mikroplastik
           </h1>
-          <p className="text-[#c9e6ff] text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-[#c9e6ff] text-base md:text-lg mb-8 leading-relaxed">
             Selamat datang, <strong className="text-white font-extrabold">{studentName || 'Penjelajah'}</strong>! 
             Di sini kamu akan melalui 6 tahapan misi rahasia untuk mengungkap bahaya plastik bagi bumi kita.
           </p>
@@ -37,6 +39,24 @@ export default function JourneyDashboard() {
             <span className="material-symbols-outlined">explore</span>
             Mulai Misi Pertama
           </button>
+        </div>
+
+        {/* Video Embed */}
+        <div className="relative z-10 w-full md:w-[400px] flex-shrink-0">
+          <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10">
+            <iframe 
+              width="100%" 
+              height="100%" 
+              src="https://www.youtube.com/embed/mdu1XEjHNYo" 
+              title="Apa Itu Mikroplastik?" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen
+            ></iframe>
+          </div>
+          <p className="text-center text-[#c9e6ff] text-xs mt-3 font-semibold tracking-wide">
+            Tonton video ini sebelum memulai misi!
+          </p>
         </div>
       </div>
 

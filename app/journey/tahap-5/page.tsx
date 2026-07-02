@@ -8,7 +8,7 @@ import { useJourneyStore } from '@/lib/journeyStore';
 export default function Tahap5() {
   const router = useRouter();
   const { currentUser } = useAuthStore();
-  const { completeStage, setLkpdAnswer, lkpdAnswers, studentName, studentClass, sessionId, totalParticles, selectedFoods, mostDangerousOrgan } = useJourneyStore();
+  const { completeStage, setLkpdAnswer, lkpdAnswers, studentName, studentClass, sessionId, totalParticles, selectedFoods, mostDangerousOrgan, quizCorrect, quizWrong } = useJourneyStore();
   const [lkpd4, setLkpd4] = useState(lkpdAnswers.lkpd4);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -46,6 +46,8 @@ export default function Tahap5() {
           commitment: lkpdAnswers.commitment,
           totalParticles,
           mostDangerousOrgan,
+          quizCorrect,
+          quizWrong,
           selectedFoods: selectedFoods.map(f => f.name),
         }),
       });

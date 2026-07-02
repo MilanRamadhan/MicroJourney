@@ -26,6 +26,8 @@ interface JourneyState {
   lkpdAnswers: LkpdAnswers;
   mostDangerousOrgan: string;
   organInteractions: string[]; // ids of organs clicked
+  quizCorrect: number;
+  quizWrong: number;
 
   setStudent: (name: string, cls: string) => void;
   completeStage: (stageId: number) => void;
@@ -34,6 +36,8 @@ interface JourneyState {
   setLkpdAnswer: (key: keyof LkpdAnswers, value: string) => void;
   setMostDangerousOrgan: (organ: string) => void;
   addOrganInteraction: (id: string) => void;
+  incrementCorrect: () => void;
+  incrementWrong: () => void;
   reset: () => void;
 }
 
@@ -53,6 +57,8 @@ export const useJourneyStore = create<JourneyState>()(
       lkpdAnswers: INITIAL_LKPD,
       mostDangerousOrgan: '',
       organInteractions: [],
+      quizCorrect: 0,
+      quizWrong: 0,
 
       setStudent: (name, cls) => set({
         studentName: name,
@@ -87,10 +93,15 @@ export const useJourneyStore = create<JourneyState>()(
           : [...s.organInteractions, id],
       })),
 
+      incrementCorrect: () => set(s => ({ quizCorrect: s.quizCorrect + 1 })),
+      
+      incrementWrong: () => set(s => ({ quizWrong: s.quizWrong + 1 })),
+
       reset: () => set({
         studentName: '', studentClass: '', sessionId: '',
         completedStages: [], selectedFoods: [], totalParticles: 0,
         lkpdAnswers: INITIAL_LKPD, mostDangerousOrgan: '', organInteractions: [],
+        quizCorrect: 0, quizWrong: 0,
       }),
     }),
     { name: 'microjourney-state' }
