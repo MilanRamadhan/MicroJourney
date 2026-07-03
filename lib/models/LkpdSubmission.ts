@@ -16,6 +16,8 @@ export interface ILkpdSubmission extends Document {
   selectedFoods: string[];
   studentAccountEmail: string;
   assessmentEligible: boolean;
+  quizCorrect: number;
+  quizWrong: number;
 }
 
 const LkpdSubmissionSchema = new Schema<ILkpdSubmission>({
@@ -34,6 +36,8 @@ const LkpdSubmissionSchema = new Schema<ILkpdSubmission>({
   selectedFoods:     { type: [String], default: [] },
   studentAccountEmail:{ type: String, default: '' },
   assessmentEligible:{ type: Boolean, default: false },
+  quizCorrect:       { type: Number, default: 0 },
+  quizWrong:         { type: Number, default: 0 },
 });
 
 const LkpdSubmission: Model<ILkpdSubmission> =

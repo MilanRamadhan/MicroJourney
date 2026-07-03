@@ -11,7 +11,7 @@ const navLinks: { href: string; label: string; match?: string }[] = [
   { href: "/materi", label: "Materi" },
   { href: "/perjalanan-belajar", label: "Peta" },
   { href: "/journey", label: "Perjalanan", match: "/journey" },
-  { href: "/e-lkpd", label: "Modul" },
+  { href: "/e-lkpd", label: "Jurnal Misi" },
 ];
 
 export default function Navbar() {

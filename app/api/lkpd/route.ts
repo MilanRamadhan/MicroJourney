@@ -22,6 +22,8 @@ export async function POST(req: NextRequest) {
       selectedFoods:      body.selectedFoods || [],
       studentAccountEmail:body.studentAccountEmail || '',
       assessmentEligible: Boolean(body.assessmentEligible),
+      quizCorrect:        Number(body.quizCorrect) || 0,
+      quizWrong:          Number(body.quizWrong) || 0,
     });
 
     return NextResponse.json({ ok: true, id: submission._id }, { status: 201 });

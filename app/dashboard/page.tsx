@@ -19,15 +19,13 @@ interface Submission {
   lkpd4: string;
   commitment: string;
   selectedFoods: string[];
+  quizCorrect: number;
+  quizWrong: number;
 }
 
-// Extract short organ label from free-text essay or organ ID
+// Extract short organ label
 const ORGAN_LABEL_MAP: Record<string, string> = {
-  mouth: 'Mulut',
-  stomach: 'Lambung',
-  smallIntestine: 'Usus Halus',
-  largeIntestine: 'Usus Besar',
-  blood: 'Darah',
+  mouth: 'Mulut', stomach: 'Lambung', smallIntestine: 'Usus Halus', largeIntestine: 'Usus Besar', blood: 'Darah',
 };
 function parseOrganLabel(raw: string): string {
   if (!raw) return '-';
@@ -50,6 +48,7 @@ export default function Dashboard() {
   const [studentForm, setStudentForm] = useState({ name: '', email: '', password: '', className: '' });
   const [studentMessage, setStudentMessage] = useState('');
   const [showImport, setShowImport] = useState(false);
+  const [activeTab, setActiveTab] = useState<'rekap' | 'manajemen'>('rekap');
 
   useEffect(() => {
     fetch('/api/lkpd')
@@ -66,21 +65,13 @@ export default function Dashboard() {
     if (currentUser.role === 'student') router.replace('/');
   }, [currentUser, router]);
 
-  if (!currentUser || currentUser.role === 'student') {
-    return (
-      <div className="min-h-screen bg-[#f7f9fb] flex items-center justify-center">
-        <div className="text-center">
-          <span className="material-symbols-outlined text-[#006591] text-5xl animate-pulse">lock</span>
-          <p className="text-[#3e4850] mt-3">Mengalihkan ke halaman login...</p>
-        </div>
-      </div>
-    );
-  }
+  if (!currentUser || currentUser.role === 'student') return null;
 
   const adminUser = currentUser;
   const classes = [...new Set(data.map(d => d.studentClass))].sort();
   const filtered = filterClass ? data.filter(d => d.studentClass === filterClass) : data;
   const avgParticles = filtered.length ? Math.round(filtered.reduce((s, d) => s + d.totalParticles, 0) / filtered.length) : 0;
+  
   const organCounts: Record<string, number> = {};
   filtered.forEach(d => {
     if (d.mostDangerousOrgan) {
@@ -93,291 +84,347 @@ export default function Dashboard() {
 
   function refreshSubmissions() {
     setLoading(true);
-    fetch('/api/lkpd')
-      .then(r => r.json())
-      .then(d => { setData(d.data || []); setLoading(false); })
-      .catch(() => setLoading(false));
+    fetch('/api/lkpd').then(r => r.json()).then(d => { setData(d.data || []); setLoading(false); }).catch(() => setLoading(false));
   }
 
   function handleRegisterStudent(e: React.FormEvent) {
     e.preventDefault();
     if (!studentForm.name.trim() || !studentForm.email.trim() || !studentForm.password || !studentForm.className.trim()) {
-      setStudentMessage('Lengkapi nama, kelas, email, dan password siswa.');
+      setStudentMessage('Semua kolom wajib diisi.');
       return;
     }
     const student = registerStudent({ ...studentForm, createdBy: adminUser.email });
-    setStudentMessage(`Akun ${student.name} berhasil disimpan. Siswa bisa login memakai ${student.email}.`);
+    setStudentMessage(`Berhasil mendaftarkan ${student.name}.`);
     setStudentForm({ name: '', email: '', password: '', className: '' });
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f9fb] text-[#191c1e]">
-      {/* Header */}
-      <header className="bg-white border-b border-[#bec8d2] px-6 py-4 flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="text-[#3e4850] hover:text-[#191c1e] transition-colors">
-            <span className="material-symbols-outlined">arrow_back</span>
-          </Link>
-          <div>
-            <h1 className="font-[family-name:var(--font-outfit)] font-bold text-lg text-[#191c1e]">Dashboard Guru — MicroJourney AR</h1>
-            <p className="text-[#3e4850] text-xs">{adminUser.name} · {adminUser.role === 'superadmin' ? 'Super Admin' : 'Guru'}</p>
+    <div className="min-h-screen bg-[#FAFAFA] text-[#111827] flex font-[family-name:var(--font-inter)] selection:bg-[#006591]/20">
+      
+      {/* MINIMALIST SIDEBAR WITH SUBTLE BLUE */}
+      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col z-20 shrink-0">
+        <div className="p-6 pb-4">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="font-[family-name:var(--font-outfit)] font-semibold text-lg tracking-tight text-[#006591]">
+              MicroJourney
+            </h1>
+            <Link href="/" className="text-slate-400 hover:text-[#006591] transition-colors">
+              <span className="material-symbols-outlined text-[20px]">arrow_outward</span>
+            </Link>
           </div>
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Menu Utama</p>
         </div>
-        <div className="flex items-center gap-3">
+
+        <nav className="flex-1 px-3 flex flex-col gap-1">
+          <button 
+            onClick={() => { setActiveTab('rekap'); setSelected(null); }} 
+            className={`flex items-center gap-3 px-3 py-2.5 transition-colors text-sm ${activeTab === 'rekap' ? 'bg-[#006591]/5 text-[#006591] font-medium border-l-[3px] border-[#006591] rounded-r-lg' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border-l-[3px] border-transparent rounded-lg'}`}
+          >
+            <span className="material-symbols-outlined text-[18px]">table_rows</span>
+            Data Penilaian
+          </button>
+          
+          <button 
+            onClick={() => { setActiveTab('manajemen'); setSelected(null); }} 
+            className={`flex items-center gap-3 px-3 py-2.5 transition-colors text-sm ${activeTab === 'manajemen' ? 'bg-[#006591]/5 text-[#006591] font-medium border-l-[3px] border-[#006591] rounded-r-lg' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border-l-[3px] border-transparent rounded-lg'}`}
+          >
+            <span className="material-symbols-outlined text-[18px]">people</span>
+            Kelola Siswa
+          </button>
+
           {adminUser.role === 'superadmin' && (
             <Link href="/superadmin"
-              className="flex items-center gap-1.5 bg-[#006591] hover:bg-[#004c6e] text-white text-sm font-bold px-4 py-2 rounded-lg transition-all hover:scale-105 active:scale-95 shadow-sm">
-              <span className="material-symbols-outlined text-base">admin_panel_settings</span>
-              Kelola Guru
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-900 mt-2 ml-1">
+              <span className="material-symbols-outlined text-[18px]">shield</span>
+              Akses Admin
             </Link>
           )}
-          <button onClick={refreshSubmissions} className="text-[#3e4850] hover:text-[#191c1e] flex items-center gap-1 text-sm transition-colors">
-            <span className="material-symbols-outlined text-base">refresh</span> Refresh
-          </button>
-          <button onClick={() => { logout(); router.push('/'); }} className="text-[#3e4850] hover:text-[#191c1e] flex items-center gap-1 text-sm transition-colors">
-            <span className="material-symbols-outlined text-base">logout</span> Keluar
+        </nav>
+
+        <div className="p-4 m-3 bg-[#006591]/[0.03] rounded-xl border border-[#006591]/10 flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-white border border-[#006591]/20 flex items-center justify-center text-[#006591]">
+              <span className="material-symbols-outlined text-[16px]">person</span>
+            </div>
+            <div className="overflow-hidden flex-1">
+              <p className="text-sm font-medium text-slate-800 truncate">{adminUser.name}</p>
+              <p className="text-[10px] text-[#006591] font-medium uppercase tracking-wider">{adminUser.role}</p>
+            </div>
+          </div>
+          <button onClick={() => { logout(); router.push('/'); }} 
+            className="w-full py-2 bg-white border border-slate-200 hover:border-red-200 hover:bg-red-50 hover:text-red-600 rounded-lg text-xs font-medium text-slate-600 transition-colors flex items-center justify-center gap-1.5">
+            <span className="material-symbols-outlined text-[14px]">logout</span> Keluar
           </button>
         </div>
-      </header>
+      </aside>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {/* Siswa submit */}
-          <div className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-[#c9e6ff]/60 flex items-center justify-center">
-                <span className="material-symbols-outlined text-[#006591] text-base">assignment_turned_in</span>
-              </div>
-              <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase tracking-wider leading-tight">Total Siswa Submit</p>
-            </div>
-            <p className="font-[family-name:var(--font-mono)] text-3xl font-bold text-[#006591]">{filtered.length}</p>
-          </div>
-
-          {/* Rata-rata partikel */}
-          <div className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-[#ffdad6]/80 flex items-center justify-center">
-                <span className="material-symbols-outlined text-[#ba1a1a] text-base">scatter_plot</span>
-              </div>
-              <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase tracking-wider leading-tight">Rata-rata Partikel</p>
-            </div>
-            <p className="font-[family-name:var(--font-mono)] text-3xl font-bold text-[#ba1a1a]">{avgParticles.toLocaleString('id-ID')}</p>
-          </div>
-
-          {/* Organ paling dipilih */}
-          <div className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-[#ffdf9a]/60 flex items-center justify-center">
-                <span className="material-symbols-outlined text-[#785a00] text-base">favorite</span>
-              </div>
-              <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase tracking-wider leading-tight">Organ Paling Dipilih</p>
-            </div>
-            <p className="font-[family-name:var(--font-mono)] text-xl font-bold text-[#785a00] truncate">{topOrgan}</p>
-            {topOrgan !== '-' && (
-              <p className="text-[#bec8d2] text-[10px] font-[family-name:var(--font-mono)] mt-0.5">
-                {organCounts[topOrgan]}× dipilih
-              </p>
-            )}
-          </div>
-
-          {/* Akun siswa */}
-          <div className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-[#dcfce7]/80 flex items-center justify-center">
-                <span className="material-symbols-outlined text-[#006e2f] text-base">group</span>
-              </div>
-              <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase tracking-wider leading-tight">Akun Siswa</p>
-            </div>
-            <p className="font-[family-name:var(--font-mono)] text-3xl font-bold text-[#006e2f]">{registeredStudents.length}</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 xl:grid-cols-[420px_1fr] gap-6 mb-8">
-          {/* Register student form */}
-          <form onSubmit={handleRegisterStudent} className="bg-white border border-[#bec8d2] rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#006e2f]">person_add</span>
-                <h2 className="font-[family-name:var(--font-outfit)] font-bold text-lg text-[#191c1e]">Daftarkan Siswa</h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowImport(true)}
-                className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl transition-all active:scale-95 hover:scale-105"
-                style={{ background: 'linear-gradient(to bottom, #0095d4, #006591)', color: 'white', border: '1.5px solid #004a6b' }}
-                title="Import banyak siswa sekaligus via file CSV"
-              >
-                <span className="material-symbols-outlined text-[15px]">upload_file</span>
-                Import CSV
-              </button>
-            </div>
-            <div className="space-y-3">
-              <input value={studentForm.name} onChange={e => setStudentForm(s => ({ ...s, name: e.target.value }))}
-                className="w-full bg-[#f7f9fb] border border-[#bec8d2] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006591] focus:ring-1 focus:ring-[#006591] transition-colors text-[#191c1e]" placeholder="Nama siswa" />
-              <input value={studentForm.className} onChange={e => setStudentForm(s => ({ ...s, className: e.target.value }))}
-                className="w-full bg-[#f7f9fb] border border-[#bec8d2] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006591] focus:ring-1 focus:ring-[#006591] transition-colors text-[#191c1e]" placeholder="Kelas, contoh: VIII-A" />
-              <input value={studentForm.email} onChange={e => setStudentForm(s => ({ ...s, email: e.target.value }))} type="email"
-                className="w-full bg-[#f7f9fb] border border-[#bec8d2] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006591] focus:ring-1 focus:ring-[#006591] transition-colors text-[#191c1e]" placeholder="Email siswa" />
-              <input value={studentForm.password} onChange={e => setStudentForm(s => ({ ...s, password: e.target.value }))} type="text"
-                className="w-full bg-[#f7f9fb] border border-[#bec8d2] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006591] focus:ring-1 focus:ring-[#006591] transition-colors text-[#191c1e]" placeholder="Password siswa" />
-            </div>
-            {studentMessage && <p className="text-[#3e4850] text-xs mt-3 bg-[#6bff8f]/20 border border-[#006e2f]/20 rounded-lg px-3 py-2">{studentMessage}</p>}
-            <button type="submit" className="w-full mt-4 bg-[#006e2f] hover:bg-[#005321] text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-[#006e2f]/20">
-              Simpan Akun Siswa <span className="material-symbols-outlined text-base">save</span>
+      {/* MAIN CONTENT */}
+      <main className="flex-1 h-screen overflow-y-auto relative flex flex-col">
+        
+        {/* Simple Header */}
+        <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-5 flex justify-between items-center sticky top-0 z-10">
+          <h2 className="font-[family-name:var(--font-outfit)] font-medium text-xl text-slate-800">
+             {activeTab === 'rekap' ? 'Data Penilaian Siswa' : 'Manajemen Akun Siswa'}
+          </h2>
+          {activeTab === 'rekap' && (
+            <button onClick={refreshSubmissions} className="text-sm text-[#006591] hover:text-[#004c6e] font-medium flex items-center gap-1.5 transition-colors bg-[#006591]/5 hover:bg-[#006591]/10 px-3 py-1.5 rounded-md">
+              <span className={`material-symbols-outlined text-[18px] ${loading ? 'animate-spin' : ''}`}>sync</span> 
+              Segarkan
             </button>
-          </form>
+          )}
+        </header>
 
-          {/* Students table */}
-          <div className="bg-white border border-[#bec8d2] rounded-2xl overflow-hidden shadow-sm">
-            <div className="px-5 py-4 border-b border-[#eceef0] flex items-center justify-between">
-              <h2 className="font-[family-name:var(--font-outfit)] font-bold text-[#191c1e]">Akun Siswa Terdaftar</h2>
-              <span className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)]">{registeredStudents.length} akun</span>
-            </div>
-            {registeredStudents.length === 0 ? (
-              <div className="p-6 text-[#6e7881] text-sm">Belum ada siswa terdaftar.</div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-[#eceef0] text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase bg-[#f7f9fb]">
-                      <th className="text-left px-4 py-3">Nama</th>
-                      <th className="text-left px-4 py-3">Kelas</th>
-                      <th className="text-left px-4 py-3">Email</th>
-                      <th className="text-left px-4 py-3">Password</th>
-                      <th className="px-4 py-3"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {registeredStudents.map(student => (
-                      <tr key={student.id} className="border-b border-[#f2f4f6] hover:bg-[#f7f9fb] transition-colors">
-                        <td className="px-4 py-3 font-semibold text-[#191c1e]">{student.name}</td>
-                        <td className="px-4 py-3 text-[#3e4850]">{student.className || '-'}</td>
-                        <td className="px-4 py-3 text-[#006591]">{student.email}</td>
-                        <td className="px-4 py-3 font-[family-name:var(--font-mono)] text-[#785a00]">{student.password}</td>
-                        <td className="px-4 py-3 text-right">
-                          <button onClick={() => deleteStudent(student.id)} className="text-[#ba1a1a] hover:text-[#93000a] text-xs font-bold transition-colors">Hapus</button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Super admin notice */}
-        {adminUser.role === 'superadmin' && (
-          <div className="bg-[#ffdf9a]/20 border border-[#c39400]/30 rounded-2xl p-5 mb-8">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="material-symbols-outlined text-[#785a00]">admin_panel_settings</span>
-              <h2 className="font-[family-name:var(--font-outfit)] font-bold text-[#191c1e]">Panel Super Admin</h2>
-            </div>
-            <p className="text-[#3e4850] text-sm">Super admin dapat melihat seluruh akun demo dan data kelas. Akun default: superadmin@gmail.com / superadmin.</p>
-          </div>
-        )}
-
-        {/* Class filter */}
-        <div className="flex items-center gap-3 mb-5 overflow-x-auto">
-          <span className="text-[#3e4850] text-sm whitespace-nowrap">Filter kelas:</span>
-          <button onClick={() => setFilterClass('')}
-            className={`px-4 py-1.5 rounded-lg text-sm border-2 transition-colors ${!filterClass ? 'bg-[#006591] border-[#006591] text-white' : 'bg-white border-[#bec8d2] text-[#3e4850] hover:border-[#006591]'}`}>
-            Semua
-          </button>
-          {classes.map(c => (
-            <button key={c} onClick={() => setFilterClass(c)}
-              className={`px-4 py-1.5 rounded-lg text-sm border-2 transition-colors whitespace-nowrap ${filterClass === c ? 'bg-[#006591] border-[#006591] text-white' : 'bg-white border-[#bec8d2] text-[#3e4850] hover:border-[#006591]'}`}>
-              {c}
-            </button>
-          ))}
-        </div>
-
-        {/* Submissions table */}
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="flex-grow bg-white border border-[#bec8d2] rounded-2xl overflow-hidden shadow-sm">
-            {loading ? (
-              <div className="flex items-center justify-center h-40 text-[#6e7881]">
-                <span className="material-symbols-outlined animate-spin mr-2 text-[#006591]">progress_activity</span> Memuat data...
-              </div>
-            ) : filtered.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-40 text-[#6e7881]">
-                <span className="material-symbols-outlined text-5xl mb-2 text-[#bec8d2]">inbox</span>
-                <p className="text-sm">Belum ada data penilaian dari siswa login.</p>
-              </div>
-            ) : (
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-[#eceef0] text-[#6e7881] text-xs font-[family-name:var(--font-mono)] uppercase bg-[#f7f9fb]">
-                    <th className="text-left px-4 py-3">Nama</th>
-                    <th className="text-left px-4 py-3">Kelas</th>
-                    <th className="text-left px-4 py-3">Partikel</th>
-                    <th className="text-left px-4 py-3">Waktu</th>
-                    <th className="px-4 py-3"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map(row => (
-                    <tr key={row._id}
-                      className={`border-b border-[#f2f4f6] hover:bg-[#f7f9fb] cursor-pointer transition-colors ${selected?._id === row._id ? 'bg-[#f2f4f6]' : ''}`}
-                      onClick={() => setSelected(row)}>
-                      <td className="px-4 py-3 font-semibold text-[#191c1e]">{row.studentName}</td>
-                      <td className="px-4 py-3 text-[#3e4850]">{row.studentClass}</td>
-                      <td className="px-4 py-3 font-[family-name:var(--font-mono)] text-[#ba1a1a] font-bold">{row.totalParticles.toLocaleString('id-ID')}</td>
-                      <td className="px-4 py-3 text-[#6e7881] text-xs">
-                        {new Date(row.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                      </td>
-                      <td className="px-4 py-3 text-[#006591] text-xs font-semibold">Lihat →</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-
-          {/* Detail panel */}
-          {selected && (
-            <div className="lg:w-96 bg-white border border-[#bec8d2] rounded-2xl p-5 overflow-y-auto max-h-[600px] shadow-sm">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="font-[family-name:var(--font-outfit)] font-bold text-lg text-[#191c1e]">{selected.studentName}</h3>
-                  <p className="text-[#3e4850] text-sm">{selected.studentClass}</p>
+        <div className="p-8 max-w-[1200px] w-full mx-auto flex-1 flex flex-col">
+          
+          {/* TAB: REKAP PENILAIAN */}
+          {activeTab === 'rekap' && (
+            <div className="flex-1 flex flex-col animate-in fade-in duration-300">
+              
+              {/* Minimal Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="bg-white rounded-xl p-5 border border-[#006591]/10 shadow-[0_2px_8px_rgba(0,101,145,0.04)] flex flex-col justify-between relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-blue-400"></div>
+                  <p className="text-sm text-slate-500 mb-2 pl-2">Total Submit</p>
+                  <p className="text-3xl font-[family-name:var(--font-outfit)] font-medium text-slate-800 pl-2">{filtered.length}</p>
                 </div>
-                <button onClick={() => setSelected(null)} className="text-[#6e7881] hover:text-[#3e4850] transition-colors">
-                  <span className="material-symbols-outlined">close</span>
+                <div className="bg-white rounded-xl p-5 border border-[#006591]/10 shadow-[0_2px_8px_rgba(0,101,145,0.04)] flex flex-col justify-between relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-red-400"></div>
+                  <p className="text-sm text-slate-500 mb-2 pl-2">Rata-rata Partikel</p>
+                  <p className="text-3xl font-[family-name:var(--font-outfit)] font-medium text-slate-800 pl-2">{avgParticles.toLocaleString('id-ID')}</p>
+                </div>
+                <div className="bg-white rounded-xl p-5 border border-[#006591]/10 shadow-[0_2px_8px_rgba(0,101,145,0.04)] flex flex-col justify-between relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-orange-400"></div>
+                  <p className="text-sm text-slate-500 mb-2 pl-2">Organ Kritis</p>
+                  <p className="text-xl font-[family-name:var(--font-outfit)] font-medium text-slate-800 truncate pl-2">{topOrgan}</p>
+                  <p className="text-xs text-slate-400 mt-1 pl-2">{topOrgan !== '-' ? `${organCounts[topOrgan]} siswa` : '-'}</p>
+                </div>
+                <div className="bg-white rounded-xl p-5 border border-[#006591]/10 shadow-[0_2px_8px_rgba(0,101,145,0.04)] flex flex-col justify-between relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
+                  <p className="text-sm text-slate-500 mb-2 pl-2">Siswa Terdaftar</p>
+                  <p className="text-3xl font-[family-name:var(--font-outfit)] font-medium text-slate-800 pl-2">{registeredStudents.length}</p>
+                </div>
+              </div>
+
+              {/* Class Filter */}
+              <div className="flex items-center gap-2 mb-6">
+                <span className="text-sm text-slate-500 mr-2">Filter Kelas:</span>
+                <button onClick={() => setFilterClass('')}
+                  className={`px-4 py-1.5 rounded-full text-sm transition-colors border ${!filterClass ? 'bg-[#006591] text-white border-[#006591]' : 'bg-white border-slate-200 text-slate-600 hover:border-[#006591]/50 hover:text-[#006591]'}`}>
+                  Semua
                 </button>
+                {classes.map(c => (
+                  <button key={c} onClick={() => setFilterClass(c)}
+                    className={`px-4 py-1.5 rounded-full text-sm transition-colors border ${filterClass === c ? 'bg-[#006591] text-white border-[#006591]' : 'bg-white border-slate-200 text-slate-600 hover:border-[#006591]/50 hover:text-[#006591]'}`}>
+                    {c}
+                  </button>
+                ))}
               </div>
 
-              <div className="flex gap-3 mb-5">
-                <div className="bg-[#f7f9fb] border border-[#bec8d2] rounded-xl p-3 flex-1 text-center">
-                  <p className="font-[family-name:var(--font-mono)] text-xl font-bold text-[#ba1a1a]">{selected.totalParticles.toLocaleString('id-ID')}</p>
-                  <p className="text-[#6e7881] text-xs">partikel</p>
+              {/* Layout for Table and Detail Panel */}
+              <div className="flex gap-6 relative flex-1 min-h-[500px] overflow-hidden">
+                
+                {/* Main Table */}
+                <div className={`flex-1 transition-all duration-500 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col overflow-hidden ${selected ? 'mr-[400px]' : ''}`}>
+                  {loading ? (
+                    <div className="flex-1 flex flex-col items-center justify-center text-slate-400 gap-2">
+                       <span className="material-symbols-outlined animate-spin text-2xl text-[#006591]">sync</span>
+                       Loading data...
+                    </div>
+                  ) : filtered.length === 0 ? (
+                    <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
+                      Belum ada data penilaian tersedia.
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto flex-1">
+                      <table className="w-full text-sm text-left">
+                        <thead className="bg-[#FAFAFA] border-b border-slate-200 text-slate-500">
+                          <tr>
+                            <th className="px-6 py-4 font-medium">Nama Siswa</th>
+                            <th className="px-6 py-4 font-medium">Kelas</th>
+                            <th className="px-6 py-4 font-medium">Partikel</th>
+                            <th className="px-6 py-4 font-medium">Waktu Submit</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {filtered.map(row => (
+                            <tr key={row._id}
+                              className={`cursor-pointer transition-colors ${selected?._id === row._id ? 'bg-[#006591]/5' : 'hover:bg-slate-50/70'}`}
+                              onClick={() => setSelected(row)}>
+                              <td className="px-6 py-4 font-medium text-slate-800">{row.studentName}</td>
+                              <td className="px-6 py-4">
+                                <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-md border border-slate-200/60">{row.studentClass}</span>
+                              </td>
+                              <td className="px-6 py-4 text-slate-600">{row.totalParticles.toLocaleString('id-ID')}</td>
+                              <td className="px-6 py-4 text-slate-400 text-xs">
+                                {new Date(row.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
-                <div className="bg-[#f7f9fb] border border-[#bec8d2] rounded-xl p-3 flex-1 text-center">
-                  <p className="font-semibold text-sm text-[#785a00]">{parseOrganLabel(selected.mostDangerousOrgan)}</p>
-                  <p className="text-[#6e7881] text-xs">organ kritis</p>
+
+                {/* Minimal Sliding Panel with Subtle Blue */}
+                <div className={`
+                  absolute right-0 top-0 bottom-0 w-[380px] 
+                  bg-white border border-[#006591]/20 rounded-xl shadow-xl 
+                  flex flex-col transform transition-transform duration-500 ease-in-out z-10
+                  ${selected ? 'translate-x-0' : 'translate-x-[110%]'}
+                `}>
+                  {selected && (
+                    <>
+                      <div className="p-6 border-b border-[#006591]/10 flex justify-between items-start bg-[#006591]/[0.02] rounded-t-xl">
+                        <div>
+                          <h3 className="font-medium text-lg text-[#006591]">{selected.studentName}</h3>
+                          <p className="text-sm text-slate-500 mt-1">{selected.studentClass}</p>
+                        </div>
+                        <button onClick={() => setSelected(null)} className="text-slate-400 hover:text-slate-800 transition-colors">
+                          <span className="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+
+                      <div className="p-6 overflow-y-auto flex-1 space-y-6">
+                        <div className="flex gap-4">
+                          <div className="flex-1 bg-red-50/50 border border-red-100 rounded-lg p-3">
+                            <p className="text-[10px] uppercase tracking-wider text-red-400 mb-1">Total Partikel</p>
+                            <p className="text-lg font-medium text-red-600">{selected.totalParticles.toLocaleString('id-ID')}</p>
+                          </div>
+                          <div className="flex-1 bg-orange-50/50 border border-orange-100 rounded-lg p-3">
+                            <p className="text-[10px] uppercase tracking-wider text-orange-400 mb-1">Organ Kritis</p>
+                            <p className="text-base font-medium text-orange-600 truncate" title={parseOrganLabel(selected.mostDangerousOrgan)}>
+                              {parseOrganLabel(selected.mostDangerousOrgan)}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="bg-[#006591]/5 border border-[#006591]/10 rounded-lg p-3 flex justify-between items-center">
+                          <p className="text-xs font-medium text-[#006591]">Kuis Pilihan Ganda</p>
+                          <div className="flex gap-3 text-xs">
+                            <span className="text-green-600 font-bold flex items-center gap-1"><span className="material-symbols-outlined text-[14px]">check_circle</span> {selected.quizCorrect || 0} Benar</span>
+                            <span className="text-red-500 font-bold flex items-center gap-1"><span className="material-symbols-outlined text-[14px]">cancel</span> {selected.quizWrong || 0} Salah</span>
+                          </div>
+                        </div>
+                        
+                        <hr className="border-slate-100" />
+
+                        <div className="space-y-4">
+                          {[
+                            { l: 'Investigasi Tahap 1', t: selected.lkpd1 },
+                            { l: 'Analisis Pelapukan', t: selected.lkpd2 },
+                            { l: 'Dampak Rantai Makanan', t: selected.lkpd3q1 },
+                            { l: 'Refleksi Konsumsi', t: selected.lkpd3q2 },
+                            { l: 'Analisis Anatomi', t: selected.lkpd4 },
+                            { l: 'Sumpah Komitmen', t: selected.commitment },
+                          ].map((item, i) => (
+                            <div key={i}>
+                              <p className="text-[11px] font-medium text-[#006591]/70 mb-1.5 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#006591]/40"></span>
+                                {item.l}
+                              </p>
+                              <p className="text-sm text-slate-700 leading-relaxed bg-[#FAFAFA] border border-slate-100 rounded-lg p-3">
+                                {item.t || <span className="text-slate-400 italic">Belum diisi</span>}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* TAB: MANAJEMEN SISWA */}
+          {activeTab === 'manajemen' && (
+            <div className="animate-in fade-in duration-300 grid grid-cols-1 md:grid-cols-[350px_1fr] gap-8">
+              
+              {/* Minimal Forms */}
+              <div className="space-y-6">
+                <div className="bg-white border border-[#006591]/10 rounded-xl p-6 shadow-sm">
+                  <h3 className="font-medium text-lg text-[#006591] mb-1">Pendaftaran Manual</h3>
+                  <p className="text-xs text-slate-500 mb-5">Tambahkan siswa satu per satu.</p>
+                  
+                  <form onSubmit={handleRegisterStudent} className="space-y-4">
+                    <input value={studentForm.name} onChange={e => setStudentForm(s => ({ ...s, name: e.target.value }))}
+                      className="w-full bg-[#FAFAFA] border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006591] focus:ring-1 focus:ring-[#006591] transition-colors" placeholder="Nama Lengkap" />
+                    <input value={studentForm.className} onChange={e => setStudentForm(s => ({ ...s, className: e.target.value }))}
+                      className="w-full bg-[#FAFAFA] border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006591] focus:ring-1 focus:ring-[#006591] transition-colors" placeholder="Kelas (Cth: VIII-A)" />
+                    <input value={studentForm.email} onChange={e => setStudentForm(s => ({ ...s, email: e.target.value }))} type="email"
+                      className="w-full bg-[#FAFAFA] border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006591] focus:ring-1 focus:ring-[#006591] transition-colors" placeholder="Email (opsional: dummy@mail.com)" />
+                    <input value={studentForm.password} onChange={e => setStudentForm(s => ({ ...s, password: e.target.value }))} type="text"
+                      className="w-full bg-[#FAFAFA] border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006591] focus:ring-1 focus:ring-[#006591] transition-colors" placeholder="Password Login" />
+
+                    {studentMessage && <p className="text-xs text-[#006591] bg-[#006591]/10 p-2 rounded-md">{studentMessage}</p>}
+
+                    <button type="submit" className="w-full bg-[#006591] hover:bg-[#004c6e] text-white font-medium py-2.5 rounded-lg text-sm transition-colors shadow-sm">
+                      Simpan Akun
+                    </button>
+                  </form>
+                </div>
+
+                <div className="bg-[#006591]/[0.03] border border-[#006591]/20 rounded-xl p-6 shadow-sm">
+                  <h3 className="font-medium text-lg text-[#006591] mb-2">Import Data Massal</h3>
+                  <p className="text-slate-500 text-xs mb-4 leading-relaxed">Punya daftar nama banyak? Gunakan file CSV untuk mendaftarkan satu kelas sekaligus secara otomatis.</p>
+                  <button onClick={() => setShowImport(true)}
+                    className="w-full bg-white border border-[#006591]/30 hover:border-[#006591] hover:text-[#006591] text-slate-700 font-medium py-2.5 rounded-lg text-sm flex items-center justify-center gap-2 transition-colors">
+                    <span className="material-symbols-outlined text-[18px]">upload_file</span>
+                    Upload CSV
+                  </button>
                 </div>
               </div>
 
-              {[
-                { l: 'LKPD 1', t: selected.lkpd1 },
-                { l: 'LKPD 2', t: selected.lkpd2 },
-                { l: 'LKPD 3 Q1', t: selected.lkpd3q1 },
-                { l: 'LKPD 3 Q2', t: selected.lkpd3q2 },
-                { l: 'LKPD 4 (HOTS)', t: selected.lkpd4 },
-                { l: 'Komitmen', t: selected.commitment },
-              ].map(item => (
-                <div key={item.l} className="mb-4">
-                  <p className="text-xs font-[family-name:var(--font-mono)] text-[#006591] mb-1 font-semibold">{item.l}</p>
-                  <p className="text-[#3e4850] text-sm bg-[#f7f9fb] border border-[#bec8d2] rounded-xl p-3 leading-relaxed">
-                    {item.t || <span className="text-[#ba1a1a] italic">Belum diisi</span>}
-                  </p>
+              {/* Minimal Table */}
+              <div className="bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col overflow-hidden h-full">
+                <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                  <h3 className="font-medium text-slate-800">Daftar Akun Siswa</h3>
+                  <span className="text-xs font-medium text-[#006591] bg-[#006591]/10 px-2.5 py-1 rounded-full">{registeredStudents.length} Akun</span>
                 </div>
-              ))}
+                
+                {registeredStudents.length === 0 ? (
+                  <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
+                    Belum ada siswa terdaftar.
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto flex-1">
+                    <table className="w-full text-sm text-left">
+                      <thead className="bg-[#FAFAFA] border-b border-slate-200 text-slate-500">
+                        <tr>
+                          <th className="px-6 py-4 font-medium">Nama</th>
+                          <th className="px-6 py-4 font-medium">Kelas</th>
+                          <th className="px-6 py-4 font-medium">Email</th>
+                          <th className="px-6 py-4 font-medium">Password</th>
+                          <th className="px-6 py-4"></th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {registeredStudents.map(student => (
+                          <tr key={student.id} className="hover:bg-slate-50/50 transition-colors group">
+                            <td className="px-6 py-4 font-medium text-slate-800">{student.name}</td>
+                            <td className="px-6 py-4 text-slate-500">{student.className || '-'}</td>
+                            <td className="px-6 py-4 text-[#006591]/80">{student.email}</td>
+                            <td className="px-6 py-4 font-mono text-slate-400 text-xs">{student.password}</td>
+                            <td className="px-6 py-4 text-right">
+                              <button onClick={() => deleteStudent(student.id)} 
+                                className="text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+                                <span className="material-symbols-outlined text-[18px]">delete</span>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
             </div>
           )}
         </div>
-      </div>
+      </main>
 
       {/* Import CSV Modal */}
       {showImport && (

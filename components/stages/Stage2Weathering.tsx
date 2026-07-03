@@ -23,33 +23,33 @@ const PLASTIC_OBJECTS = [
 const EVALUATION_QUESTIONS = [
   {
     id: 1,
-    text: "Berdasarkan eksperimen tadi, proses utama apa yang menyebabkan plastik akhirnya hancur berkeping-keping?",
+    text: "Dari percobaan tadi, apa sih yang bikin benda plastiknya jadi rapuh dan hancur berkeping-keping di lautan?",
     options: [
-      { id: 'a', text: 'Fotodegradasi (UV) + Abrasi Mekanis (Ombak)' },
-      { id: 'b', text: 'Pembakaran oleh panas + Biodegradasi bakteri' },
-      { id: 'c', text: 'Hidrolisis air hujan + Oksidasi udara' }
+      { id: 'a', text: 'Panas terik matahari (Sinar UV) dan hantaman keras ombak laut' },
+      { id: 'b', text: 'Dimakan oleh ikan-ikan kecil dan hewan laut lainnya' },
+      { id: 'c', text: 'Membeku karena suhu air laut yang sangat dingin' }
     ],
     correct: 'a'
   },
   {
     id: 2,
-    text: "Mengapa alat 'Bakteri' gagal menghancurkan plastik pada simulasi tadi?",
+    text: "Waktu kita mencoba alat 'Bakteri', kenapa kumannya tidak bisa menghancurkan atau memakan plastik tersebut?",
     options: [
-      { id: 'a', text: 'Karena bakteri laut tidak bisa menempel pada permukaan yang licin' },
-      { id: 'b', text: 'Karena plastik adalah polimer buatan (sintetis) yang tidak dikenali enzim bakteri alami' },
-      { id: 'c', text: 'Karena air laut terlalu asin sehingga bakteri mati' }
+      { id: 'a', text: 'Karena plastiknya terlalu licin untuk ditempeli bakteri' },
+      { id: 'b', text: 'Karena plastik itu buatan manusia (sintetis), bukan makanan alami yang dikenal bakteri' },
+      { id: 'c', text: 'Karena bakteri di laut tidak bisa hidup di air yang terlalu asin' }
     ],
     correct: 'b'
   },
   {
     id: 3,
-    text: "Setelah hancur berkeping-keping, disebut apakah serpihan plastik tak kasat mata tersebut?",
+    text: "Setelah plastiknya hancur oleh ombak dan matahari menjadi serpihan yang sangat kecil, disebut apakah potongan tersebut?",
     options: [
-      { id: 'a', text: 'Bioplastik' },
-      { id: 'b', text: 'Mikroplastik' },
-      { id: 'c', text: 'Makroplastik' }
+      { id: 'a', text: 'Bioplastik (plastik ramah lingkungan yang bisa jadi kompos)' },
+      { id: 'b', text: 'Mikroplastik (potongan plastik super kecil yang berbahaya jika termakan)' },
+      { id: 'c', text: 'Makroplastik (sampah plastik ukuran besar yang masih utuh)' }
     ],
-    correct: 'c'
+    correct: 'b'
   }
 ];
 
@@ -145,6 +145,7 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
   const [bottleIntegrity, setBottleIntegrity] = useState(100);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'info' | 'error' | 'success'>('info');
+  const [activeEffect, setActiveEffect] = useState<'uv' | 'wave' | 'bacteria' | null>(null);
   
   // State for evaluation questions
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -170,12 +171,69 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
     setMessage('');
   };
 
+  const playVoiceInstruction = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      const text = "Selamat datang di laboratorium virtual. Silakan seret alat panas matahari dan ombak laut ke arah objek plastik di tengah untuk melihat proses pelapukan mikroplastik.";
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 0.95;
+      utterance.pitch = 1.1;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  const playSound = (type: 'uv' | 'wave' | 'error' | 'break') => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      if (type === 'uv') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.start(); osc.stop(ctx.currentTime + 0.5);
+      } else if (type === 'wave') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(150, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.8);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+        osc.start(); osc.stop(ctx.currentTime + 0.8);
+      } else if (type === 'error') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, ctx.currentTime);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc.start(); osc.stop(ctx.currentTime + 0.3);
+      } else if (type === 'break') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(100, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.start(); osc.stop(ctx.currentTime + 0.5);
+      }
+    } catch (e) { console.error('Audio play failed', e); }
+  };
+
   const handleDragEnd = (tool: 'uv' | 'wave' | 'bacteria', info: PanInfo) => {
     if (info.offset.y > -20) return;
 
     if (tool === 'bacteria') {
+      setActiveEffect('bacteria');
+      playSound('error');
       showMessage('❌ Bakteri: "Plastik ini sintetis, aku tidak bisa memakannya!"', 'error');
     } else if (tool === 'uv') {
+      setActiveEffect('uv');
+      playSound('uv');
       if (uvExposure < 100) {
         setUvExposure(prev => Math.min(100, prev + 35));
         showMessage('☀️ Sinar UV memutus ikatan polimer, plastik mulai melemah.', 'info');
@@ -183,6 +241,8 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
         showMessage('Objek sudah mencapai batas kerapuhan dari UV!', 'info');
       }
     } else if (tool === 'wave') {
+      setActiveEffect('wave');
+      playSound('wave');
       if (uvExposure < 50) {
         showMessage('🌊 Ombak menerjang, tapi plastiknya masih terlalu kuat!', 'error');
       } else {
@@ -195,11 +255,14 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
         });
       }
     }
+    
+    setTimeout(() => setActiveEffect(null), 1200);
   };
 
   const triggerBreak = useCallback(() => {
     if (phaseRef.current === 'breaking' || phaseRef.current === 'complete') return;
     setLabPhase('breaking');
+    playSound('break');
     showMessage('💥 Hancur menjadi jutaan mikroplastik!', 'success');
     const colors = ['#90caf9', '#80cbc4', '#ce93d8', '#fff176', '#ef9a9a', '#a5d6a7'];
     particlesRef.current = Array.from({ length: 150 }, () => ({
@@ -307,7 +370,10 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
             {/* Button Lanjut */}
             <div className="flex justify-center mt-4 mb-20">
               <motion.button
-                onClick={() => setHasWatched(true)}
+                onClick={() => {
+                  setHasWatched(true);
+                  playVoiceInstruction();
+                }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="relative inline-flex items-center justify-center gap-2 px-10 py-5 font-extrabold text-[#3b2313] text-xl font-[family-name:var(--font-outfit)] transition-all"
@@ -336,35 +402,51 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
             className="w-full flex flex-col gap-6"
           >
             {/* Object Selection Tabs (Soft, Not Boxy) */}
-            <div className="flex flex-wrap gap-4 justify-center">
+            <div className="flex flex-wrap gap-2 md:gap-4 justify-center">
               {PLASTIC_OBJECTS.map(item => (
                 <button
                   key={item.id}
                   onClick={() => handleSelectObject(item.id)}
-                  className={`flex flex-col items-center gap-1 px-6 py-3 rounded-[24px] transition-all border-2 ${
+                  className={`flex flex-col items-center gap-1 px-3 py-2 md:px-6 md:py-3 rounded-[20px] md:rounded-[24px] transition-all border-2 ${
                     selectedObject === item.id 
                       ? 'bg-white border-[#006591] text-[#006591] shadow-lg scale-110 z-10' 
                       : 'bg-white/60 border-transparent text-[#6e7881] hover:bg-white/90 hover:scale-105'
                   }`}
                 >
-                  <span className="text-3xl">{item.emoji}</span>
-                  <span className="text-sm font-extrabold font-[family-name:var(--font-outfit)]">{item.label}</span>
+                  <span className="text-2xl md:text-3xl">{item.emoji}</span>
+                  <span className="text-[10px] md:text-sm font-extrabold font-[family-name:var(--font-outfit)]">{item.label}</span>
                 </button>
               ))}
             </div>
 
             {/* The Lab Area - Soft Water Gradient (Fixed Height to not jump around) */}
-            <div className="w-full h-[500px] rounded-[40px] overflow-hidden shadow-xl relative flex flex-col border-[4px] border-white bg-gradient-to-b from-[#e4f1f9] to-[#c9e6ff] transition-all duration-700">
+            <div className="w-full h-[500px] rounded-[40px] overflow-hidden shadow-xl relative flex flex-col border-[4px] border-white bg-gradient-to-b from-[#87CEEB] to-[#004c6e] transition-all duration-700">
               
-              {/* Subtle water waves decoration */}
-              <div className="absolute inset-0 pointer-events-none opacity-50">
-                {[...Array(3)].map((_, i) => (
+              {/* Gelombang Laut Berjalan */}
+              <div className="absolute inset-0 pointer-events-none opacity-40">
+                {[...Array(4)].map((_, i) => (
                   <motion.div
                     key={i}
-                    className="absolute bottom-0 left-0 right-0 h-48"
-                    style={{ background: `linear-gradient(to top, #ffffff, transparent)` }}
-                    animate={{ y: [0, -15, 0] }}
-                    transition={{ duration: 6 + i, repeat: Infinity, ease: 'easeInOut', delay: i }}
+                    className="absolute bottom-0 left-[-50%] right-[-50%] h-64 opacity-50"
+                    style={{ 
+                      background: `radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, transparent 70%)`,
+                      borderRadius: '50% 50% 0 0'
+                    }}
+                    animate={{ x: [0, 100, 0], y: [0, -15, 0] }}
+                    transition={{ duration: 8 + i*2, repeat: Infinity, ease: 'easeInOut', delay: i }}
+                  />
+                ))}
+              </div>
+
+              {/* Gelembung Air Bawah Laut */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                {[...Array(12)].map((_, i) => (
+                  <motion.div
+                    key={`bubble-${i}`}
+                    className="absolute bottom-[-20px] rounded-full bg-white/30 border border-white/50 shadow-sm"
+                    style={{ left: `${Math.random() * 100}%`, width: Math.random() * 15 + 5, height: Math.random() * 15 + 5 }}
+                    animate={{ y: -600, x: Math.random() * 60 - 30 }}
+                    transition={{ duration: Math.random() * 4 + 3, repeat: Infinity, ease: 'linear', delay: Math.random() * 3 }}
                   />
                 ))}
               </div>
@@ -391,20 +473,20 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
               </AnimatePresence>
 
               {/* HUD Indicators */}
-              <div className="absolute top-8 right-8 flex flex-col gap-3 z-20">
-                <div className="bg-white/70 backdrop-blur-sm border-2 border-white rounded-2xl px-5 py-3 w-40 shadow-sm">
-                  <p className="text-[#006591] text-xs font-bold uppercase tracking-widest mb-2 flex justify-between">
+              <div className="absolute top-4 right-4 md:top-8 md:right-8 flex flex-col gap-2 md:gap-3 z-20">
+                <div className="bg-white/70 backdrop-blur-sm border-2 border-white rounded-xl md:rounded-2xl px-3 py-2 md:px-5 md:py-3 w-28 md:w-40 shadow-sm">
+                  <p className="text-[#006591] text-[10px] md:text-xs font-bold uppercase tracking-widest mb-1 md:mb-2 flex justify-between">
                     <span>Sinar UV</span> <span>{uvExposure}%</span>
                   </p>
-                  <div className="w-full bg-[#c9e6ff] h-3 rounded-full overflow-hidden shadow-inner">
+                  <div className="w-full bg-[#c9e6ff] h-2 md:h-3 rounded-full overflow-hidden shadow-inner">
                     <motion.div className="h-full bg-[#f0a345]" animate={{ width: `${uvExposure}%` }} />
                   </div>
                 </div>
-                <div className="bg-white/70 backdrop-blur-sm border-2 border-white rounded-2xl px-5 py-3 w-40 shadow-sm">
-                  <p className="text-[#006e2f] text-xs font-bold uppercase tracking-widest mb-2 flex justify-between">
+                <div className="bg-white/70 backdrop-blur-sm border-2 border-white rounded-xl md:rounded-2xl px-3 py-2 md:px-5 md:py-3 w-28 md:w-40 shadow-sm">
+                  <p className="text-[#006e2f] text-[10px] md:text-xs font-bold uppercase tracking-widest mb-1 md:mb-2 flex justify-between">
                     <span>Fisik</span> <span>{bottleIntegrity}%</span>
                   </p>
-                  <div className="w-full bg-[#c9e6ff] h-3 rounded-full overflow-hidden shadow-inner">
+                  <div className="w-full bg-[#c9e6ff] h-2 md:h-3 rounded-full overflow-hidden shadow-inner">
                     <motion.div className="h-full bg-[#6bff8f]" animate={{ width: `${bottleIntegrity}%` }} />
                   </div>
                 </div>
@@ -412,6 +494,45 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
 
               {/* Canvas Area (Central Focus) */}
               <div className="flex-1 relative flex items-center justify-center">
+                
+                {/* Visual Effects Render */}
+                {activeEffect === 'uv' && (
+                  <motion.div 
+                    initial={{ scale: 0, opacity: 1, rotate: 0 }} 
+                    animate={{ scale: 4, opacity: 0, rotate: 90 }} 
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    className="absolute w-40 h-40 bg-gradient-to-tr from-[#ffeb3b] to-[#ff9800] rounded-full mix-blend-screen blur-xl pointer-events-none z-10"
+                  />
+                )}
+                
+                {activeEffect === 'wave' && (
+                  <motion.div 
+                    initial={{ scale: 0.5, opacity: 1, y: 50 }} 
+                    animate={{ scale: 2.5, opacity: 0, y: -50 }} 
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="absolute w-full h-full flex items-center justify-center pointer-events-none z-10"
+                  >
+                    <div className="w-48 h-48 border-[12px] border-white/60 rounded-full blur-md" />
+                    <div className="absolute w-32 h-32 border-[8px] border-[#c9e6ff]/80 rounded-full blur-sm" />
+                  </motion.div>
+                )}
+
+                {activeEffect === 'bacteria' && (
+                  <motion.div className="absolute w-full h-full flex items-center justify-center pointer-events-none z-10">
+                     {[...Array(6)].map((_, i) => (
+                       <motion.div 
+                         key={`bac-${i}`} 
+                         initial={{ opacity: 1, y: 0, x: 0, scale: 1 }} 
+                         animate={{ opacity: 0, y: -100, x: (Math.random()-0.5)*150, scale: 0.5 }} 
+                         transition={{ duration: 1.2, ease: "easeOut" }} 
+                         className="absolute text-4xl"
+                       >
+                         🦠
+                       </motion.div>
+                     ))}
+                  </motion.div>
+                )}
+
                 {labPhase !== 'complete' && (
                   <motion.div animate={labPhase === 'lab' ? { y: [0, -15, 0] } : {}} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
                     <PlasticSVG objectId={selectedObject} uvExposure={uvExposure} breaking={labPhase === 'breaking'} />
@@ -432,7 +553,7 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
                 {labPhase === 'lab' && (
                   <motion.div 
                     initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 50, opacity: 0 }}
-                    className="relative z-20 p-6 flex justify-center gap-8 bg-white/10 backdrop-blur-sm border-t border-white/40"
+                    className="relative z-20 p-3 md:p-6 flex justify-center gap-3 md:gap-8 bg-white/10 backdrop-blur-sm border-t border-white/40"
                   >
                     <ToolTile id="uv" icon="wb_sunny" label="Panas Matahari" desc="(UV)" color="from-[#fff3d4] to-[#fde08b]" textColor="text-[#b27b00]" onDragEnd={handleDragEnd} />
                     <ToolTile id="wave" icon="waves" label="Abrasi Pantai" desc="(Ombak)" color="from-[#e4f1f9] to-[#c9e6ff]" textColor="text-[#006591]" onDragEnd={handleDragEnd} />
@@ -538,12 +659,12 @@ function ToolTile({ id, icon, label, desc, color, textColor, onDragEnd }: { id: 
       drag dragSnapToOrigin
       onDragEnd={(_, info) => onDragEnd(id, info)}
       whileDrag={{ scale: 1.15, zIndex: 50, rotate: id === 'uv' ? -5 : 5 }}
-      className={`w-32 h-32 rounded-3xl flex flex-col items-center justify-center gap-2 cursor-grab active:cursor-grabbing shadow-sm bg-gradient-to-br ${color} border-[3px] border-white hover:shadow-lg transition-shadow`}
+      className={`w-24 h-24 md:w-32 md:h-32 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-1 md:gap-2 cursor-grab active:cursor-grabbing shadow-sm bg-gradient-to-br ${color} border-2 md:border-[3px] border-white hover:shadow-lg transition-shadow`}
     >
-      <span className={`material-symbols-outlined ${textColor} text-4xl`}>{icon}</span>
-      <div className="text-center">
-        <div className={`text-xs font-extrabold ${textColor}`}>{label}</div>
-        <div className={`text-[10px] font-bold ${textColor} opacity-70`}>{desc}</div>
+      <span className={`material-symbols-outlined ${textColor} text-3xl md:text-4xl`}>{icon}</span>
+      <div className="text-center px-1">
+        <div className={`text-[10px] md:text-xs font-extrabold ${textColor} leading-tight`}>{label}</div>
+        <div className={`text-[8px] md:text-[10px] font-bold ${textColor} opacity-70`}>{desc}</div>
       </div>
     </motion.div>
   );

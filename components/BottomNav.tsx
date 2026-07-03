@@ -9,7 +9,7 @@ const NAV_ITEMS: { href: string; label: string; icon: string; match?: string }[]
   { href: '/materi',             label: 'Materi',     icon: 'menu_book' },
   { href: '/perjalanan-belajar', label: 'Peta',       icon: 'map' },
   { href: '/journey',            label: 'Perjalanan', icon: 'hiking', match: '/journey' },
-  { href: '/e-lkpd',             label: 'Modul',      icon: 'assignment' },
+  { href: '/e-lkpd',             label: 'Jurnal Misi',icon: 'assignment' },
 ];
 
 export default function BottomNav() {

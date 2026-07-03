@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { stages, getStageById, type Stage } from '@/lib/stagesData';
+import { useJourneyStore } from '@/lib/journeyStore';
 
 // Per-stage: background environment, centered AR object, extra left/right panel content
 const stageConfig: Record<number, {
@@ -49,6 +50,7 @@ export default function TahapPage() {
   const router = useRouter();
   const stageId = Number(params.tahap);
   const stage = getStageById(stageId);
+  const { incrementCorrect, incrementWrong } = useJourneyStore();
 
   const [quizState, setQuizState] = useState<'idle' | 'answered' | 'correct' | 'wrong'>('idle');
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -86,6 +88,7 @@ export default function TahapPage() {
 
     if (option.isCorrect) {
       setQuizState('correct');
+      incrementCorrect();
       setTimeout(() => {
         setQuizVisible(false);
         setCompleted(true);
@@ -98,6 +101,7 @@ export default function TahapPage() {
       }, 1200);
     } else {
       setQuizState('wrong');
+      incrementWrong();
       setTimeout(() => {
         setQuizState('idle');
         setSelectedOption(null);
