@@ -144,7 +144,7 @@ export default function Navbar() {
           <svg viewBox="0 0 1500 325" preserveAspectRatio="xMidYMid meet" className="absolute inset-0 w-full h-full overflow-visible pointer-events-none">
             {navLinks.map((link, idx) => {
               const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.match ?? link.href);
-              const cx = [420, 600, 809, 1020, 1203][idx] ?? 809;
+              const cx = [420, 620, 790, 990, 1203][idx] ?? 809;
               return (
                 <text
                   key={link.href}

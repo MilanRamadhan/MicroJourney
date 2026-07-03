@@ -164,7 +164,7 @@ export default function Tahap1() {
   }
 
   return (
-    <div className="relative w-full h-[calc(100vh-88px)] bg-black overflow-hidden">
+    <div className="relative w-full overflow-hidden min-h-[540px] h-[100vh] max-h-[820px] -mt-14 md:-mt-[112px]">
       <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" muted playsInline />
       <canvas ref={overlayRef} className="absolute inset-0 w-full h-full pointer-events-none" />
       {phase === 'scanning' && <div className="ar-scanline" />}

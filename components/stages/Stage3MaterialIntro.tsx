@@ -208,9 +208,8 @@ export default function Stage3MaterialIntro({ onComplete }: { onComplete: () => 
   // We fill exactly the remaining viewport height with overflow-hidden.
   return (
     <div
-      className="flex flex-col overflow-hidden relative font-[family-name:var(--font-inter)]"
+      className="flex flex-col overflow-hidden relative font-[family-name:var(--font-inter)] w-full min-h-[540px] h-[100vh] max-h-[820px] -mt-14 md:-mt-[112px] pt-14 md:pt-[112px]"
       style={{
-        height: 'calc(100vh - 7rem)',  // 7rem = h-28 (journey navbar)
         background: 'linear-gradient(160deg, #083b54 0%, #006591 45%, #004c6e 100%)',
       }}
     >
@@ -219,6 +218,9 @@ export default function Stage3MaterialIntro({ onComplete }: { onComplete: () => 
         style={{ background: '#6bff8f' }} />
       <div className="absolute bottom-[-80px] left-[-60px] w-72 h-72 rounded-full blur-3xl opacity-10 pointer-events-none"
         style={{ background: '#f0a345' }} />
+      {/* Bottom Shadow Overlay to blend with layout background */}
+      <div className="absolute inset-x-0 bottom-0 h-24 md:h-36 pointer-events-none z-0"
+        style={{ background: "linear-gradient(to bottom, rgba(247,249,251,0) 0%, rgba(247,249,251,0.15) 30%, rgba(247,249,251,0.5) 65%, rgba(247,249,251,0.85) 85%, #f7f9fb 100%)" }} />
       {/* Particles */}
       {Array.from({ length: 12 }).map((_, i) => (
         <motion.div key={i} className="absolute rounded-full pointer-events-none"
