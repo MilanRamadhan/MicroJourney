@@ -20,24 +20,26 @@ export default function Tahap2() {
   }
 
   return (
-    <div className="relative w-full min-h-[calc(100vh-88px)] overflow-hidden">
+    <div className="w-full">
       {/* Intro Phase (takes full screen with hero-bg) */}
       <AnimatePresence>
         {phase === 'intro' && (
-          <StageIntro
-            title="Pelapukan Plastik di Alam"
-            description="Satu botol plastik butuh 450 tahun untuk terurai. Tapi sebelum itu, ia hancur menjadi jutaan partikel mikro yang mencemari laut. Ikuti simulasi interaktifnya!"
-            icon="wb_sunny"
-            layout="split"
-            actionText="Mulai Simulasi"
-            onStart={() => setPhase('main')}
-          />
+          <div className="relative w-full overflow-hidden min-h-[540px] h-[100vh] max-h-[820px] -mt-14 md:-mt-[112px]">
+            <StageIntro
+              title="Pelapukan Plastik di Alam"
+              description="Satu botol plastik butuh 450 tahun untuk terurai. Tapi sebelum itu, ia hancur menjadi jutaan partikel mikro yang mencemari laut. Ikuti simulasi interaktifnya!"
+              icon="wb_sunny"
+              layout="split"
+              actionText="Mulai Simulasi"
+              onStart={() => setPhase('main')}
+            />
+          </div>
         )}
       </AnimatePresence>
 
       {/* Main Lab Phase (clean bg, no hero-bg) */}
       {phase === 'main' && (
-        <div className="px-4 py-4 bg-[#f7f9fb] min-h-[calc(100vh-88px)]">
+        <div className="relative px-4 py-4 bg-[#f7f9fb] min-h-[calc(100vh-88px)]">
           <Stage2Weathering
             onComplete={handleComplete}
             videoUrl={videoUrl}

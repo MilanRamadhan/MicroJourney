@@ -28,8 +28,17 @@ export default function StageIntro({
       exit={{ opacity: 0 }}
       className="absolute inset-0 z-40 bg-[url('/hero-bg.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center font-[family-name:var(--font-inter)] overflow-hidden"
     >
+      {/* Soften vividness + lift text contrast */}
+      <div className="absolute inset-0 bg-white/10" />
+      
+      {/* Shadow top */}
+      <div className="absolute inset-x-0 top-0 h-1/3 md:h-2/5 bg-gradient-to-b from-[#f7f9fb] to-transparent pointer-events-none z-10" />
+
       {/* Overlay Tipis agar teks bisa terbaca */}
-      <div className="absolute inset-0 bg-[#083b54]/60 mix-blend-multiply pointer-events-none" />
+      <div className="absolute inset-0 bg-[#083b54]/60 mix-blend-multiply pointer-events-none z-10" />
+
+      {/* Shadow bottom */}
+      <div className="absolute inset-x-0 bottom-0 h-15 sm:h-10 md:h-22 lg:h-30 pointer-events-none z-30" style={{ background: "linear-gradient(to bottom, rgba(247,249,251,0) 0%, rgba(247,249,251,0.5) 50%, #f7f9fb 86%)" }} />
 
       {/* Gelembung Animasi Bawah Air */}
       <motion.div 

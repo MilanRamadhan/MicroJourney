@@ -14,6 +14,14 @@ const FLOW_PARTICLES = Array.from({ length: 14 }, (_, i) => ({
   color: ['#ba1a1a','#006591','#c39400'][i%3],
 }));
 
+const HOTSPOTS: Record<string, { top: string; left: string; origin: string; scale: number }> = {
+  mouth: { top: '15%', left: '50%', origin: '50% 15%', scale: 2.5 },
+  stomach: { top: '45%', left: '55%', origin: '55% 45%', scale: 2.5 },
+  smallIntestine: { top: '58%', left: '50%', origin: '50% 58%', scale: 2.5 },
+  largeIntestine: { top: '55%', left: '50%', origin: '50% 55%', scale: 2.2 },
+  blood: { top: '35%', left: '48%', origin: '48% 35%', scale: 2.0 },
+};
+
 function HealthBar({ pct, color }: { pct: number; color: string }) {
   return (
     <div className="w-full bg-[#eceef0] rounded-full h-3 overflow-hidden">
@@ -194,60 +202,44 @@ export default function Tahap4() {
 
       {/* ── Organ interactive ── */}
       {phase === 'organs' && (
-        <div className="flex-grow flex flex-col lg:flex-row max-w-6xl mx-auto w-full px-4 py-6 gap-6 z-10">
+        <div className="flex-grow flex flex-col lg:flex-row max-w-[1400px] mx-auto w-full px-4 py-6 gap-6 z-10">
 
-          {/* Left: Organ selector */}
-          <div className="lg:w-72 flex-shrink-0">
-            <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] mb-3 text-center uppercase tracking-wider">Klik organ untuk investigasi</p>
+          {/* Column 1: Left Organ selector (Buttons) */}
+          <div className="lg:w-72 flex-shrink-0 flex flex-col">
+            <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] mb-3 text-center uppercase tracking-wider">Pilih Organ</p>
 
-            {/* Body with particle flow */}
-            <div className="relative bg-white border border-[#bec8d2] rounded-2xl overflow-hidden mx-auto shadow-md"
-              style={{ width: 250, minHeight: 480 }}>
-
-              {/* Particle flow overlay */}
-              <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {FLOW_PARTICLES.map(p => (
-                  <div key={p.id} className="absolute rounded-full"
-                    style={{ width:'6px', height:'6px', backgroundColor: p.color,
-                      left: p.left, opacity:0.5,
-                      animation:`flowDown ${p.dur} ${p.delay} linear infinite` }} />
-                ))}
-              </div>
-
-              {/* Organs as visual cards */}
-              <div className="relative z-10 flex flex-col items-center gap-3 p-4 py-5">
-                {ORGANS.map(organ => {
-                  const isClicked = clickedIds.has(organ.id);
-                  const isActive = activeOrgan?.id === organ.id;
-                  return (
-                    <button key={organ.id} onClick={() => handleOrganClick(organ)}
-                      className={`w-full rounded-xl p-3 border-2 transition-all duration-200 flex items-center gap-3 hover:scale-105 active:scale-95 ${
-                        isActive ? 'bg-[#ffdad6] border-[#ba1a1a] shadow-md'
-                        : isClicked ? 'bg-[#6bff8f]/20 border-[#006e2f]/40'
-                        : 'bg-[#f7f9fb] border-[#bec8d2] hover:border-[#ba1a1a]/40 hover:bg-[#ffdad6]/30'
-                      }`}>
-                      {/* Mini organ illustration */}
-                      <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
-                        <OrganIllustration organId={organ.id} isActive={isActive} isClicked={isClicked} />
+            <div className="relative bg-white border border-[#bec8d2] rounded-2xl mx-auto shadow-md w-full flex flex-col items-center gap-3 p-4 py-5">
+              {ORGANS.map(organ => {
+                const isClicked = clickedIds.has(organ.id);
+                const isActive = activeOrgan?.id === organ.id;
+                return (
+                  <button key={organ.id} onClick={() => handleOrganClick(organ)}
+                    className={`w-full rounded-xl p-3 border-2 transition-all duration-200 flex items-center gap-3 hover:scale-105 active:scale-95 ${
+                      isActive ? 'bg-[#ffdad6] border-[#ba1a1a] shadow-md'
+                      : isClicked ? 'bg-[#6bff8f]/20 border-[#006e2f]/40'
+                      : 'bg-[#f7f9fb] border-[#bec8d2] hover:border-[#ba1a1a]/40 hover:bg-[#ffdad6]/30'
+                    }`}>
+                    {/* Mini organ illustration */}
+                    <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
+                      <OrganIllustration organId={organ.id} isActive={isActive} isClicked={isClicked} />
+                    </div>
+                    <div className="text-left flex-grow">
+                      <div className={`text-sm font-bold flex items-center gap-1 ${isActive ? 'text-[#ba1a1a]' : isClicked ? 'text-[#006e2f]' : 'text-[#191c1e]'}`}>
+                        {ORGAN_LABELS[organ.id]}
+                        {organ.isKeyOrgan && <span className="text-[#c39400] text-xs">★</span>}
                       </div>
-                      <div className="text-left flex-grow">
-                        <div className={`text-sm font-bold flex items-center gap-1 ${isActive ? 'text-[#ba1a1a]' : isClicked ? 'text-[#006e2f]' : 'text-[#191c1e]'}`}>
-                          {ORGAN_LABELS[organ.id]}
-                          {organ.isKeyOrgan && <span className="text-[#c39400] text-xs">★</span>}
-                        </div>
-                        <div className={`text-xs font-[family-name:var(--font-mono)] ${isActive ? 'text-[#ba1a1a]/70' : 'text-[#6e7881]'}`}>
-                          {organ.healthPct}% kondisi
-                        </div>
-                        {/* Mini health bar */}
-                        <div className="w-full bg-[#eceef0] rounded-full h-1.5 mt-1.5 overflow-hidden">
-                          <div className="h-full rounded-full" style={{ width:`${organ.healthPct}%`, backgroundColor: organ.healthColor }} />
-                        </div>
+                      <div className={`text-xs font-[family-name:var(--font-mono)] ${isActive ? 'text-[#ba1a1a]/70' : 'text-[#6e7881]'}`}>
+                        {organ.healthPct}% kondisi
                       </div>
-                      {isClicked && <span className="material-symbols-outlined text-[#006e2f] text-base flex-shrink-0">check_circle</span>}
-                    </button>
-                  );
-                })}
-              </div>
+                      {/* Mini health bar */}
+                      <div className="w-full bg-[#eceef0] rounded-full h-1.5 mt-1.5 overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width:`${organ.healthPct}%`, backgroundColor: organ.healthColor }} />
+                      </div>
+                    </div>
+                    {isClicked && <span className="material-symbols-outlined text-[#006e2f] text-base flex-shrink-0">check_circle</span>}
+                  </button>
+                );
+              })}
             </div>
 
             <p className="text-center text-[#6e7881] text-xs mt-3 font-[family-name:var(--font-mono)]">
@@ -255,7 +247,7 @@ export default function Tahap4() {
             </p>
           </div>
 
-          {/* Right: Info panel */}
+          {/* Column 2: Info panel (Middle) */}
           <div className="flex-grow flex flex-col">
             {!activeOrgan ? (
               <div className="flex-grow flex items-center justify-center bg-white border border-[#bec8d2] rounded-2xl shadow-sm">
@@ -341,6 +333,23 @@ export default function Tahap4() {
               </button>
             )}
           </div>
+
+          {/* Column 3: The zooming image (Right) */}
+          <div className="lg:w-[320px] flex-shrink-0 flex flex-col">
+            <p className="text-[#6e7881] text-xs font-[family-name:var(--font-mono)] mb-3 text-center uppercase tracking-wider">Live Feed Anatomi</p>
+            <div className="relative bg-white border border-[#bec8d2] rounded-2xl overflow-hidden shadow-md w-full h-[480px]">
+              <div 
+                className="absolute inset-0 transition-transform duration-700 ease-in-out"
+                style={{
+                  transform: activeOrgan ? `scale(${HOTSPOTS[activeOrgan.id]?.scale || 1})` : 'scale(1)',
+                  transformOrigin: activeOrgan ? HOTSPOTS[activeOrgan.id]?.origin : 'center center'
+                }}
+              >
+                <img src="/organ.png" alt="Anatomi" className="w-full h-full object-cover" />
+              </div>
+            </div>
+          </div>
+
         </div>
       )}
 
