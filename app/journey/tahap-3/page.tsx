@@ -31,6 +31,9 @@ function BgDeco() {
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
       <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl opacity-10" style={{ background: '#6bff8f' }} />
       <div className="absolute -bottom-24 -left-16 w-80 h-80 rounded-full blur-3xl opacity-10" style={{ background: '#f0a345' }} />
+      {/* Bottom Shadow Overlay to blend with layout background */}
+      <div className="absolute inset-x-0 bottom-0 h-24 md:h-36 pointer-events-none z-0"
+        style={{ background: "linear-gradient(to bottom, rgba(247,249,251,0) 0%, rgba(247,249,251,0.15) 30%, rgba(247,249,251,0.5) 65%, rgba(247,249,251,0.85) 85%, #f7f9fb 100%)" }} />
     </div>
   );
 }
@@ -85,8 +88,7 @@ function RevealScreen({
   const dangerText = isHighDanger ? 'BAHAYA! KONTAMINASI TINGGI' : 'WASPADA! ADA KONTAMINASI';
 
   return (
-    <div className="relative overflow-hidden flex items-center justify-center"
-      style={{ minHeight: 'calc(100vh - 7rem)', background: 'linear-gradient(160deg, #083b54 0%, #006591 45%, #004c6e 100%)' }}>
+    <div className="relative w-full overflow-hidden flex items-center justify-center min-h-[540px] h-screen max-h-[820px] -mt-14 md:-mt-[112px] pt-14 md:pt-[112px] bg-[linear-gradient(160deg,#083b54_0%,#006591_45%,#004c6e_100%)]">
       <BgDeco />
 
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -257,8 +259,8 @@ export default function Tahap3() {
   // ─── SELECT PHASE ──────────────────────────────────────────────────────────
   if (phase === 'select') {
     return (
-      <div className="relative overflow-hidden flex flex-col"
-        style={{ minHeight: 'calc(100vh - 7rem)', background: 'linear-gradient(160deg, #083b54 0%, #006591 45%, #004c6e 100%)' }}>
+      <div className="relative overflow-hidden flex flex-col w-full min-h-[540px] h-[100vh] max-h-[820px] -mt-14 md:-mt-[112px] pt-14 md:pt-[112px]"
+        style={{ background: 'linear-gradient(160deg, #083b54 0%, #006591 45%, #004c6e 100%)' }}>
         <BgDeco />
 
         <div className="relative z-10 flex-1 flex flex-col items-center px-4 pt-6 pb-6">
@@ -407,8 +409,8 @@ export default function Tahap3() {
 
   // ─── SUMMARY / LKPD ───────────────────────────────────────────────────────
   return (
-    <div className="relative overflow-y-auto"
-      style={{ minHeight: 'calc(100vh - 7rem)', background: 'linear-gradient(160deg, #083b54 0%, #006591 45%, #004c6e 100%)' }}>
+    <div className="relative overflow-y-auto w-full min-h-[540px] h-[100vh] max-h-[820px] -mt-14 md:-mt-[112px] pt-14 md:pt-[112px]"
+      style={{ background: 'linear-gradient(160deg, #083b54 0%, #006591 45%, #004c6e 100%)' }}>
       <BgDeco />
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-6 flex flex-col gap-5">
 
