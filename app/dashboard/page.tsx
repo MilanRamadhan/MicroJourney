@@ -49,6 +49,7 @@ export default function Dashboard() {
   const [studentMessage, setStudentMessage] = useState('');
   const [showImport, setShowImport] = useState(false);
   const [activeTab, setActiveTab] = useState<'rekap' | 'manajemen'>('rekap');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     fetch('/api/lkpd')
@@ -99,11 +100,21 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-[#111827] flex font-[family-name:var(--font-inter)] selection:bg-[#006591]/20">
+    <div className="min-h-screen bg-[#FAFAFA] text-[#111827] flex flex-col lg:flex-row font-[family-name:var(--font-inter)] selection:bg-[#006591]/20">
       
+      {/* Mobile Header */}
+      <div className="lg:hidden flex items-center justify-between bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30">
+        <h1 className="font-[family-name:var(--font-outfit)] font-semibold text-lg tracking-tight text-[#006591]">
+          MicroJourney
+        </h1>
+        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-slate-600 hover:text-[#006591]">
+          <span className="material-symbols-outlined">{mobileMenuOpen ? 'close' : 'menu'}</span>
+        </button>
+      </div>
+
       {/* MINIMALIST SIDEBAR WITH SUBTLE BLUE */}
-      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col z-20 shrink-0">
-        <div className="p-6 pb-4">
+      <aside className={`${mobileMenuOpen ? 'flex' : 'hidden'} lg:flex w-full lg:w-64 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 flex-col z-20 shrink-0 absolute lg:relative top-[56px] lg:top-0 h-[calc(100vh-56px)] lg:h-auto`}>
+        <div className="p-6 pb-4 hidden lg:block">
           <div className="flex items-center justify-between mb-8">
             <h1 className="font-[family-name:var(--font-outfit)] font-semibold text-lg tracking-tight text-[#006591]">
               MicroJourney
@@ -115,9 +126,9 @@ export default function Dashboard() {
           <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Menu Utama</p>
         </div>
 
-        <nav className="flex-1 px-3 flex flex-col gap-1">
+        <nav className="flex-1 px-3 flex flex-col gap-1 lg:mt-0 mt-4">
           <button 
-            onClick={() => { setActiveTab('rekap'); setSelected(null); }} 
+            onClick={() => { setActiveTab('rekap'); setSelected(null); setMobileMenuOpen(false); }} 
             className={`flex items-center gap-3 px-3 py-2.5 transition-colors text-sm ${activeTab === 'rekap' ? 'bg-[#006591]/5 text-[#006591] font-medium border-l-[3px] border-[#006591] rounded-r-lg' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border-l-[3px] border-transparent rounded-lg'}`}
           >
             <span className="material-symbols-outlined text-[18px]">table_rows</span>
@@ -125,7 +136,7 @@ export default function Dashboard() {
           </button>
           
           <button 
-            onClick={() => { setActiveTab('manajemen'); setSelected(null); }} 
+            onClick={() => { setActiveTab('manajemen'); setSelected(null); setMobileMenuOpen(false); }} 
             className={`flex items-center gap-3 px-3 py-2.5 transition-colors text-sm ${activeTab === 'manajemen' ? 'bg-[#006591]/5 text-[#006591] font-medium border-l-[3px] border-[#006591] rounded-r-lg' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border-l-[3px] border-transparent rounded-lg'}`}
           >
             <span className="material-symbols-outlined text-[18px]">people</span>
@@ -139,6 +150,10 @@ export default function Dashboard() {
               Akses Admin
             </Link>
           )}
+          <Link href="/" className="lg:hidden flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-900 mt-2 ml-1">
+            <span className="material-symbols-outlined text-[18px]">home</span>
+            Kembali ke Beranda
+          </Link>
         </nav>
 
         <div className="p-4 m-3 bg-[#006591]/[0.03] rounded-xl border border-[#006591]/10 flex flex-col gap-3">
@@ -159,11 +174,11 @@ export default function Dashboard() {
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className="flex-1 h-screen overflow-y-auto relative flex flex-col">
+      <main className="flex-1 lg:h-screen overflow-y-auto relative flex flex-col">
         
         {/* Simple Header */}
-        <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-5 flex justify-between items-center sticky top-0 z-10">
-          <h2 className="font-[family-name:var(--font-outfit)] font-medium text-xl text-slate-800">
+        <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 md:px-8 py-4 md:py-5 flex justify-between items-center sticky top-0 z-10">
+          <h2 className="font-[family-name:var(--font-outfit)] font-medium text-lg md:text-xl text-slate-800">
              {activeTab === 'rekap' ? 'Data Penilaian Siswa' : 'Manajemen Akun Siswa'}
           </h2>
           {activeTab === 'rekap' && (
@@ -174,14 +189,14 @@ export default function Dashboard() {
           )}
         </header>
 
-        <div className="p-8 max-w-[1200px] w-full mx-auto flex-1 flex flex-col">
+        <div className="p-4 md:p-8 max-w-[1200px] w-full mx-auto flex-1 flex flex-col">
           
           {/* TAB: REKAP PENILAIAN */}
           {activeTab === 'rekap' && (
             <div className="flex-1 flex flex-col animate-in fade-in duration-300">
               
               {/* Minimal Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <div className="bg-white rounded-xl p-5 border border-[#006591]/10 shadow-[0_2px_8px_rgba(0,101,145,0.04)] flex flex-col justify-between relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-1 h-full bg-blue-400"></div>
                   <p className="text-sm text-slate-500 mb-2 pl-2">Total Submit</p>
@@ -218,31 +233,29 @@ export default function Dashboard() {
                     {c}
                   </button>
                 ))}
-              </div>
-
-              {/* Layout for Table and Detail Panel */}
+              </div>              {/* Layout for Table and Detail Panel */}
               <div className="flex gap-6 relative flex-1 min-h-[500px] overflow-hidden">
                 
                 {/* Main Table */}
-                <div className={`flex-1 transition-all duration-500 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col overflow-hidden ${selected ? 'mr-[400px]' : ''}`}>
+                <div className={`flex-1 transition-all duration-500 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col overflow-hidden ${selected ? 'lg:mr-[400px]' : ''}`}>
                   {loading ? (
                     <div className="flex-1 flex flex-col items-center justify-center text-slate-400 gap-2">
                        <span className="material-symbols-outlined animate-spin text-2xl text-[#006591]">sync</span>
                        Loading data...
                     </div>
                   ) : filtered.length === 0 ? (
-                    <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
+                    <div className="flex-1 flex items-center justify-center text-slate-400 text-sm p-4 text-center">
                       Belum ada data penilaian tersedia.
                     </div>
                   ) : (
                     <div className="overflow-x-auto flex-1">
-                      <table className="w-full text-sm text-left">
+                      <table className="w-full text-sm text-left whitespace-nowrap min-w-[600px]">
                         <thead className="bg-[#FAFAFA] border-b border-slate-200 text-slate-500">
                           <tr>
-                            <th className="px-6 py-4 font-medium">Nama Siswa</th>
-                            <th className="px-6 py-4 font-medium">Kelas</th>
-                            <th className="px-6 py-4 font-medium">Partikel</th>
-                            <th className="px-6 py-4 font-medium">Waktu Submit</th>
+                            <th className="px-4 md:px-6 py-4 font-medium">Nama Siswa</th>
+                            <th className="px-4 md:px-6 py-4 font-medium">Kelas</th>
+                            <th className="px-4 md:px-6 py-4 font-medium">Partikel</th>
+                            <th className="px-4 md:px-6 py-4 font-medium">Waktu Submit</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
@@ -250,12 +263,12 @@ export default function Dashboard() {
                             <tr key={row._id}
                               className={`cursor-pointer transition-colors ${selected?._id === row._id ? 'bg-[#006591]/5' : 'hover:bg-slate-50/70'}`}
                               onClick={() => setSelected(row)}>
-                              <td className="px-6 py-4 font-medium text-slate-800">{row.studentName}</td>
-                              <td className="px-6 py-4">
+                              <td className="px-4 md:px-6 py-4 font-medium text-slate-800">{row.studentName}</td>
+                              <td className="px-4 md:px-6 py-4">
                                 <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-md border border-slate-200/60">{row.studentClass}</span>
                               </td>
-                              <td className="px-6 py-4 text-slate-600">{row.totalParticles.toLocaleString('id-ID')}</td>
-                              <td className="px-6 py-4 text-slate-400 text-xs">
+                              <td className="px-4 md:px-6 py-4 text-slate-600">{row.totalParticles.toLocaleString('id-ID')}</td>
+                              <td className="px-4 md:px-6 py-4 text-slate-400 text-xs">
                                 {new Date(row.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                               </td>
                             </tr>
@@ -268,9 +281,9 @@ export default function Dashboard() {
 
                 {/* Minimal Sliding Panel with Subtle Blue */}
                 <div className={`
-                  absolute right-0 top-0 bottom-0 w-[380px] 
-                  bg-white border border-[#006591]/20 rounded-xl shadow-xl 
-                  flex flex-col transform transition-transform duration-500 ease-in-out z-10
+                  fixed inset-0 lg:absolute lg:right-0 lg:top-0 lg:bottom-0 w-full lg:w-[380px] 
+                  bg-white border-l lg:border border-[#006591]/20 lg:rounded-xl shadow-2xl lg:shadow-xl 
+                  flex flex-col transform transition-transform duration-500 ease-in-out z-40 lg:z-10
                   ${selected ? 'translate-x-0' : 'translate-x-[110%]'}
                 `}>
                   {selected && (
@@ -385,31 +398,31 @@ export default function Dashboard() {
                 </div>
                 
                 {registeredStudents.length === 0 ? (
-                  <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
+                  <div className="flex-1 flex items-center justify-center text-slate-400 text-sm p-4 text-center">
                     Belum ada siswa terdaftar.
                   </div>
                 ) : (
                   <div className="overflow-x-auto flex-1">
-                    <table className="w-full text-sm text-left">
+                    <table className="w-full text-sm text-left whitespace-nowrap min-w-[500px]">
                       <thead className="bg-[#FAFAFA] border-b border-slate-200 text-slate-500">
                         <tr>
-                          <th className="px-6 py-4 font-medium">Nama</th>
-                          <th className="px-6 py-4 font-medium">Kelas</th>
-                          <th className="px-6 py-4 font-medium">Email</th>
-                          <th className="px-6 py-4 font-medium">Password</th>
-                          <th className="px-6 py-4"></th>
+                          <th className="px-4 md:px-6 py-4 font-medium">Nama</th>
+                          <th className="px-4 md:px-6 py-4 font-medium">Kelas</th>
+                          <th className="px-4 md:px-6 py-4 font-medium">Email</th>
+                          <th className="px-4 md:px-6 py-4 font-medium">Password</th>
+                          <th className="px-4 md:px-6 py-4"></th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
                         {registeredStudents.map(student => (
                           <tr key={student.id} className="hover:bg-slate-50/50 transition-colors group">
-                            <td className="px-6 py-4 font-medium text-slate-800">{student.name}</td>
-                            <td className="px-6 py-4 text-slate-500">{student.className || '-'}</td>
-                            <td className="px-6 py-4 text-[#006591]/80">{student.email}</td>
-                            <td className="px-6 py-4 font-mono text-slate-400 text-xs">{student.password}</td>
-                            <td className="px-6 py-4 text-right">
+                            <td className="px-4 md:px-6 py-4 font-medium text-slate-800">{student.name}</td>
+                            <td className="px-4 md:px-6 py-4 text-slate-500">{student.className || '-'}</td>
+                            <td className="px-4 md:px-6 py-4 text-[#006591]/80">{student.email}</td>
+                            <td className="px-4 md:px-6 py-4 font-mono text-slate-400 text-xs">{student.password}</td>
+                            <td className="px-4 md:px-6 py-4 text-right">
                               <button onClick={() => deleteStudent(student.id)} 
-                                className="text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+                                className="text-slate-300 hover:text-red-500 transition-colors md:opacity-0 group-hover:opacity-100">
                                 <span className="material-symbols-outlined text-[18px]">delete</span>
                               </button>
                             </td>
