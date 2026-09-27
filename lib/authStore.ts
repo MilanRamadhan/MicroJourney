@@ -7,8 +7,10 @@ export interface AppUser {
   id: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   role: UserRole;
+  school?: string;
+  phoneNumber?: string;
   className?: string;
   createdBy?: string;
 }

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, PanInfo, AnimatePresence } from 'framer-motion';
+import YouTubePlayer from '@/components/ui/YouTubePlayer';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type LabPhase = 'lab' | 'breaking' | 'complete';
@@ -354,18 +355,8 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
               </p>
             </div>
 
-            {/* Video Player - Soft Glass Frame */}
-            <div className="rounded-[32px] overflow-hidden shadow-2xl bg-white border-[6px] border-white">
-              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                <iframe
-                  className="absolute top-0 left-0 w-full h-full rounded-[24px]"
-                  src={videoUrl}
-                  title="Video Pelapukan"
-                  frameBorder="0"
-                  allowFullScreen
-                />
-              </div>
-            </div>
+            {/* Video Player - Soft Glass Frame with YouTube option */}
+            <YouTubePlayer url={videoUrl} title="Video Pelapukan Mikroplastik" />
 
             {/* Button Lanjut */}
             <div className="flex justify-center mt-4 mb-20">

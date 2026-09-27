@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useCallback } from 'react';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { MICROPLASTIC_JOURNEY_ITEMS, type DragItem } from '@/lib/dragDropData';
 
 // ─── SVG Illustrations ────────────────────────────────────────────────────────
@@ -111,50 +111,99 @@ function WoodButton({ onClick, children, disabled, sm }: {
   );
 }
 
-// ─── Drag Card ────────────────────────────────────────────────────────────────
-function DragCard({ item, index, isDragging, isOver, onDragStart, onDragEnter, onDragEnd }: {
-  item: DragItem; index: number; isDragging: boolean; isOver: boolean;
-  onDragStart: (i: number) => void; onDragEnter: (i: number) => void; onDragEnd: () => void;
+// ─── Reorderable Card Component (Desktop Mouse & Touch Mobile Supported) ────────
+function DragCard({
+  item,
+  index,
+  totalItems,
+  onMoveUp,
+  onMoveDown,
+}: {
+  item: DragItem;
+  index: number;
+  totalItems: number;
+  onMoveUp: (index: number) => void;
+  onMoveDown: (index: number) => void;
 }) {
   const accent = STEP_ACCENT[item.id];
   return (
-    <motion.div
-      layout
-      draggable
-      onDragStart={() => onDragStart(index)}
-      onDragEnter={() => onDragEnter(index)}
-      onDragEnd={onDragEnd}
-      onDragOver={(e) => e.preventDefault()}
-      animate={{ scale: isDragging ? 0.95 : isOver ? 1.02 : 1, opacity: isDragging ? 0.35 : 1 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-      className="select-none cursor-grab active:cursor-grabbing flex items-center gap-3 px-3 py-2.5 rounded-xl border-2 bg-white transition-colors"
+    <Reorder.Item
+      value={item}
+      id={item.id}
+      whileDrag={{ scale: 1.03, boxShadow: `0 8px 25px ${accent}40`, zIndex: 30 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+      className="select-none touch-none flex items-center gap-2.5 sm:gap-3 px-3 py-2.5 rounded-xl border-2 bg-white transition-all cursor-grab active:cursor-grabbing relative"
       style={{
-        borderColor: isOver ? accent : 'transparent',
-        boxShadow: isOver ? `0 6px 20px ${accent}33` : '0 2px 8px rgba(0,0,0,0.07)',
+        borderColor: accent,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
       }}
     >
-      <div className="flex-shrink-0 w-7 h-7 rounded-full text-white text-xs font-extrabold font-[family-name:var(--font-outfit)] flex items-center justify-center"
-        style={{ background: accent }}>
+      {/* Index Badge */}
+      <div
+        className="flex-shrink-0 w-7 h-7 rounded-full text-white text-xs font-extrabold font-[family-name:var(--font-outfit)] flex items-center justify-center shadow-sm"
+        style={{ background: accent }}
+      >
         {index + 1}
       </div>
-      <div className="w-9 h-9 flex-shrink-0" style={{ background: STEP_BG[item.id], borderRadius: 10, padding: 2 }}>
+
+      {/* SVG Icon */}
+      <div
+        className="w-9 h-9 flex-shrink-0"
+        style={{ background: STEP_BG[item.id], borderRadius: 10, padding: 2 }}
+      >
         {STEP_SVG[item.id]}
       </div>
+
+      {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-[#083b54] text-sm font-[family-name:var(--font-outfit)] leading-none">
+        <p className="font-bold text-[#083b54] text-xs sm:text-sm font-[family-name:var(--font-outfit)] leading-tight">
           {STEP_LABEL[item.id]}
         </p>
-        <p className="text-[11px] text-slate-400 mt-0.5">{STEP_DESC[item.id]}</p>
+        <p className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 line-clamp-1">
+          {STEP_DESC[item.id]}
+        </p>
       </div>
-      <div className="flex-shrink-0 flex flex-col gap-0.5 opacity-25">
-        {[0, 1, 2].map(i => (
-          <div key={i} className="flex gap-0.5">
-            <div className="w-1 h-1 rounded-full bg-slate-500" />
-            <div className="w-1 h-1 rounded-full bg-slate-500" />
-          </div>
-        ))}
+
+      {/* Mobile Touch & Desktop Fallback Controls (Up/Down Buttons) + Drag Grip */}
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        <div className="flex flex-col gap-0.5">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onMoveUp(index);
+            }}
+            disabled={index === 0}
+            className="w-6 h-5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-colors active:scale-90"
+            title="Geser ke atas"
+          >
+            <span className="material-symbols-outlined text-[14px]">keyboard_arrow_up</span>
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onMoveDown(index);
+            }}
+            disabled={index === totalItems - 1}
+            className="w-6 h-5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-colors active:scale-90"
+            title="Geser ke bawah"
+          >
+            <span className="material-symbols-outlined text-[14px]">keyboard_arrow_down</span>
+          </button>
+        </div>
+
+        {/* Drag Handle Grip Icon */}
+        <div className="p-1 text-slate-400 opacity-60 hover:opacity-100 cursor-grab active:cursor-grabbing touch-none flex flex-col gap-0.5">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="flex gap-0.5">
+              <div className="w-1 h-1 rounded-full bg-slate-500" />
+              <div className="w-1 h-1 rounded-full bg-slate-500" />
+            </div>
+          ))}
+        </div>
       </div>
-    </motion.div>
+    </Reorder.Item>
   );
 }
 
@@ -174,25 +223,25 @@ export default function Stage3MaterialIntro({ onComplete }: { onComplete: () => 
 
   const [feedback, setFeedback] = useState<'idle' | 'correct' | 'wrong'>('idle');
   const [attempts, setAttempts] = useState(0);
-  const dragIdx = useRef<number | null>(null);
-  const dropIdx = useRef<number | null>(null);
-  const [draggingIdx, setDraggingIdx] = useState<number | null>(null);
-  const [overIdx, setOverIdx] = useState<number | null>(null);
 
-  const onDragStart = useCallback((i: number) => { dragIdx.current = i; setDraggingIdx(i); setFeedback('idle'); }, []);
-  const onDragEnter = useCallback((i: number) => { dropIdx.current = i; setOverIdx(i); }, []);
-  const onDragEnd = useCallback(() => {
-    const from = dragIdx.current, to = dropIdx.current;
-    if (from !== null && to !== null && from !== to) {
-      setItems(prev => {
-        const next = [...prev];
-        const [moved] = next.splice(from, 1);
-        next.splice(to, 0, moved);
-        return next;
-      });
-    }
-    dragIdx.current = null; dropIdx.current = null;
-    setDraggingIdx(null); setOverIdx(null);
+  const moveItemUp = useCallback((index: number) => {
+    if (index === 0) return;
+    setItems((prev) => {
+      const next = [...prev];
+      [next[index - 1], next[index]] = [next[index], next[index - 1]];
+      return next;
+    });
+    setFeedback('idle');
+  }, []);
+
+  const moveItemDown = useCallback((index: number) => {
+    setItems((prev) => {
+      if (index >= prev.length - 1) return prev;
+      const next = [...prev];
+      [next[index], next[index + 1]] = [next[index + 1], next[index]];
+      return next;
+    });
+    setFeedback('idle');
   }, []);
 
   function checkOrder() {
@@ -322,8 +371,8 @@ export default function Stage3MaterialIntro({ onComplete }: { onComplete: () => 
                 <h2 className="text-2xl md:text-3xl font-extrabold text-white font-[family-name:var(--font-outfit)] mb-1">
                   Susun Urutannya! 🧩
                 </h2>
-                <p className="text-blue-200 text-sm">
-                  <span className="text-[#6bff8f] font-bold">Seret & lepas</span> kartu ke posisi yang benar.
+                <p className="text-blue-200 text-xs sm:text-sm">
+                  <span className="text-[#6bff8f] font-bold">Geser / tekan panah</span> untuk menyusun alur yang benar.
                 </p>
               </div>
 
@@ -335,14 +384,26 @@ export default function Stage3MaterialIntro({ onComplete }: { onComplete: () => 
                   backdropFilter: 'blur(16px)',
                   boxShadow: feedback === 'correct' ? '0 0 40px rgba(107,255,143,0.2)' : 'none',
                 }}>
-                {items.map((item, index) => (
-                  <DragCard
-                    key={item.id} item={item} index={index}
-                    isDragging={draggingIdx === index}
-                    isOver={overIdx === index && draggingIdx !== index}
-                    onDragStart={onDragStart} onDragEnter={onDragEnter} onDragEnd={onDragEnd}
-                  />
-                ))}
+                <Reorder.Group
+                  axis="y"
+                  values={items}
+                  onReorder={(newItems) => {
+                    setItems(newItems);
+                    setFeedback('idle');
+                  }}
+                  className="w-full flex flex-col gap-2"
+                >
+                  {items.map((item, index) => (
+                    <DragCard
+                      key={item.id}
+                      item={item}
+                      index={index}
+                      totalItems={items.length}
+                      onMoveUp={moveItemUp}
+                      onMoveDown={moveItemDown}
+                    />
+                  ))}
+                </Reorder.Group>
               </div>
 
               {/* Feedback */}

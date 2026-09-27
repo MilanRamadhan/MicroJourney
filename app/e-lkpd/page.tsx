@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useJourneyStore } from '@/lib/journeyStore';
 import { useAuthStore } from '@/lib/authStore';
 import BottomNav from '@/components/BottomNav';
+import PageContainer from '@/components/ui/PageContainer';
+import PageHeader from '@/components/ui/PageHeader';
 
 const LKPD_DEFS = [
   {
@@ -94,20 +96,14 @@ export default function ELKPDPage() {
       <div className="absolute inset-0 adventure-map opacity-20 pointer-events-none" />
       <div className="absolute top-0 right-0 w-72 h-72 bg-[#006591]/5 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
-
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-white border border-[#bec8d2] px-5 py-2 rounded-full mb-5 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#006e2f] animate-pulse" />
-            <span className="text-[#006e2f] text-xs font-[family-name:var(--font-mono)] uppercase tracking-widest">Lembar Kerja Peserta Didik Digital</span>
-          </div>
-          <h1 className="font-[family-name:var(--font-outfit)] text-4xl font-extrabold text-[#191c1e] mb-3">Jurnal Misi</h1>
-          <p className="text-[#3e4850] max-w-xl mx-auto text-sm leading-relaxed">
-            Kumpulan lembar kerja digital dari seluruh tahap perjalanan investigasi mikroplastik.
-            Jawaban tersimpan otomatis saat kamu mengerjakan setiap tahap.
-          </p>
-        </div>
+      <PageContainer>
+        {/* Atomic Page Header */}
+        <PageHeader
+          badgeText="Lembar Kerja Peserta Didik Digital"
+          badgeColor="#006e2f"
+          title="Jurnal Misi LKPD"
+          subtitle="Kumpulan lembar kerja digital dari seluruh tahap perjalanan investigasi mikroplastik. Jawaban tersimpan otomatis saat kamu mengerjakan setiap tahap."
+        />
 
         {/* Progress bar */}
         <div className="bg-white border border-[#bec8d2] rounded-2xl p-6 mb-8 shadow-sm">
@@ -295,7 +291,7 @@ export default function ELKPDPage() {
             </Link>
           </div>
         )}
-      </div>
+      </PageContainer>
 
       {/* Mobile bottom nav */}
       <BottomNav />
