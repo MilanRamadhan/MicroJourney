@@ -169,7 +169,7 @@ export default function TeacherDashboardTemplate() {
 
   function handleExportSubmissionsCsv() {
     if (filteredSubmissions.length === 0) return;
-    const headers = ['Nama Siswa', 'Kelas', 'Total Partikel', 'Organ Kritis', 'Kuis Benar', 'Kuis Salah', 'Waktu Submit', 'Sumpah Komitmen'];
+    const headers = ['Nama Siswa', 'Kelas', 'Total Partikel', 'Organ Kritis', 'Kuis Benar', 'Kuis Salah', 'Link PR Drive', 'Link Sosmed', 'Rating Siswa', 'Catatan Aksi', 'Waktu Submit', 'Sumpah Komitmen'];
     const rows = filteredSubmissions.map(d => [
       `"${d.studentName.replace(/"/g, '""')}"`,
       `"${d.studentClass}"`,
@@ -177,6 +177,10 @@ export default function TeacherDashboardTemplate() {
       `"${parseOrganLabel(d.mostDangerousOrgan)}"`,
       d.quizCorrect || 0,
       d.quizWrong || 0,
+      `"${(d.driveLink || '').replace(/"/g, '""')}"`,
+      `"${(d.sosmedLink || '').replace(/"/g, '""')}"`,
+      d.rating || 5,
+      `"${(d.actionNote || '').replace(/"/g, '""')}"`,
       `"${new Date(d.createdAt).toLocaleString('id-ID')}"`,
       `"${(d.commitment || '').replace(/"/g, '""')}"`
     ]);

@@ -1,10 +1,11 @@
 // MOLECULE: StudentDetailDrawer
-// Slide-over drawer untuk menampilkan detail hasil laboratorium & E-LKPD 6 Tahap siswa.
+// Slide-over drawer untuk menampilkan detail hasil laboratorium, PR Google Drive, & E-LKPD 6 Tahap siswa.
 'use client';
 
 import React from 'react';
 import { cn } from '@/libs/utils';
 import ClassBadge from '@/components/atoms/ClassBadge';
+import StarRating from '@/components/atoms/StarRating';
 
 export interface Submission {
   _id: string;
@@ -22,6 +23,11 @@ export interface Submission {
   selectedFoods: string[];
   quizCorrect: number;
   quizWrong: number;
+  driveLink?: string;
+  sosmedLink?: string;
+  actionNote?: string;
+  rating?: number;
+  feedback?: string;
 }
 
 interface StudentDetailDrawerProps {
@@ -107,6 +113,70 @@ export default function StudentDetailDrawer({
             </span>
           </div>
         </div>
+
+        {/* Section: Tugas PR & Kampanye Sosmed */}
+        <div className="bg-[#f0f7fc] border border-[#b8d8eb] rounded-xl p-3.5 space-y-2.5">
+          <p className="font-extrabold text-[#006591] uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-[16px]">folder_shared</span>
+            Pengumpulan PR Digital & Media Sosial
+          </p>
+
+          <div className="flex flex-col gap-2">
+            {submission.driveLink ? (
+              <a
+                href={submission.driveLink}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-white border border-[#006591]/30 hover:border-[#006591] text-[#006591] font-bold py-2 px-3 rounded-lg flex items-center justify-between transition-colors shadow-2xs"
+              >
+                <span className="flex items-center gap-1.5 truncate">
+                  <span className="material-symbols-outlined text-[16px]">add_to_drive</span>
+                  Buka Folder Google Drive PR
+                </span>
+                <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+              </a>
+            ) : (
+              <span className="text-slate-400 italic">Google Drive PR: (belum dilampirkan)</span>
+            )}
+
+            {submission.sosmedLink ? (
+              <a
+                href={submission.sosmedLink}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-white border border-emerald-300 hover:border-emerald-600 text-emerald-700 font-bold py-2 px-3 rounded-lg flex items-center justify-between transition-colors shadow-2xs"
+              >
+                <span className="flex items-center gap-1.5 truncate">
+                  <span className="material-symbols-outlined text-[16px]">share</span>
+                  Lihat Video Kampanye Sosmed
+                </span>
+                <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+              </a>
+            ) : null}
+
+            {submission.actionNote && (
+              <div className="bg-white/80 p-2.5 rounded-lg border border-slate-200">
+                <p className="font-bold text-slate-700 text-[11px] mb-0.5">Catatan Aksi Lingkungan:</p>
+                <p className="text-slate-600 text-[11px] leading-relaxed">{submission.actionNote}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Section: Refleksi & Rating Bintang Siswa */}
+        {submission.rating && (
+          <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-3.5 space-y-1">
+            <div className="flex items-center justify-between">
+              <p className="font-extrabold text-amber-800 text-[11px]">Umpan Balik Pembelajaran</p>
+              <StarRating value={submission.rating} readonly size="sm" />
+            </div>
+            {submission.feedback && (
+              <p className="text-amber-900 text-[11px] italic bg-white/70 p-2 rounded-md border border-amber-200/60 mt-1">
+                &ldquo;{submission.feedback}&rdquo;
+              </p>
+            )}
+          </div>
+        )}
 
         <hr className="border-slate-100" />
 

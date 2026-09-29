@@ -4,6 +4,20 @@ import { useRouter } from 'next/navigation';
 import { useJourneyStore } from '@/lib/journeyStore';
 import MikaMascot from '@/components/MikaMascot';
 
+const ORGAN_LABEL_MAP: Record<string, string> = {
+  mouth: 'Mulut', stomach: 'Lambung', smallIntestine: 'Usus Halus', largeIntestine: 'Usus Besar', blood: 'Darah',
+};
+function parseOrganLabel(raw: string): string {
+  if (!raw) return 'Usus Halus';
+  const r = raw.toLowerCase();
+  if (r.includes('usus halus') || r.includes('small') || r.includes('intestinum') || r.includes('villus') || r.includes('vili')) return 'Usus Halus';
+  if (r.includes('usus besar') || r.includes('large') || r.includes('kolon')) return 'Usus Besar';
+  if (r.includes('lambung') || r.includes('stomach') || r.includes('gaster') || r.includes('hcl')) return 'Lambung';
+  if (r.includes('darah') || r.includes('blood') || r.includes('sirkulasi') || r.includes('jantung')) return 'Darah';
+  if (r.includes('mulut') || r.includes('mouth') || r.includes('saliva')) return 'Mulut';
+  return ORGAN_LABEL_MAP[raw] ?? (raw.length > 20 ? raw.slice(0, 18) + '…' : raw);
+}
+
 const QUICK_PLEDGES = [
   'Bawa tumbler sendiri ke sekolah setiap hari',
   'Tolak kantong plastik di kantin sekolah',
@@ -315,14 +329,23 @@ export default function Tahap6() {
         )}
 
         {pdfDone && (
-          <div className="text-center">
-            <div className="bg-white border border-[#006e2f]/20 rounded-xl p-5 mb-4 shadow-sm">
-              <span className="material-symbols-outlined text-[#006e2f] text-4xl block mb-2">check_circle</span>
-              <p className="text-[#006e2f] font-bold">Rapor PDF berhasil diunduh!</p>
-              <p className="text-[#3e4850] text-sm mt-1">Serahkan file kepada gurumu sebagai bukti selesainya perjalanan.</p>
+          <div className="mt-8 border-t border-[#006e2f]/20 pt-6 text-center space-y-3">
+            <div className="p-4 rounded-2xl bg-[#e6f4ea] border border-[#006e2f]/30 text-[#006e2f] text-xs font-extrabold flex items-center justify-center gap-2">
+              <span className="material-symbols-outlined text-xl">verified</span>
+              <span>Rapor PDF Terunduh! Sekarang kumpulkan PR Digital & Aksimu di Halaman Rangkuman.</span>
             </div>
-            <button onClick={() => router.push('/')} className="text-[#6e7881] text-sm underline hover:text-[#3e4850]">
-              Kembali ke Beranda
+
+            <button
+              onClick={() => router.push('/journey/summary')}
+              className="w-full py-4 px-6 rounded-2xl text-base font-extrabold text-[#3b2313] flex items-center justify-center gap-3 transition-all transform active:scale-95 shadow-lg border-2 border-[#8e4912]"
+              style={{
+                fontFamily: 'var(--font-outfit)',
+                background: 'linear-gradient(to bottom, #f0a345, #d27b22)',
+                boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.3), 0 8px 16px rgba(0,0,0,0.25)',
+              }}
+            >
+              <span>Lanjut ke Halaman Rangkuman & PR Cloudinary</span>
+              <span className="material-symbols-outlined text-2xl">arrow_forward</span>
             </button>
           </div>
         )}

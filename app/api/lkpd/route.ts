@@ -24,6 +24,11 @@ export async function POST(req: NextRequest) {
       assessmentEligible: Boolean(body.assessmentEligible),
       quizCorrect:        Number(body.quizCorrect) || 0,
       quizWrong:          Number(body.quizWrong) || 0,
+      driveLink:          body.driveLink || '',
+      sosmedLink:         body.sosmedLink || '',
+      actionNote:         body.actionNote || '',
+      rating:             Number(body.rating) || 5,
+      feedback:           body.feedback || '',
     });
 
     return NextResponse.json({ ok: true, id: submission._id }, { status: 201 });

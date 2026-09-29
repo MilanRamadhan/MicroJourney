@@ -257,7 +257,7 @@ export default function Stage3MaterialIntro({ onComplete }: { onComplete: () => 
   // We fill exactly the remaining viewport height with overflow-hidden.
   return (
     <div
-      className="flex flex-col overflow-hidden relative font-[family-name:var(--font-inter)] w-full min-h-[540px] h-[100vh] max-h-[820px] -mt-14 md:-mt-[112px] pt-14 md:pt-[112px]"
+      className="flex flex-col overflow-y-auto relative font-[family-name:var(--font-inter)] w-full min-h-[calc(100vh-7rem)] -mt-14 md:-mt-[112px] pt-14 md:pt-[112px] pb-28 md:pb-12"
       style={{
         background: 'linear-gradient(160deg, #083b54 0%, #006591 45%, #004c6e 100%)',
       }}
@@ -283,8 +283,8 @@ export default function Stage3MaterialIntro({ onComplete }: { onComplete: () => 
         />
       ))}
 
-      {/* Content — fills remaining height, no scroll */}
-      <div className="relative z-10 flex-1 flex items-center justify-center px-4 overflow-hidden">
+      {/* Content */}
+      <div className="relative z-10 flex-1 flex items-center justify-center px-4 py-4">
         <AnimatePresence mode="wait">
 
           {/* ═══ VIEW 1: MATERI ═══ */}
@@ -292,7 +292,7 @@ export default function Stage3MaterialIntro({ onComplete }: { onComplete: () => 
             <motion.div key="learn"
               initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.35 }}
-              className="w-full max-w-4xl flex flex-col items-center gap-4"
+              className="w-full max-w-4xl flex flex-col items-center gap-4 py-4"
             >
               {/* Badge + Title */}
               <div className="text-center">
@@ -302,36 +302,29 @@ export default function Stage3MaterialIntro({ onComplete }: { onComplete: () => 
                     animate={{ scale: [1, 1.5, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
                   Tahap 3 · Penguatan Materi
                 </div>
-                <h1 className="text-3xl md:text-4xl font-extrabold text-white leading-tight font-[family-name:var(--font-outfit)]">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight font-[family-name:var(--font-outfit)]">
                   Dari Sampah{' '}
                   <span className="text-[#6bff8f]">ke Piringmu</span>
                 </h1>
               </div>
 
-              {/* Flow — 5 cards horizontal */}
-              <div className="w-full flex items-start justify-center gap-2">
+              {/* Flow — responsive grid cards */}
+              <div className="w-full max-w-3xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 justify-items-center">
                 {ordered.map((item, i) => (
-                  <div key={item.id} className="flex items-center gap-2">
-                    <motion.div
-                      whileHover={{ scale: 1.07, y: -4 }}
-                      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl w-[110px] sm:w-[128px] cursor-default"
-                      style={{ background: STEP_BG[item.id], boxShadow: `0 4px 16px ${STEP_ACCENT[item.id]}22` }}
-                    >
-                      <div className="w-12 h-12 sm:w-14 sm:h-14">{STEP_SVG[item.id]}</div>
-                      <p className="text-[11px] sm:text-xs font-bold text-center text-[#083b54] leading-tight font-[family-name:var(--font-outfit)]">
-                        {STEP_LABEL[item.id]}
-                      </p>
-                      <p className="text-[10px] text-slate-500 text-center leading-tight hidden sm:block">
-                        {STEP_DESC[item.id]}
-                      </p>
-                    </motion.div>
-                    {i < ordered.length - 1 && (
-                      <motion.svg width="20" height="14" viewBox="0 0 20 14" fill="none" className="flex-shrink-0 mb-4"
-                        animate={{ x: [0, 4, 0] }} transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}>
-                        <path d="M1 7 H16 M11 2 L16 7 L11 12" stroke="#6bff8f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </motion.svg>
-                    )}
-                  </div>
+                  <motion.div
+                    key={item.id}
+                    whileHover={{ scale: 1.05, y: -3 }}
+                    className="w-full flex flex-col items-center gap-1.5 p-3 rounded-2xl cursor-default"
+                    style={{ background: STEP_BG[item.id], boxShadow: `0 4px 16px ${STEP_ACCENT[item.id]}22` }}
+                  >
+                    <div className="w-12 h-12 sm:w-14 sm:h-14">{STEP_SVG[item.id]}</div>
+                    <p className="text-[11px] sm:text-xs font-bold text-center text-[#083b54] leading-tight font-[family-name:var(--font-outfit)]">
+                      {STEP_LABEL[item.id]}
+                    </p>
+                    <p className="text-[10px] text-slate-500 text-center leading-tight">
+                      {STEP_DESC[item.id]}
+                    </p>
+                  </motion.div>
                 ))}
               </div>
 
