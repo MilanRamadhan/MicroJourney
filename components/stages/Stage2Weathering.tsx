@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, PanInfo, AnimatePresence } from 'framer-motion';
+import YouTubePlayer from '@/components/ui/YouTubePlayer';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type LabPhase = 'lab' | 'breaking' | 'complete';
@@ -354,18 +355,8 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
               </p>
             </div>
 
-            {/* Video Player - Soft Glass Frame */}
-            <div className="rounded-[32px] overflow-hidden shadow-2xl bg-white border-[6px] border-white">
-              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                <iframe
-                  className="absolute top-0 left-0 w-full h-full rounded-[24px]"
-                  src={videoUrl}
-                  title="Video Pelapukan"
-                  frameBorder="0"
-                  allowFullScreen
-                />
-              </div>
-            </div>
+            {/* Video Player - Soft Glass Frame with YouTube option */}
+            <YouTubePlayer url={videoUrl} title="Video Pelapukan Mikroplastik" />
 
             {/* Button Lanjut */}
             <div className="flex justify-center mt-4 mb-20">
@@ -472,8 +463,16 @@ export default function Stage2Weathering({ onComplete, videoUrl = 'https://www.y
                 )}
               </AnimatePresence>
 
-              {/* HUD Indicators */}
-              <div className="absolute top-4 right-4 md:top-8 md:right-8 flex flex-col gap-2 md:gap-3 z-20">
+              {/* HUD Indicators & Voice Guide Button */}
+              <div className="absolute top-4 right-4 md:top-8 md:right-8 flex flex-col gap-2 md:gap-3 z-20 items-end">
+                <button
+                  onClick={playVoiceInstruction}
+                  title="Dengarkan Suara Panduan"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-[#006591]/30 text-[#006591] text-xs font-bold shadow-md hover:bg-[#006591] hover:text-white transition-all"
+                >
+                  <span className="material-symbols-outlined text-base">volume_up</span>
+                  <span>Suara Panduan</span>
+                </button>
                 <div className="bg-white/70 backdrop-blur-sm border-2 border-white rounded-xl md:rounded-2xl px-3 py-2 md:px-5 md:py-3 w-28 md:w-40 shadow-sm">
                   <p className="text-[#006591] text-[10px] md:text-xs font-bold uppercase tracking-widest mb-1 md:mb-2 flex justify-between">
                     <span>Sinar UV</span> <span>{uvExposure}%</span>

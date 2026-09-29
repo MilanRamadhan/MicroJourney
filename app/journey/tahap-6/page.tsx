@@ -1,8 +1,22 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useJourneyStore } from '@/lib/journeyStore';
 import MikaMascot from '@/components/MikaMascot';
+
+const ORGAN_LABEL_MAP: Record<string, string> = {
+  mouth: 'Mulut', stomach: 'Lambung', smallIntestine: 'Usus Halus', largeIntestine: 'Usus Besar', blood: 'Darah',
+};
+function parseOrganLabel(raw: string): string {
+  if (!raw) return 'Usus Halus';
+  const r = raw.toLowerCase();
+  if (r.includes('usus halus') || r.includes('small') || r.includes('intestinum') || r.includes('villus') || r.includes('vili')) return 'Usus Halus';
+  if (r.includes('usus besar') || r.includes('large') || r.includes('kolon')) return 'Usus Besar';
+  if (r.includes('lambung') || r.includes('stomach') || r.includes('gaster') || r.includes('hcl')) return 'Lambung';
+  if (r.includes('darah') || r.includes('blood') || r.includes('sirkulasi') || r.includes('jantung')) return 'Darah';
+  if (r.includes('mulut') || r.includes('mouth') || r.includes('saliva')) return 'Mulut';
+  return ORGAN_LABEL_MAP[raw] ?? (raw.length > 20 ? raw.slice(0, 18) + '…' : raw);
+}
 
 const QUICK_PLEDGES = [
   'Bawa tumbler sendiri ke sekolah setiap hari',
@@ -11,17 +25,129 @@ const QUICK_PLEDGES = [
   'Tidak beli minuman kemasan plastik selama seminggu',
 ];
 
+const MATCH_PAIRS = [
+  { id: 'siswa', role: '🧑‍🎓 Siswa / Pelajar', task: 'Membawa tumbler & menolak sedotan plastik di kantin' },
+  { id: 'pemerintah', role: '🏛️ Pemerintah', task: 'Membuat peraturan larangan penggunaan plastik sekali pakai' },
+  { id: 'pabrik', role: '🏭 Pabrik / Produsen', task: 'Menggunakan bahan kemasan ramah lingkungan (bukan styrofoam)' },
+  { id: 'masyarakat', role: '👨‍👩‍👧‍👦 Orang Tua / Keluarga', task: 'Selalu membawa tas belanja kain sendiri saat ke pasar' },
+];
+
+function MatchingGame({ onComplete }: { onComplete: () => void }) {
+  const [roles, setRoles] = useState(MATCH_PAIRS);
+  const [tasks, setTasks] = useState(MATCH_PAIRS);
+
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [selectedTask, setSelectedTask] = useState<string | null>(null);
+  const [matched, setMatched] = useState<string[]>([]);
+  const [errorPair, setErrorPair] = useState<{role: string, task: string} | null>(null);
+
+  useEffect(() => {
+    setRoles([...MATCH_PAIRS].sort(() => Math.random() - 0.5));
+    setTasks([...MATCH_PAIRS].sort(() => Math.random() - 0.5));
+  }, []);
+
+  const checkMatch = (rId: string, tId: string) => {
+    if (rId === tId) {
+      const newMatched = [...matched, rId];
+      setMatched(newMatched);
+      setSelectedRole(null);
+      setSelectedTask(null);
+      if (newMatched.length === MATCH_PAIRS.length) {
+        setTimeout(onComplete, 1000);
+      }
+    } else {
+      setErrorPair({ role: rId, task: tId });
+      setTimeout(() => {
+        setErrorPair(null);
+        setSelectedRole(null);
+        setSelectedTask(null);
+      }, 800);
+    }
+  };
+
+  const handleRoleClick = (id: string) => {
+    if (matched.includes(id)) return;
+    if (selectedRole === id) { setSelectedRole(null); return; } // toggle off
+    if (selectedTask) checkMatch(id, selectedTask);
+    else setSelectedRole(id);
+  };
+
+  const handleTaskClick = (id: string) => {
+    if (matched.includes(id)) return;
+    if (selectedTask === id) { setSelectedTask(null); return; } // toggle off
+    if (selectedRole) checkMatch(selectedRole, id);
+    else setSelectedTask(id);
+  };
+
+  return (
+    <div className="bg-white rounded-[32px] p-6 shadow-sm border border-[#bec8d2] text-center mb-10">
+      <h2 className="text-2xl font-extrabold text-[#083b54] mb-2 font-[family-name:var(--font-outfit)]">Siapa Bertanggung Jawab?</h2>
+      <p className="text-sm text-[#3e4850] mb-8">Sebelum membuat janji komitmen, pasangkan <b>Tokoh</b> dengan <b>Tugas Lingkungannya</b> yang tepat!</p>
+
+      <div className="grid grid-cols-2 gap-3 sm:gap-6 text-left">
+        {/* Kolom Peran */}
+        <div className="flex flex-col gap-2 sm:gap-3">
+          <h3 className="font-bold text-[#006591] mb-1 sm:mb-2 text-[10px] sm:text-sm uppercase tracking-wider text-center">Tokoh</h3>
+          {roles.map(r => (
+            <button 
+               key={r.id} 
+               onClick={() => handleRoleClick(r.id)}
+               className={`p-2 sm:p-3 rounded-lg sm:rounded-xl border-2 transition-all font-bold text-[#3e4850] text-xs sm:text-sm flex items-center justify-center min-h-[60px] sm:min-h-[80px] text-center ${
+                 matched.includes(r.id) ? 'bg-[#c8e6c9] border-[#006e2f] opacity-50 cursor-not-allowed scale-95' :
+                 errorPair?.role === r.id ? 'bg-[#ffcdd2] border-[#ba1a1a] animate-shake text-[#ba1a1a]' :
+                 selectedRole === r.id ? 'bg-[#c9e6ff] border-[#006591] shadow-md scale-[1.02] text-[#006591]' :
+                 'bg-[#f7f9fb] border-[#bec8d2] hover:border-[#006591]/50 hover:bg-white'
+               }`}
+            >
+              {r.role}
+            </button>
+          ))}
+        </div>
+
+        {/* Kolom Tugas */}
+        <div className="flex flex-col gap-2 sm:gap-3">
+          <h3 className="font-bold text-[#006e2f] mb-1 sm:mb-2 text-[10px] sm:text-sm uppercase tracking-wider text-center">Tugas</h3>
+          {tasks.map(t => (
+            <button 
+               key={t.id} 
+               onClick={() => handleTaskClick(t.id)}
+               className={`p-2 sm:p-3 rounded-lg sm:rounded-xl border-2 transition-all text-[10px] sm:text-sm text-center sm:text-left leading-tight sm:leading-relaxed flex items-center min-h-[60px] sm:min-h-[80px] ${
+                 matched.includes(t.id) ? 'bg-[#c8e6c9] border-[#006e2f] opacity-50 cursor-not-allowed scale-95' :
+                 errorPair?.task === t.id ? 'bg-[#ffcdd2] border-[#ba1a1a] animate-shake text-[#ba1a1a]' :
+                 selectedTask === t.id ? 'bg-[#c9e6ff] border-[#006591] shadow-md scale-[1.02] text-[#006591] font-semibold' :
+                 'bg-white border-[#bec8d2] hover:border-[#006591]/50 text-[#3e4850]'
+               }`}
+            >
+              {t.task}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          75% { transform: translateX(5px); }
+        }
+        .animate-shake { animation: shake 0.3s ease-in-out; }
+      `}} />
+    </div>
+  );
+}
+
 export default function Tahap6() {
   const router = useRouter();
   const { completeStage, setLkpdAnswer, lkpdAnswers, studentName, studentClass } = useJourneyStore();
   const [commitment, setCommitment] = useState(lkpdAnswers.commitment);
   const [selectedPledges, setSelectedPledges] = useState<Set<string>>(new Set());
   const [pdfDone, setPdfDone] = useState(false);
+  const [gameDone, setGameDone] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
   const drawing = useRef(false);
   const [hasSig, setHasSig] = useState(false);
-  const isReady = commitment.trim().length > 10 && hasSig;
+  const isReady = commitment.trim().length > 10 && hasSig && gameDone;
 
   function togglePledge(p: string) {
     const s = new Set(selectedPledges);
@@ -124,19 +250,26 @@ export default function Tahap6() {
   return (
     <div className="min-h-[calc(100vh-88px)] bg-[#f7f9fb] flex flex-col">
       <div className="max-w-2xl mx-auto px-4 py-8 w-full">
-        {/* Conclusion */}
-        <div className="text-center mb-10">
-          <div className="flex justify-center mb-5">
-            <MikaMascot size={120} bubbleSide="top" pop message="Penyelidikan selesai! Kamu sudah jadi penyelidik hebat. Sekarang, apa janjimu untuk menjaga samudra kita?" />
-          </div>
-          <h2 className="font-[family-name:var(--font-outfit)] text-3xl font-bold mb-5 text-[#191c1e]">Generalisasi &amp; Refleksi</h2>
-          <div className="bg-white border border-[#bec8d2] rounded-2xl p-6 max-w-lg mx-auto shadow-sm">
-            <p className="text-[#3e4850] leading-relaxed italic text-base">
-              &ldquo;Manusia adalah pelaku utama pencemaran sekaligus korban akhir dari kecerobohannya sendiri. Setiap keputusan kecil — menolak sedotan plastik, membawa tas belanja — adalah tindakan konkret yang bermakna.&rdquo;
-            </p>
-            <p className="text-[#6e7881] text-xs mt-3">— Kesimpulan Kurikulum, Modul Ajar IPA Kelas VIII</p>
-          </div>
-        </div>
+        
+        {!gameDone && (
+          <MatchingGame onComplete={() => setGameDone(true)} />
+        )}
+
+        {gameDone && (
+          <div className="animate-[fadeIn_0.8s_ease-out]">
+            {/* Conclusion */}
+            <div className="text-center mb-10">
+              <div className="flex justify-center mb-5">
+                <MikaMascot size={120} bubbleSide="top" pop message="Penyelidikan selesai! Kamu sudah paham tanggung jawab setiap pihak. Sekarang, apa janjimu untuk samudra kita?" />
+              </div>
+              <h2 className="font-[family-name:var(--font-outfit)] text-3xl font-bold mb-5 text-[#191c1e]">Generalisasi &amp; Refleksi</h2>
+              <div className="bg-white border border-[#bec8d2] rounded-2xl p-6 max-w-lg mx-auto shadow-sm">
+                <p className="text-[#3e4850] leading-relaxed italic text-base">
+                  &ldquo;Manusia adalah pelaku utama pencemaran sekaligus korban akhir dari kecerobohannya sendiri. Setiap keputusan kecil — menolak sedotan plastik, membawa tas belanja — adalah tindakan konkret yang bermakna.&rdquo;
+                </p>
+                <p className="text-[#6e7881] text-xs mt-3">— Kesimpulan Kurikulum, Modul Ajar IPA Kelas VIII</p>
+              </div>
+            </div>
 
         {/* Eco-pledge */}
         <div className="bg-white border border-[#006e2f]/15 rounded-2xl p-6 mb-6 shadow-sm">
@@ -196,18 +329,37 @@ export default function Tahap6() {
         )}
 
         {pdfDone && (
-          <div className="text-center">
-            <div className="bg-white border border-[#006e2f]/20 rounded-xl p-5 mb-4 shadow-sm">
-              <span className="material-symbols-outlined text-[#006e2f] text-4xl block mb-2">check_circle</span>
-              <p className="text-[#006e2f] font-bold">Rapor PDF berhasil diunduh!</p>
-              <p className="text-[#3e4850] text-sm mt-1">Serahkan file kepada gurumu sebagai bukti selesainya perjalanan.</p>
+          <div className="mt-8 border-t border-[#006e2f]/20 pt-6 text-center space-y-3">
+            <div className="p-4 rounded-2xl bg-[#e6f4ea] border border-[#006e2f]/30 text-[#006e2f] text-xs font-extrabold flex items-center justify-center gap-2">
+              <span className="material-symbols-outlined text-xl">verified</span>
+              <span>Rapor PDF Terunduh! Sekarang kumpulkan PR Digital & Aksimu di Halaman Rangkuman.</span>
             </div>
-            <button onClick={() => router.push('/')} className="text-[#6e7881] text-sm underline hover:text-[#3e4850]">
-              Kembali ke Beranda
+
+            <button
+              onClick={() => router.push('/journey/summary')}
+              className="w-full py-4 px-6 rounded-2xl text-base font-extrabold text-[#3b2313] flex items-center justify-center gap-3 transition-all transform active:scale-95 shadow-lg border-2 border-[#8e4912]"
+              style={{
+                fontFamily: 'var(--font-outfit)',
+                background: 'linear-gradient(to bottom, #f0a345, #d27b22)',
+                boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.3), 0 8px 16px rgba(0,0,0,0.25)',
+              }}
+            >
+              <span>Lanjut ke Halaman Rangkuman & PR Cloudinary</span>
+              <span className="material-symbols-outlined text-2xl">arrow_forward</span>
             </button>
           </div>
         )}
+          </div>
+        )}
+
       </div>
+
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}} />
     </div>
   );
 }

@@ -38,7 +38,7 @@ export default function SuperadminPage() {
   }
 
   function openEdit(teacher: AppUser) {
-    setForm({ name: teacher.name, email: teacher.email, password: teacher.password });
+    setForm({ name: teacher.name, email: teacher.email, password: teacher.password || '' });
     setEditTarget(teacher);
     setShowPass(false);
     setFeedback(null);
@@ -89,7 +89,7 @@ export default function SuperadminPage() {
       <div className="absolute top-0 right-0 w-80 h-80 bg-[#006591]/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white border-b border-[#bec8d2] shadow-[0_4px_12px_rgba(0,0,0,0.04)] h-16 flex items-center px-6 gap-4">
+      <header className="sticky top-0 z-40 bg-white border-b border-[#bec8d2] shadow-[0_4px_12px_rgba(0,0,0,0.04)] h-16 flex items-center px-4 lg:px-6 gap-4">
         <Link href="/dashboard" className="text-[#006591] hover:text-[#004c6e] transition-colors">
           <span className="material-symbols-outlined">arrow_back</span>
         </Link>
@@ -105,7 +105,7 @@ export default function SuperadminPage() {
         </div>
       </header>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 py-8">
+      <div className="relative z-10 w-full px-4 lg:px-6 py-8">
 
         {/* Page title */}
         <div className="mb-8">
@@ -188,7 +188,7 @@ export default function SuperadminPage() {
                   </div>
                   <p className="text-[#3e4850] text-sm truncate">{teacher.email}</p>
                   <p className="text-[#6e7881] text-sm font-[family-name:var(--font-mono)]">
-                    {'•'.repeat(Math.min(teacher.password.length, 8))}
+                    {'•'.repeat(Math.min((teacher.password || '').length, 8))}
                   </p>
                   <div className="flex items-center gap-1">
                     <button onClick={() => openEdit(teacher)} title="Edit"

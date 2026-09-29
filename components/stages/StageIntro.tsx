@@ -22,15 +22,15 @@ export default function StageIntro({
   onStart
 }: StageIntroProps) {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 z-40 bg-[url('/hero-bg.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center font-[family-name:var(--font-inter)] overflow-hidden py-10 overflow-y-auto"
+      className="absolute inset-0 z-40 bg-[url('/hero-bg.webp')] bg-cover bg-center bg-no-repeat flex items-center justify-center font-[family-name:var(--font-inter)] overflow-hidden py-10 overflow-y-auto"
     >
       {/* Soften vividness + lift text contrast */}
       <div className="absolute inset-0 bg-white/10" />
-      
+
       {/* Shadow top */}
       <div className="absolute inset-x-0 top-0 h-1/3 md:h-2/5 bg-gradient-to-b from-[#f7f9fb] to-transparent pointer-events-none z-10" />
 
@@ -41,12 +41,12 @@ export default function StageIntro({
       <div className="absolute inset-x-0 bottom-0 h-15 sm:h-10 md:h-22 lg:h-30 pointer-events-none z-30" style={{ background: "linear-gradient(to bottom, rgba(247,249,251,0) 0%, rgba(247,249,251,0.5) 50%, #f7f9fb 86%)" }} />
 
       {/* Gelembung Animasi Bawah Air */}
-      <motion.div 
+      <motion.div
         className="absolute bottom-[-10%] left-[10%] w-64 h-64 rounded-full bg-white/10 blur-2xl mix-blend-overlay pointer-events-none"
         animate={{ y: [0, -800], opacity: [0, 0.5, 0], scale: [1, 1.5] }}
         transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
       />
-      <motion.div 
+      <motion.div
         className="absolute bottom-[-20%] right-[20%] w-48 h-48 rounded-full bg-[#6bff8f]/10 blur-2xl mix-blend-overlay pointer-events-none"
         animate={{ y: [0, -900], opacity: [0, 0.4, 0], scale: [1, 2] }}
         transition={{ duration: 15, repeat: Infinity, ease: 'linear', delay: 3 }}
@@ -55,9 +55,9 @@ export default function StageIntro({
       {layout === 'split' ? (
         /* Kontainer Utama 2-Kolom (Untuk Tahap 2 dst) */
         <div className="relative z-10 w-full max-w-6xl px-4 md:px-6 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 md:gap-10 mt-8 md:mt-0">
-          
+
           {/* Kolom Kiri: Ilustrasi / Mika */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.2 }}
@@ -68,9 +68,9 @@ export default function StageIntro({
             ) : (
               // Default Illustration (Mika)
               <div className="relative w-40 sm:w-56 md:w-full max-w-sm aspect-square drop-shadow-2xl">
-                <Image 
-                  src="/mika.png" 
-                  alt="Penjelajah" 
+                <Image
+                  src="/mika.webp"
+                  alt="Penjelajah"
                   fill
                   className="object-contain animate-[float_4s_ease-in-out_infinite]"
                 />
@@ -79,19 +79,19 @@ export default function StageIntro({
           </motion.div>
 
           {/* Kolom Kanan: Teks & Tombol */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50, scale: 0.9 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ type: "spring", stiffness: 120, damping: 14, delay: 0.3 }}
             className="w-full md:w-1/2 bg-white/10 backdrop-blur-md border border-white/30 p-6 sm:p-12 text-center md:text-left shadow-[0_32px_64px_rgba(0,0,0,0.4)] flex flex-col items-center md:items-start"
-            style={{ 
+            style={{
               // Bentuk Gelembung Organik
               borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%'
             }}
           >
             {/* Ikon Mengambang (Opsional) */}
             {icon && (
-              <motion.div 
+              <motion.div
                 className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-[#006591]/40 border-2 border-[#6bff8f]/60 backdrop-blur-sm shadow-[0_0_20px_rgba(107,255,143,0.3)]"
                 animate={{ y: [-5, 5, -5] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
@@ -122,17 +122,17 @@ export default function StageIntro({
         </div>
       ) : (
         /* Kontainer Utama Terpusat (Untuk Tahap 1 Scanner) */
-        <motion.div 
+        <motion.div
           initial={{ scale: 0.8, y: 50 }}
           animate={{ scale: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 150, damping: 15 }}
           className="relative z-10 w-[90%] max-w-2xl bg-white/20 backdrop-blur-xl border border-white/40 p-8 sm:p-12 text-center shadow-[0_32px_64px_rgba(0,101,145,0.4)] flex flex-col items-center"
-          style={{ 
+          style={{
             borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%'
           }}
         >
           {icon && (
-            <motion.div 
+            <motion.div
               className="w-24 h-24 mb-6 flex items-center justify-center rounded-full bg-[#006591]/40 border-2 border-[#6bff8f]/60 backdrop-blur-sm shadow-[0_0_20px_rgba(107,255,143,0.3)]"
               animate={{ y: [-10, 10, -10] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
@@ -155,7 +155,8 @@ export default function StageIntro({
       )}
 
       {/* Global Style for Floating Animation */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes float {
           0% { transform: translateY(0px); }
           50% { transform: translateY(-15px); }
@@ -169,7 +170,7 @@ export default function StageIntro({
 // Reusable Wooden Button
 function WoodenButton({ onClick, text }: { onClick: () => void, text: string }) {
   return (
-    <motion.button 
+    <motion.button
       onClick={onClick}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
@@ -183,7 +184,7 @@ function WoodenButton({ onClick, text }: { onClick: () => void, text: string }) 
     >
       <span className="absolute left-3 w-2 h-2 rounded-full bg-[#5a2e0a] shadow-[inset_0_1px_1px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.3)]" />
       <span className="absolute right-3 w-2 h-2 rounded-full bg-[#5a2e0a] shadow-[inset_0_1px_1px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.3)]" />
-      
+
       <span className="material-symbols-outlined text-2xl font-bold">explore</span>
       {text}
     </motion.button>
